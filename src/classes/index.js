@@ -1,1 +1,1 @@
-export { Search as ISearch } from "./Search";
+export { Result } from "./Result";

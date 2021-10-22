@@ -1,4 +1,4 @@
-export class Search {
+export class Result {
   actors?: [];
   color: boolean = true;
   director?: string;

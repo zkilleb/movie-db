@@ -1,7 +1,7 @@
 import axios from "axios";
-import { ISearch } from "../classes";
+import { Result } from "../classes";
 
-export async function searchMovie(title: string | null): Promise<ISearch[]> {
+export async function searchMovie(title: string | null): Promise<Result[]> {
   return await axios
     .get(`http://localhost:8080/titles/${title}`)
     .then((res) => {

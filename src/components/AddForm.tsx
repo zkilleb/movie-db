@@ -13,6 +13,7 @@ import {
   Checkbox,
   MenuItem,
   TextField,
+  Tooltip,
 } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { addMovie } from "../handlers";
@@ -30,6 +31,7 @@ export function AddForm() {
   const [actors, setActors] = React.useState<string[]>([]);
   const [addActor, setAddActor] = React.useState<string | null>();
   const [notes, setNotes] = React.useState<string>();
+  const [validation, setValidation] = React.useState("");
 
   return (
     <div>
@@ -153,18 +155,21 @@ export function AddForm() {
             <AddCircleIcon />
           </Button>
         </form>
-        <Button
-          className={classes.submit}
-          onClick={handleSubmit}
-          variant="contained"
-        >
-          Submit
-        </Button>
+        <Tooltip title={validation}>
+          <Button
+            className={classes.submit}
+            onClick={handleSubmit}
+            variant="contained"
+          >
+            Submit
+          </Button>
+        </Tooltip>
       </Paper>
     </div>
   );
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setValidation("");
     switch (event.target.id) {
       case "title":
         setTitle(event.target.value);
@@ -206,7 +211,7 @@ export function AddForm() {
   }
 
   async function handleSubmit() {
-    await addMovie({
+    const results = await addMovie({
       title,
       format,
       length,
@@ -218,6 +223,9 @@ export function AddForm() {
       actors,
       notes,
     });
+    if (results.status === 200) {
+      window.location.reload();
+    } else setValidation("Error adding record to database");
   }
 }
 

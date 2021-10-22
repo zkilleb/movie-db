@@ -1,7 +1,6 @@
 import express from 'express';
 import { MongoClient, ObjectId } from 'mongodb';
 import Joi from 'joi';
-import axios from 'axios';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
@@ -24,8 +23,8 @@ app.use((req, res, next) => {
 });
 
 client.connect();
-const database = client.db('mydb');
-const movies = database.collection('movies');
+const database = client.db(process.env.DB_NAME || 'mydb');
+const movies = database.collection(process.env.COLLECTION || 'movies');
 
 app.get('/titles/:title', async (req, res) => {
   const titleSchema = Joi.string().min(3);
@@ -74,7 +73,11 @@ app.post('/add/title', async (req, res) => {
     notes: req.query.notes,
   };
   const response = await movies.insertOne(doc);
-  res.send(response);
+  if (response.acknowledged) res.status(200).send(response);
+  else
+    res.status(400).json({
+      message: 'Error adding record to database',
+    });
 });
 
 app.get('/keyword-search/:keyword', async (req, res) => {
