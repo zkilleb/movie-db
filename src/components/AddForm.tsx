@@ -178,10 +178,10 @@ export function AddForm() {
         setFormat(event.target.value);
         break;
       case "length":
-        setLength(parseInt(event.target.value));
+        if(typeof event.target.value === "number") setLength(parseInt(event.target.value));
         break;
       case "year":
-        setYear(parseInt(event.target.value));
+        if(typeof event.target.value === "number") setYear(parseInt(event.target.value));
         break;
       case "color":
         setColor(event.target.checked);
@@ -285,7 +285,7 @@ const useStyles = makeStyles((theme) => ({
     width: "90%",
     margin: "auto",
     marginTop: 25,
-    borderRadius: "10px 10px 10px 10px",
+    borderRadius: '10px 10px 10px 10px'
   },
   addActors: {
     backgroundColor: "white",
