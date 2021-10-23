@@ -29,7 +29,7 @@ export function AddForm() {
   const [director, setDirector] = React.useState<string>();
   const [label, setLabel] = React.useState<string>();
   const [actors, setActors] = React.useState<string[]>([]);
-  const [addActor, setAddActor] = React.useState<string | null>();
+  const [addActor, setAddActor] = React.useState<string>();
   const [notes, setNotes] = React.useState<string>();
   const [validation, setValidation] = React.useState("");
 
@@ -203,7 +203,7 @@ export function AddForm() {
 
   function handleAddActor() {
     if (addActor) setActors([...actors, addActor]);
-    setAddActor(undefined);
+    setAddActor("");
   }
 
   function handleNameField(event: React.ChangeEvent<HTMLInputElement>) {
@@ -285,6 +285,7 @@ const useStyles = makeStyles((theme) => ({
     width: "90%",
     margin: "auto",
     marginTop: 25,
+    borderRadius: "10px 10px 10px 10px",
   },
   addActors: {
     backgroundColor: "white",
