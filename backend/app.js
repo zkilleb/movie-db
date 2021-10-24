@@ -19,6 +19,7 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept',
   );
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   next();
 });
 
@@ -81,9 +82,14 @@ app.post('/add/title', async (req, res) => {
 });
 
 app.delete('/title/:id', async (req, res) => {
-  const response = await movies.deleteOne({_id: req});
-  console.log(response)
-  res.status(200);
+  const response = await movies.deleteOne({ _id: ObjectId(req.params.id) });
+  if (response.acknowledged) {
+    res.status(200).send('Record succesfully deleted');
+  } else {
+    res.status(400).json({
+      message: 'Error delete record from database',
+    });
+  }
 });
 
 app.get('/keyword-search/:keyword', async (req, res) => {

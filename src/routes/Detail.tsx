@@ -1,35 +1,81 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Tooltip, Icon } from "@material-ui/core";
+import {
+  Tooltip,
+  Icon,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+  Button,
+} from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Result } from "../classes";
 import { getRecommendations } from "../handlers";
+import { deleteMovie } from "../handlers/deleteMovie";
 
 export function Detail(props: any) {
   const classes = useStyles();
+  const history = useHistory();
   const data: Result = props.location.state.details
     ? props.location.state.details
     : null;
   const tmdbData = props.location.state.keyword;
   const [recommendations, setRecommendations] = React.useState<any>();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [validation, setValidation] = React.useState("");
 
   React.useEffect(() => {
-    async function fetchData() {
-      const response = await getRecommendations(tmdbData.id);
-      setRecommendations(response.results.splice(0, 8));
+    if (tmdbData && tmdbData.id) {
+      async function fetchData() {
+        const response = await getRecommendations(tmdbData.id);
+        setRecommendations(response.results.splice(0, 8));
+      }
+      fetchData();
     }
-    fetchData();
   }, [tmdbData]);
 
   return (
     <div>
+      <Dialog
+        open={dialogOpen}
+        PaperProps={{
+          style: {
+            backgroundColor: "#456",
+            color: "white",
+            width: "50%",
+            height: "8%",
+          },
+        }}
+      >
+        <DialogContent>
+          Are you sure you want to delete {data.title}?
+          <DialogContentText className={classes.error}>
+            {validation}
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button className={classes.dialogButtons} onClick={handleClick}>
+            No
+          </Button>
+          <Button className={classes.dialogButtons} onClick={handleDelete}>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {data ? (
         <div className={classes.header}>
           {data.title}
-          <Icon className={classes.icons}><Delete/></Icon>
+          <Tooltip title={"Delete Movie"}>
+            <Icon className={classes.icons} onClick={handleClick}>
+              <Delete />
+            </Icon>
+          </Tooltip>
           <div className={classes.details}>
-            {tmdbData.poster_path ? (
+            {tmdbData && tmdbData.poster_path ? (
               <img
                 className={classes.poster}
                 src={`https://image.tmdb.org/t/p/original${tmdbData.poster_path}`}
@@ -51,7 +97,7 @@ export function Detail(props: any) {
               <div>Runtime: {data.length} mins.</div>
               <div>Release Year: {data.year}</div>
               <div>Language: {data.language}</div>
-              <div>Color: {data.color ? 'Yes' : 'No'}</div>
+              <div>Color: {data.color ? "Yes" : "No"}</div>
               <div>Format: {data.format}</div>
               <div>Label: {data.label}</div>
               <div>Notes: {data.notes}</div>
@@ -93,6 +139,21 @@ export function Detail(props: any) {
       )}
     </div>
   );
+
+  function handleClick() {
+    setDialogOpen(!dialogOpen);
+  }
+
+  async function handleDelete() {
+    if (data._id) {
+      const response = await deleteMovie(data._id);
+      if (response === "Record succesfully deleted") {
+        history.push({
+          pathname: "/",
+        });
+      } else setValidation("Error deleting record");
+    }
+  }
 }
 
 const useStyles = makeStyles(() => ({
@@ -103,7 +164,7 @@ const useStyles = makeStyles(() => ({
   icons: {
     position: "absolute",
     right: 0,
-    marginRight: 10
+    marginRight: 10,
   },
   details: {
     display: "flex",
@@ -123,5 +184,11 @@ const useStyles = makeStyles(() => ({
     display: "inline-block",
     marginLeft: 5,
     marginRight: 5,
+  },
+  dialogButtons: {
+    color: "white",
+  },
+  error: {
+    color: "red",
   },
 }));
