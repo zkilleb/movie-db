@@ -80,6 +80,12 @@ app.post('/add/title', async (req, res) => {
     });
 });
 
+app.delete('/title/:id', async (req, res) => {
+  const response = await movies.deleteOne({_id: req});
+  console.log(response)
+  res.status(200);
+});
+
 app.get('/keyword-search/:keyword', async (req, res) => {
   fetch(
     `${BASE_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,

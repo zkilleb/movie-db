@@ -1,8 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip, Icon } from "@material-ui/core";
+import { Delete } from "@material-ui/icons";
 import { Link } from "react-router-dom";
-import { Tooltip } from "@material-ui/core";
-
 import { Result } from "../classes";
 import { getRecommendations } from "../handlers";
 
@@ -21,12 +21,13 @@ export function Detail(props: any) {
     }
     fetchData();
   }, [tmdbData]);
-  console.log(recommendations);
+
   return (
     <div>
       {data ? (
         <div className={classes.header}>
           {data.title}
+          <Icon className={classes.icons}><Delete/></Icon>
           <div className={classes.details}>
             {tmdbData.poster_path ? (
               <img
@@ -98,6 +99,11 @@ const useStyles = makeStyles(() => ({
   header: {
     fontSize: 20,
     color: "white",
+  },
+  icons: {
+    position: "absolute",
+    right: 0,
+    marginRight: 10
   },
   details: {
     display: "flex",
