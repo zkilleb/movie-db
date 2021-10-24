@@ -33,9 +33,10 @@ export function Search() {
       </div>
       <div>
         {searchResults &&
-          searchResults.map((result) => {
+          searchResults.map((result, index) => {
             return (
               <SearchResult
+                key={index}
                 data={result}
                 keywordResults={keywordResults ? keywordResults : []}
               />

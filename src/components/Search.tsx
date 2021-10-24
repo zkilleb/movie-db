@@ -69,9 +69,4 @@ const useStyles = makeStyles(() => ({
     marginTop: 15,
     display: "inline-block",
   },
-  closeIcon: {
-    display: "inline-block",
-    marginTop: 15,
-    marginRight: 10,
-  },
 }));
