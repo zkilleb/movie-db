@@ -1,4 +1,4 @@
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import { TextField, Icon, Tooltip } from "@material-ui/core";
@@ -12,14 +12,17 @@ export function Search() {
 
   return (
     <div>
-      <TextField
-        InputProps={{ className: classes.field }}
-        InputLabelProps={{ className: classes.field }}
-        className={classes.root}
-        label="Search"
-        value={title}
-        onChange={handleSearchChange}
-      />
+      <Tooltip title={validation}>
+        <TextField
+          InputProps={{ className: classes.field }}
+          InputLabelProps={{ className: classes.field }}
+          className={classes.root}
+          label="Search"
+          value={title}
+          onChange={handleSearchChange}
+          onKeyPress={(e) => handleKeyPress(e)}
+        />
+      </Tooltip>
       <Tooltip title={validation}>
         <Icon className={classes.searchIcon} onClick={handleSearchClick}>
           <SearchIcon />
@@ -37,6 +40,12 @@ export function Search() {
       setTitle("");
     } else {
       setValidation("Search must be at least 3 charactes long");
+    }
+  }
+
+  function handleKeyPress(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "Enter") {
+      handleSearchClick();
     }
   }
 

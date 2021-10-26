@@ -22,8 +22,8 @@ export function AddForm() {
   const classes = useStyles();
   const [title, setTitle] = React.useState<string>();
   const [format, setFormat] = React.useState<string>(formats[0].value);
-  const [length, setLength] = React.useState<number>();
-  const [year, setYear] = React.useState<number>();
+  const [length, setLength] = React.useState<string>();
+  const [year, setYear] = React.useState<string>();
   const [color, setColor] = React.useState<boolean>(true);
   const [language, setLanguage] = React.useState<string>();
   const [director, setDirector] = React.useState<string>();
@@ -178,12 +178,10 @@ export function AddForm() {
         setFormat(event.target.value);
         break;
       case "length":
-        if (typeof event.target.value === "number")
-          setLength(parseInt(event.target.value));
+        setLength(event.target.value.replace(/[^0-9]/g, ''));
         break;
       case "year":
-        if (typeof event.target.value === "number")
-          setYear(parseInt(event.target.value));
+        setYear(event.target.value.replace(/[^0-9]/g, ''));
         break;
       case "color":
         setColor(event.target.checked);
