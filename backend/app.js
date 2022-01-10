@@ -81,6 +81,30 @@ app.post('/add/title', async (req, res) => {
     });
 });
 
+app.put('/edit/title', async (req, res) => {
+  const doc = {
+    title: req.query.title,
+    format: req.query.format,
+    color: req.query.color,
+    length: req.query.length,
+    year: req.query.year,
+    language: req.query.language,
+    director: req.query.director,
+    label: req.query.label,
+    actors: req.query.actors,
+    notes: req.query.notes,
+  };
+  const response = await movies.replaceOne(
+    { _id: ObjectId(req.query.id) },
+    doc,
+  );
+  if (response.acknowledged) res.status(200).send(response);
+  else
+    res.status(400).json({
+      message: 'Error adding record to database',
+    });
+});
+
 app.delete('/title/:id', async (req, res) => {
   const response = await movies.deleteOne({ _id: ObjectId(req.params.id) });
   if (response.acknowledged) {

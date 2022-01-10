@@ -9,7 +9,7 @@ import {
   DialogContentText,
   Button,
 } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import { Delete, Edit } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
 import { Result } from "../classes";
 import { getRecommendations } from "../handlers";
@@ -45,7 +45,7 @@ export function Detail(props: any) {
             backgroundColor: "#456",
             color: "white",
             width: "50%",
-            height: "8%",
+            height: "15%",
           },
         }}
       >
@@ -57,7 +57,7 @@ export function Detail(props: any) {
         </DialogContent>
 
         <DialogActions>
-          <Button className={classes.dialogButtons} onClick={handleClick}>
+          <Button className={classes.dialogButtons} onClick={handleDeleteModal}>
             No
           </Button>
           <Button className={classes.dialogButtons} onClick={handleDelete}>
@@ -69,8 +69,13 @@ export function Detail(props: any) {
       {data ? (
         <div className={classes.header}>
           {data.title}
+          <Tooltip title={"Edit Movie"}>
+            <Icon className={classes.editIcon} onClick={handleEditClick}>
+              <Edit />
+            </Icon>
+          </Tooltip>
           <Tooltip title={"Delete Movie"}>
-            <Icon className={classes.icons} onClick={handleClick}>
+            <Icon className={classes.deleteIcon} onClick={handleDeleteModal}>
               <Delete />
             </Icon>
           </Tooltip>
@@ -117,6 +122,7 @@ export function Detail(props: any) {
                       }}
                       target="_blank"
                       rel="noopener noreferrer"
+                      key={JSON.stringify(recommend)}
                     >
                       <div className={classes.recommendInfo}>
                         <Tooltip title={recommend.title}>
@@ -140,7 +146,7 @@ export function Detail(props: any) {
     </div>
   );
 
-  function handleClick() {
+  function handleDeleteModal() {
     setDialogOpen(!dialogOpen);
   }
 
@@ -154,6 +160,13 @@ export function Detail(props: any) {
       } else setValidation("Error deleting record");
     }
   }
+
+  function handleEditClick() {
+    history.push({
+      pathname: "/edit",
+      state: { details: data },
+    });
+  }
 }
 
 const useStyles = makeStyles(() => ({
@@ -161,9 +174,14 @@ const useStyles = makeStyles(() => ({
     fontSize: 20,
     color: "white",
   },
-  icons: {
+  deleteIcon: {
     position: "absolute",
     right: 0,
+    marginRight: 10,
+  },
+  editIcon: {
+    position: "absolute",
+    right: 30,
     marginRight: 10,
   },
   details: {

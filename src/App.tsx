@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { NotFound, AddMovie, Home, Search, Detail } from "./routes";
+import { NotFound, AddMovie, EditMovie, Home, Search, Detail } from "./routes";
 import { Header } from "./components";
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
         <Switch>
           <Route path="/" component={Home} exact />
           <Route path="/add" component={AddMovie} exact />
+          <Route path="/edit" component={EditMovie} exact />
           <Route path="/search" component={Search} />
           <Route path="/detail" component={Detail} />
           <Route component={NotFound} />

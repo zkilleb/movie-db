@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 import { searchMovie, getTMDBKeyword } from "../handlers";
 import { Result } from "../classes";
 import { SearchResult } from "../components";
@@ -31,6 +32,14 @@ export function Search() {
       <div className={classes.results}>
         Results for {urlParams}: {searchResults && searchResults.length}
       </div>
+      {!searchResults ||
+        (searchResults && searchResults.length === 0 && (
+          <div className={classes.linkWrapper}>
+            <Link to="/add" className={classes.link}>
+              Add Movie
+            </Link>
+          </div>
+        ))}
       <div>
         {searchResults &&
           searchResults.map((result, index) => {
@@ -51,5 +60,16 @@ const useStyles = makeStyles(() => ({
   results: {
     color: "white",
     fontSize: 20,
+  },
+  link: {
+    paddingLeft: 10,
+    paddingRight: 10,
+    fontFamily: "Graphik-Semibold-Web,sans-serif",
+    fontWeight: "bold",
+    textDecoration: "none",
+    color: "white",
+  },
+  linkWrapper: {
+    marginTop: 20,
   },
 }));

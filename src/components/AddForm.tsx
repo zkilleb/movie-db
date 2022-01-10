@@ -15,23 +15,65 @@ import {
   TextField,
   Tooltip,
 } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { addMovie } from "../handlers";
+import { addMovie, editMovie, getTMDBKeyword } from "../handlers";
 
-export function AddForm() {
+export function AddForm(data: any) {
+  const editResults = data.data;
   const classes = useStyles();
-  const [title, setTitle] = React.useState<string>();
+  const history = useHistory();
+  const [title, setTitle] = React.useState<string>(
+    editResults && editResults.title ? editResults.title : null
+  );
   const [format, setFormat] = React.useState<string>(formats[0].value);
-  const [length, setLength] = React.useState<string>();
-  const [year, setYear] = React.useState<string>();
-  const [color, setColor] = React.useState<boolean>(true);
-  const [language, setLanguage] = React.useState<string>();
-  const [director, setDirector] = React.useState<string>();
-  const [label, setLabel] = React.useState<string>();
-  const [actors, setActors] = React.useState<string[]>([]);
+  const [length, setLength] = React.useState<string>(
+    editResults && editResults.length ? editResults.length : null
+  );
+  const [year, setYear] = React.useState<string>(
+    editResults && editResults.year ? editResults.year : null
+  );
+  const [color, setColor] = React.useState<boolean>(
+    editResults && editResults.color ? editResults.color : true
+  );
+  const [language, setLanguage] = React.useState<string>(
+    editResults && editResults.language ? editResults.language : null
+  );
+  const [director, setDirector] = React.useState<string>(
+    editResults && editResults.director ? editResults.director : null
+  );
+  const [label, setLabel] = React.useState<string>(
+    editResults && editResults.label ? editResults.label : null
+  );
+  const [actors, setActors] = React.useState<string[]>(
+    editResults && editResults.actors ? editResults.actors : []
+  );
   const [addActor, setAddActor] = React.useState<string>();
-  const [notes, setNotes] = React.useState<string>();
+  const [notes, setNotes] = React.useState<string>(
+    editResults && editResults.notes ? editResults.notes : null
+  );
   const [validation, setValidation] = React.useState("");
+  const [test, setTest] = React.useState();
+
+  React.useEffect(() => {
+    const minYear = year ? parseInt(year) - 1 : 0;
+    const maxYear = year ? parseInt(year) + 1 : 0;
+    if (title) {
+      async function fetchData() {
+        const tmdbResults = await getTMDBKeyword(title);
+        if (tmdbResults) {
+          const result: any = tmdbResults.find(
+            (movie: any) =>
+              movie.title.toLowerCase() === title.toLowerCase() &&
+              movie.release_date.substring(0, 4) >= minYear &&
+              movie.release_date.substring(0, 4) <= maxYear
+          );
+          setTest(result);
+        }
+      }
+      fetchData();
+    }
+  }, [title, year]);
 
   return (
     <div>
@@ -178,10 +220,10 @@ export function AddForm() {
         setFormat(event.target.value);
         break;
       case "length":
-        setLength(event.target.value.replace(/[^0-9]/g, ''));
+        setLength(event.target.value.replace(/[^0-9]/g, ""));
         break;
       case "year":
-        setYear(event.target.value.replace(/[^0-9]/g, ''));
+        setYear(event.target.value.replace(/[^0-9]/g, ""));
         break;
       case "color":
         setColor(event.target.checked);
@@ -211,21 +253,58 @@ export function AddForm() {
   }
 
   async function handleSubmit() {
-    const results = await addMovie({
-      title,
-      format,
-      length,
-      year,
-      color,
-      language,
-      director,
-      label,
-      actors,
-      notes,
-    });
-    if (results.status === 200) {
-      window.location.reload();
-    } else setValidation("Error adding record to database");
+    if (!editResults) {
+      const results = await addMovie({
+        title,
+        format,
+        length,
+        year,
+        color,
+        language,
+        director,
+        label,
+        actors,
+        notes,
+      });
+      if (results.status === 200) {
+        window.location.reload();
+      } else setValidation("Error adding record to database");
+    } else {
+      const results = await editMovie({
+        title,
+        format,
+        length,
+        year,
+        color,
+        language,
+        director,
+        label,
+        actors,
+        notes,
+        id: editResults._id,
+      });
+      if (results.status === 200) {
+        history.push({
+          pathname: "/detail",
+          state: {
+            details: {
+              title,
+              format,
+              length,
+              year,
+              color,
+              language,
+              director,
+              label,
+              actors,
+              notes,
+              _id: editResults._id,
+            },
+            keyword: test,
+          },
+        });
+      } else setValidation("Error editing record in database");
+    }
   }
 }
 
