@@ -22,7 +22,7 @@ export function Detail(props: any) {
     ? props.location.state.details
     : null;
   const tmdbData = props.location.state.keyword;
-  const [recommendations, setRecommendations] = React.useState<any>();
+  const [recommendations, setRecommendations] = React.useState<IRecommend[]>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [validation, setValidation] = React.useState("");
 
@@ -112,7 +112,7 @@ export function Detail(props: any) {
             Similar Films:
             <div>
               {recommendations &&
-                recommendations.map((recommend: any) => {
+                recommendations.map((recommend: IRecommend) => {
                   return (
                     <Link
                       to={{
@@ -210,3 +210,8 @@ const useStyles = makeStyles(() => ({
     color: "red",
   },
 }));
+
+interface IRecommend {
+  poster_path: string;
+  title: string;
+}

@@ -6,7 +6,7 @@ export function Header() {
   const classes = useStyles();
 
   return (
-    <div className={classes.header}>
+    <div className={classes.header} data-cy="Header">
       <Link to="/" className={classes.link}>
         Home
       </Link>

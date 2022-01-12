@@ -73,11 +73,18 @@ app.post('/add/title', async (req, res) => {
     actors: req.query.actors,
     notes: req.query.notes,
   };
-  const response = await movies.insertOne(doc);
-  if (response.acknowledged) res.status(200).send(response);
-  else
-    res.status(400).json({
-      message: 'Error adding record to database',
+  const movie = await movies.findOne(doc);
+  if (!movie) {
+    const response = await movies.insertOne(doc);
+    if (response.acknowledged) res.status(200).send(response);
+    else {
+      res.status(400).json({
+        message: 'Error adding record to database',
+      });
+    }
+  } else
+    res.status(409).json({
+      message: 'Record already exists',
     });
 });
 

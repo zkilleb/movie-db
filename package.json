@@ -30,6 +30,7 @@
     "start": "react-scripts start",
     "start:backend": "node backend/app.js",
     "start:backend:dev": "nodemon backend/app.js",
+    "cypress:open": "cypress open",
     "prettier": "prettier --write ./**/*.{js,ts,tsx}",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -55,6 +56,7 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "5.1.8",
+    "cypress": "^9.2.1",
     "nodemon": "2.0.12",
     "prettier": "2.3.2"
   }

@@ -21,10 +21,15 @@ export function Search() {
           value={title}
           onChange={handleSearchChange}
           onKeyPress={(e) => handleKeyPress(e)}
+          data-cy="SearchTextField"
         />
       </Tooltip>
       <Tooltip title={validation}>
-        <Icon className={classes.searchIcon} onClick={handleSearchClick}>
+        <Icon
+          className={classes.searchIcon}
+          onClick={handleSearchClick}
+          data-cy="SearchFieldButton"
+        >
           <SearchIcon />
         </Icon>
       </Tooltip>

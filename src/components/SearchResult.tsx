@@ -27,6 +27,7 @@ export function SearchResult({ data, keywordResults }: IResult) {
           alt={`${data.title} poster`}
           width="106.7"
           height="160"
+          data-cy="PosterImage"
         />
       ) : (
         <div className={classes.noPoster}>No Poster Found</div>
