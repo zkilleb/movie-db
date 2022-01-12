@@ -60,28 +60,41 @@ export function Detail(props: any) {
           <Button className={classes.dialogButtons} onClick={handleDeleteModal}>
             No
           </Button>
-          <Button className={classes.dialogButtons} onClick={handleDelete}>
+          <Button
+            className={classes.dialogButtons}
+            onClick={handleDelete}
+            data-cy="ConfirmDelete"
+          >
             Yes
           </Button>
         </DialogActions>
       </Dialog>
 
       {data ? (
-        <div className={classes.header}>
+        <div className={classes.header} data-cy="DetailContainer">
           {data.title}
           <Tooltip title={"Edit Movie"}>
-            <Icon className={classes.editIcon} onClick={handleEditClick}>
+            <Icon
+              className={classes.editIcon}
+              onClick={handleEditClick}
+              data-cy="EditIcon"
+            >
               <Edit />
             </Icon>
           </Tooltip>
           <Tooltip title={"Delete Movie"}>
-            <Icon className={classes.deleteIcon} onClick={handleDeleteModal}>
+            <Icon
+              className={classes.deleteIcon}
+              onClick={handleDeleteModal}
+              data-cy="DeleteIcon"
+            >
               <Delete />
             </Icon>
           </Tooltip>
           <div className={classes.details}>
             {tmdbData && tmdbData.poster_path ? (
               <img
+                data-cy="DetailPoster"
                 className={classes.poster}
                 src={`https://image.tmdb.org/t/p/original${tmdbData.poster_path}`}
                 alt={`${tmdbData.title} poster`}
@@ -108,7 +121,7 @@ export function Detail(props: any) {
               <div>Notes: {data.notes}</div>
             </div>
           </div>
-          <div className={classes.recommendations}>
+          <div className={classes.recommendations} data-cy="Recommendations">
             Similar Films:
             <div>
               {recommendations &&
@@ -131,6 +144,7 @@ export function Detail(props: any) {
                             alt={`${recommend.title} poster`}
                             width="106.7"
                             height="160"
+                            data-cy="RecommendedFilm"
                           />
                         </Tooltip>
                       </div>

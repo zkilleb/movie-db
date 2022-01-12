@@ -265,57 +265,61 @@ export function AddForm(data: IAddForm) {
   }
 
   async function handleSubmit() {
-    if (!editResults) {
-      const results = await addMovie({
-        title,
-        format,
-        length,
-        year,
-        color,
-        language,
-        director,
-        label,
-        actors,
-        notes,
-      });
-      if (results.status === 200) {
-        window.location.reload();
-      } else setValidation("Error adding record to database");
-    } else {
-      const results = await editMovie({
-        title,
-        format,
-        length,
-        year,
-        color,
-        language,
-        director,
-        label,
-        actors,
-        notes,
-        id: editResults._id,
-      });
-      if (results.status === 200) {
-        history.push({
-          pathname: "/detail",
-          state: {
-            details: {
-              title,
-              format,
-              length,
-              year,
-              color,
-              language,
-              director,
-              label,
-              actors,
-              notes,
-              _id: editResults._id,
-            },
-            keyword,
-          },
+    try {
+      if (!editResults) {
+        const results = await addMovie({
+          title,
+          format,
+          length,
+          year,
+          color,
+          language,
+          director,
+          label,
+          actors,
+          notes,
         });
-      } else setValidation("Error editing record in database");
+        if (results.status === 200) {
+          window.location.reload();
+        } 
+      } else {
+        const results = await editMovie({
+          title,
+          format,
+          length,
+          year,
+          color,
+          language,
+          director,
+          label,
+          actors,
+          notes,
+          id: editResults._id,
+        });
+        if (results.status === 200) {
+          history.push({
+            pathname: "/detail",
+            state: {
+              details: {
+                title,
+                format,
+                length,
+                year,
+                color,
+                language,
+                director,
+                label,
+                actors,
+                notes,
+                _id: editResults._id,
+              },
+              keyword,
+            },
+          });
+        } 
+      }
+    } catch (e: any) {
+      setValidation(e.response.data.message);
     }
   }
 }

@@ -28,7 +28,7 @@ export function Search() {
   }, [title]);
 
   return (
-    <div>
+    <div data-cy="SearchResultPage">
       <div className={classes.results}>
         Results for {urlParams}: {searchResults && searchResults.length}
       </div>

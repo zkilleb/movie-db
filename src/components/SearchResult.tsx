@@ -19,7 +19,12 @@ export function SearchResult({ data, keywordResults }: IResult) {
   );
 
   return (
-    <Paper elevation={1} className={classes.paper} onClick={handleClick}>
+    <Paper
+      data-cy="SearchResult"
+      elevation={1}
+      className={classes.paper}
+      onClick={handleClick}
+    >
       {result ? (
         <img
           className={classes.poster}
