@@ -56,8 +56,10 @@ describe("Test Application Workflow", () => {
     cy.get(objects.searchButton).click();
     cy.wait(1000);
     cy.url().should("include", "/search");
-    cy.get(objects.posterImage).should('have.attr', 'alt').then((alt) => {
+    cy.get(objects.posterImage)
+      .should("have.attr", "alt")
+      .then((alt) => {
         expect(alt).to.equal("The Godfather poster");
-    });
+      });
   });
 });
