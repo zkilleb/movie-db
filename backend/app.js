@@ -61,18 +61,17 @@ app.get('/title/id/:id', async (req, res) => {
 });
 
 app.post('/add/title', async (req, res) => {
-  const doc = {
-    title: req.query.title,
-    format: req.query.format,
-    color: req.query.color,
-    length: req.query.length,
-    year: req.query.year,
-    language: req.query.language,
-    director: req.query.director,
-    label: req.query.label,
-    actors: req.query.actors,
-    notes: req.query.notes,
-  };
+  let doc = {};
+  req.query.title && (doc.title = req.query.title);
+  req.query.format && (doc.format = req.query.format);
+  req.query.color && (doc.color = req.query.color);
+  req.query.length && (doc.length = req.query.length);
+  req.query.year && (doc.year = req.query.year);
+  req.query.language && (doc.language = req.query.language);
+  req.query.director && (doc.director = req.query.director);
+  req.query.label && (doc.label = req.query.label);
+  req.query.actors && req.query.actors.length !== 0 && (doc.actors = req.query.actors);
+  req.query.notes && (doc.notes = req.query.notes);
   const movie = await movies.findOne(doc);
   if (!movie) {
     const response = await movies.insertOne(doc);
@@ -89,18 +88,17 @@ app.post('/add/title', async (req, res) => {
 });
 
 app.put('/edit/title', async (req, res) => {
-  const doc = {
-    title: req.query.title,
-    format: req.query.format,
-    color: req.query.color,
-    length: req.query.length,
-    year: req.query.year,
-    language: req.query.language,
-    director: req.query.director,
-    label: req.query.label,
-    actors: req.query.actors,
-    notes: req.query.notes,
-  };
+  let doc = {};
+  req.query.title && (doc.title = req.query.title);
+  req.query.format && (doc.format = req.query.format);
+  req.query.color && (doc.color = req.query.color);
+  req.query.length && (doc.length = req.query.length);
+  req.query.year && (doc.year = req.query.year);
+  req.query.language && (doc.language = req.query.language);
+  req.query.director && (doc.director = req.query.director);
+  req.query.label && (doc.label = req.query.label);
+  req.query.actors && req.query.actors.length !== 0 && (doc.actors = req.query.actors);
+  req.query.notes && (doc.notes = req.query.notes);
   const response = await movies.replaceOne(
     { _id: ObjectId(req.query.id) },
     doc,
@@ -115,7 +113,7 @@ app.put('/edit/title', async (req, res) => {
 app.delete('/title/:id', async (req, res) => {
   const response = await movies.deleteOne({ _id: ObjectId(req.params.id) });
   if (response.acknowledged) {
-    res.status(200).send('Record succesfully deleted');
+    res.status(200).json({ message: 'Record succesfully deleted' });
   } else {
     res.status(400).json({
       message: 'Error delete record from database',

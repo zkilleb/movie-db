@@ -6,12 +6,12 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
-  DialogContentText,
   Button,
 } from "@material-ui/core";
 import { Delete, Edit } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
-import { Result } from "../classes";
+import { Result, Validation } from "../classes";
+import { Notification } from "../components";
 import { getRecommendations } from "../handlers";
 import { deleteMovie } from "../handlers/deleteMovie";
 
@@ -24,7 +24,8 @@ export function Detail(props: any) {
   const tmdbData = props.location.state.keyword;
   const [recommendations, setRecommendations] = React.useState<IRecommend[]>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [validation, setValidation] = React.useState("");
+  const [validation, setValidation] = React.useState<Validation | undefined>();
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (tmdbData && tmdbData.id) {
@@ -38,6 +39,10 @@ export function Detail(props: any) {
 
   return (
     <div>
+      {validation && open && (
+        <Notification message={validation.message} severity={validation.severity} open={open} handleClose={handleClose}/>
+      )}
+
       <Dialog
         open={dialogOpen}
         PaperProps={{
@@ -51,9 +56,6 @@ export function Detail(props: any) {
       >
         <DialogContent>
           Are you sure you want to delete {data.title}?
-          <DialogContentText className={classes.error}>
-            {validation}
-          </DialogContentText>
         </DialogContent>
 
         <DialogActions>
@@ -165,14 +167,23 @@ export function Detail(props: any) {
   }
 
   async function handleDelete() {
-    if (data._id) {
-      const response = await deleteMovie(data._id);
-      if (response === "Record succesfully deleted") {
-        history.push({
-          pathname: "/",
-        });
-      } else setValidation("Error deleting record");
+    try {
+      if (data._id) {
+        const response = await deleteMovie(data._id);
+        if (response.status === 200) {
+          history.push({
+            pathname: "/",
+          });
+        }
+      }
+    } catch (e: any) {
+      setValidation({ message: e.response.data.message, severity: "error" });
     }
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
   }
 
   function handleEditClick() {
@@ -219,9 +230,6 @@ const useStyles = makeStyles(() => ({
   },
   dialogButtons: {
     color: "white",
-  },
-  error: {
-    color: "red",
   },
 }));
 

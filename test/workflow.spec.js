@@ -23,6 +23,7 @@ const objects = {
   editIcon: "[data-cy=EditIcon]",
   deleteIcon: "[data-cy=DeleteIcon]",
   confirmDelete: "[data-cy=ConfirmDelete]",
+  detailAlert: "[data-cy=DetailAlert]",
 };
 
 describe("Test Application Workflow", () => {
@@ -87,13 +88,20 @@ describe("Test Application Workflow", () => {
     cy.get(objects.addActorField).type("Al Pacino");
     cy.get(objects.addActorButton).click();
     cy.get(objects.addActorRow).eq(0).should("contain", "Al Pacino");
-    cy.intercept('PUT', '**/add**', {}).as('addMovie')
+    cy.intercept("PUT", "**/add**", {}).as("addMovie");
     cy.get(objects.submitButton).click();
-    cy.get(`${objects.titleField} >>`).should("have.value", "The Godfather");
+    cy.get(objects.detailAlert).should("contain", "Record already exists");
     cy.wait(3000);
   });
 
   it("Search Added Movie", () => {
+    cy.get(objects.searchTextField).type("Th");
+    cy.get(objects.searchButton).click();
+    cy.get(objects.detailAlert).should(
+      "contain",
+      "Search must be at least 3 charactes long"
+    );
+    cy.get(`${objects.searchTextField} >>`).clear();
     cy.get(objects.searchTextField).type("The Godfather");
     cy.get(objects.searchButton).click();
     cy.url().should("include", "/search");

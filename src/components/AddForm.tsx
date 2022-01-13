@@ -13,17 +13,18 @@ import {
   Checkbox,
   MenuItem,
   TextField,
-  Tooltip,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { Result } from "../classes";
+import { Result, Validation } from "../classes";
 import { addMovie, editMovie, getTMDBKeyword } from "../handlers";
+import { Notification } from ".";
 
 export function AddForm(data: IAddForm) {
   const editResults = data.data;
   const classes = useStyles();
   const history = useHistory();
+  const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState<string | null>(
     editResults && editResults.title ? editResults.title : null
   );
@@ -53,7 +54,7 @@ export function AddForm(data: IAddForm) {
   const [notes, setNotes] = React.useState<string | null>(
     editResults && editResults.notes ? editResults.notes : null
   );
-  const [validation, setValidation] = React.useState("");
+  const [validation, setValidation] = React.useState<Validation | undefined>();
   const [keyword, setKeyword] = React.useState();
 
   React.useEffect(() => {
@@ -79,6 +80,10 @@ export function AddForm(data: IAddForm) {
 
   return (
     <div>
+      {validation && open && (
+        <Notification message={validation.message} severity={validation.severity} open={open} handleClose={handleClose}/>
+      )}
+
       <Paper elevation={1} className={classes.paper}>
         <form className={classes.root} noValidate autoComplete="off">
           <TextField
@@ -208,22 +213,20 @@ export function AddForm(data: IAddForm) {
             <AddCircleIcon />
           </Button>
         </form>
-        <Tooltip title={validation}>
-          <Button
-            className={classes.submit}
-            onClick={handleSubmit}
-            variant="contained"
-            data-cy="SubmitButton"
-          >
-            Submit
-          </Button>
-        </Tooltip>
+        <Button
+          className={classes.submit}
+          onClick={handleSubmit}
+          variant="contained"
+          data-cy="SubmitButton"
+        >
+          Submit
+        </Button>
       </Paper>
     </div>
   );
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setValidation("");
+    setValidation(undefined);
     switch (event.target.id) {
       case "title":
         setTitle(event.target.value);
@@ -264,63 +267,92 @@ export function AddForm(data: IAddForm) {
     setAddActor(event.target.value);
   }
 
+  function handleClose() {
+    setOpen(false);
+  }
+
   async function handleSubmit() {
-    try {
-      if (!editResults) {
-        const results = await addMovie({
-          title,
-          format,
-          length,
-          year,
-          color,
-          language,
-          director,
-          label,
-          actors,
-          notes,
-        });
-        if (results.status === 200) {
-          window.location.reload();
-        } 
-      } else {
-        const results = await editMovie({
-          title,
-          format,
-          length,
-          year,
-          color,
-          language,
-          director,
-          label,
-          actors,
-          notes,
-          id: editResults._id,
-        });
-        if (results.status === 200) {
-          history.push({
-            pathname: "/detail",
-            state: {
-              details: {
-                title,
-                format,
-                length,
-                year,
-                color,
-                language,
-                director,
-                label,
-                actors,
-                notes,
-                _id: editResults._id,
-              },
-              keyword,
-            },
+    if (title) {
+      try {
+        if (!editResults) {
+          const results = await addMovie({
+            title,
+            format,
+            length,
+            year,
+            color,
+            language,
+            director,
+            label,
+            actors,
+            notes,
           });
-        } 
+          if (results.status === 200) {
+            setValidation({
+              message: "Record Succesfully Created",
+              severity: "success",
+            });
+            history.push({
+              pathname: "/detail",
+              state: {
+                details: {
+                  title,
+                  format,
+                  length,
+                  year,
+                  color,
+                  language,
+                  director,
+                  label,
+                  actors,
+                  notes,
+                  _id: results.data.insertedId,
+                },
+                keyword,
+              },
+            });
+          }
+        } else {
+          const results = await editMovie({
+            title,
+            format,
+            length,
+            year,
+            color,
+            language,
+            director,
+            label,
+            actors,
+            notes,
+            id: editResults._id,
+          });
+          if (results.status === 200) {
+            history.push({
+              pathname: "/detail",
+              state: {
+                details: {
+                  title,
+                  format,
+                  length,
+                  year,
+                  color,
+                  language,
+                  director,
+                  label,
+                  actors,
+                  notes,
+                  _id: editResults._id,
+                },
+                keyword,
+              },
+            });
+          }
+        }
+      } catch (e: any) {
+        setValidation({ message: e.response.data.message, severity: "error" });
       }
-    } catch (e: any) {
-      setValidation(e.response.data.message);
-    }
+    } else setValidation({ message: "Title is required", severity: "error" });
+    setOpen(true);
   }
 }
 
