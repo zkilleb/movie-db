@@ -70,7 +70,9 @@ app.post('/add/title', async (req, res) => {
   req.query.language && (doc.language = req.query.language);
   req.query.director && (doc.director = req.query.director);
   req.query.label && (doc.label = req.query.label);
-  req.query.actors && req.query.actors.length !== 0 && (doc.actors = req.query.actors);
+  req.query.actors &&
+    req.query.actors.length !== 0 &&
+    (doc.actors = req.query.actors);
   req.query.notes && (doc.notes = req.query.notes);
   const movie = await movies.findOne(doc);
   if (!movie) {
@@ -97,7 +99,9 @@ app.put('/edit/title', async (req, res) => {
   req.query.language && (doc.language = req.query.language);
   req.query.director && (doc.director = req.query.director);
   req.query.label && (doc.label = req.query.label);
-  req.query.actors && req.query.actors.length !== 0 && (doc.actors = req.query.actors);
+  req.query.actors &&
+    req.query.actors.length !== 0 &&
+    (doc.actors = req.query.actors);
   req.query.notes && (doc.notes = req.query.notes);
   const response = await movies.replaceOne(
     { _id: ObjectId(req.query.id) },

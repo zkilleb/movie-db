@@ -81,7 +81,12 @@ export function AddForm(data: IAddForm) {
   return (
     <div>
       {validation && open && (
-        <Notification message={validation.message} severity={validation.severity} open={open} handleClose={handleClose}/>
+        <Notification
+          message={validation.message}
+          severity={validation.severity}
+          open={open}
+          handleClose={handleClose}
+        />
       )}
 
       <Paper elevation={1} className={classes.paper}>

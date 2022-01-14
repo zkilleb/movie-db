@@ -1,5 +1,4 @@
 export class Validation {
-    message: string = "";
-    severity: string = "";
+  message: string = "";
+  severity: string = "";
 }
-  

@@ -16,7 +16,12 @@ export function Search() {
   return (
     <div>
       {validation && open && (
-        <Notification message={validation.message} severity={validation.severity} open={open} handleClose={handleClose}/>
+        <Notification
+          message={validation.message}
+          severity={validation.severity}
+          open={open}
+          handleClose={handleClose}
+        />
       )}
 
       <TextField
