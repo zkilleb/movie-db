@@ -3,6 +3,7 @@ import { MongoClient, ObjectId } from 'mongodb';
 import Joi from 'joi';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import { fetchReview, fetchGreatMovie } from 'eberts-api';
 
 dotenv.config();
 
@@ -139,6 +140,14 @@ app.get('/recommendations/:id', (req, res) => {
   )
     .then((response) => response.json())
     .then((json) => res.send(json));
+});
+
+app.get('/review/:title/:year', async (req, res) => {
+  let result = await fetchReview(req.params.title, req.params.year);
+  if (result.error) {
+    result = await fetchGreatMovie(req.params.title, req.params.year);
+    if (result.error) res.status(404).send(result.error);
+  } else res.status(200).send(result);
 });
 
 app.listen(port, () => {

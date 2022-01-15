@@ -3,3 +3,4 @@ export { Header } from "./Header";
 export { Search } from "./Search";
 export { SearchResult } from "./SearchResult";
 export { Notification } from "./Notification";
+export { Review } from "./Review";

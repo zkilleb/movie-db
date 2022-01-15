@@ -24,6 +24,7 @@ const objects = {
   deleteIcon: "[data-cy=DeleteIcon]",
   confirmDelete: "[data-cy=ConfirmDelete]",
   detailAlert: "[data-cy=DetailAlert]",
+  review: "[data-cy=Review]",
 };
 
 describe("Test Application Workflow", () => {
@@ -146,6 +147,7 @@ describe("Test Application Workflow", () => {
       "contain",
       "Notes: Part of The Godfather Trilogy release"
     );
+    cy.get(objects.review).should("contain", "Review By Roger Ebert:");
     cy.get(objects.recommendations).should("contain", "Similar Films:");
     cy.get(objects.recommendedFilm).eq(0).should("exist");
     cy.get(objects.recommendedFilm).eq(1).should("exist");

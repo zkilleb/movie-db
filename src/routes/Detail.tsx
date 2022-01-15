@@ -10,10 +10,9 @@ import {
 } from "@material-ui/core";
 import { Delete, Edit } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
-import { Result, Validation } from "../classes";
-import { Notification } from "../components";
-import { getRecommendations } from "../handlers";
-import { deleteMovie } from "../handlers/deleteMovie";
+import { Result, Validation, Ebert } from "../classes";
+import { Notification, Review } from "../components";
+import { getRecommendations, deleteMovie, getReview } from "../handlers";
 
 export function Detail(props: any) {
   const classes = useStyles();
@@ -25,6 +24,7 @@ export function Detail(props: any) {
   const [recommendations, setRecommendations] = React.useState<IRecommend[]>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [validation, setValidation] = React.useState<Validation | undefined>();
+  const [review, setReview] = React.useState<Ebert>();
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -36,6 +36,23 @@ export function Detail(props: any) {
       fetchData();
     }
   }, [tmdbData]);
+
+  React.useEffect(() => {
+    async function fetchData() {
+      try {
+        if (data.title && data.year) {
+          const response = await getReview(data.title, data.year);
+          if (response.status === 200) {
+            setReview(response.data);
+          }
+        }
+      } catch (e: any) {
+        setValidation({ message: e.response.data, severity: "info" });
+        setOpen(true);
+      }
+    }
+    fetchData();
+  }, [data]);
 
   return (
     <div>
@@ -127,6 +144,13 @@ export function Detail(props: any) {
               <div>Label: {data.label}</div>
               <div>Notes: {data.notes}</div>
             </div>
+            {review && (
+              <Review
+                writer={review.reviewWriter}
+                stars={review.starRating}
+                url={review.url}
+              />
+            )}
           </div>
           <div className={classes.recommendations} data-cy="Recommendations">
             Similar Films:

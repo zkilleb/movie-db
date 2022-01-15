@@ -16,7 +16,7 @@
     "@types/react-dom": "17.0.9",
     "axios": "0.21.4",
     "dotenv": "10.0.0",
-    "ebert-api": "^1.0.2",
+    "eberts-api": "1.0.1",
     "joi": "17.4.2",
     "mongodb": "4.1.1",
     "node-fetch": "3.0.0",
