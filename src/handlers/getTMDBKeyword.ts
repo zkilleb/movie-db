@@ -6,7 +6,7 @@ export async function getTMDBKeyword(
 ): Promise<[]> {
   let route = "";
   if (type === "title") route = `keyword-search/${title}`;
-  if (type === "director") route = `person-search/${title}`;
+  if (type === "director") route = `person-search/${title}/${type}`;
   return await axios.get(`http://localhost:8080/${route}`).then((res) => {
     return res.data;
   });

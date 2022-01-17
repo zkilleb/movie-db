@@ -161,14 +161,20 @@ app.get('/keyword-search/:keyword', async (req, res) => {
     .then((json) => res.send(json.results));
 });
 
-app.get('/person-search/:keyword', async (req, res) => {
+app.get('/person-search/:keyword/:type', async (req, res) => {
+  let knownFor = '';
+  if (req.params.type === 'director') knownFor = 'Directing';
   fetch(
     `${BASE_URL}/search/person?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
   )
     .then((response) => response.json())
     .then((json) => {
+      let temp = [];
+      json.results.forEach((element) => {
+        if (element.known_for_department === knownFor) temp.push(element);
+      });
       fetch(
-        `${BASE_URL}/person/${json.results[0].id}/movie_credits?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
+        `${BASE_URL}/person/${temp[0].id}/movie_credits?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
       )
         .then((subResponse) => subResponse.json())
         .then((subJson) => res.send(subJson.crew));
