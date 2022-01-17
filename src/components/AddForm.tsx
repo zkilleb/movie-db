@@ -16,9 +16,10 @@ import {
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { Result, Validation, TMDBResult } from "../classes";
-import { addMovie, editMovie, getTMDBKeyword } from "../handlers";
+import { Result, Validation } from "../classes";
+import { addMovie, editMovie } from "../handlers";
 import { Notification } from ".";
+import { filterTMDBResult } from "../util";
 
 export function AddForm(data: IAddForm) {
   const editResults = data.data;
@@ -58,24 +59,11 @@ export function AddForm(data: IAddForm) {
   const [keyword, setKeyword] = React.useState();
 
   React.useEffect(() => {
-    const minYear = year ? parseInt(year) - 1 : 0;
-    const maxYear = year ? parseInt(year) + 1 : 0;
-    if (title) {
-      async function fetchData() {
-        const tmdbResults = await getTMDBKeyword(title);
-        if (tmdbResults) {
-          const result: TMDBResult[] | undefined = tmdbResults.find(
-            (movie: TMDBResult) =>
-              title &&
-              movie.title.toLowerCase() === title.toLowerCase() &&
-              parseInt(movie.release_date.substring(0, 4)) >= minYear &&
-              parseInt(movie.release_date.substring(0, 4)) <= maxYear
-          );
-          setKeyword(result);
-        }
-      }
-      fetchData();
+    async function fetchData() {
+      const result = await filterTMDBResult(year, title);
+      setKeyword(result);
     }
+    fetchData();
   }, [title, year]);
 
   return (

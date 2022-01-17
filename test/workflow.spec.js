@@ -25,12 +25,19 @@ const objects = {
   confirmDelete: "[data-cy=ConfirmDelete]",
   detailAlert: "[data-cy=DetailAlert]",
   review: "[data-cy=Review]",
+  random: "[data-cy=Random]",
 };
 
 describe("Test Application Workflow", () => {
   it("Verifies the Home Page Loads", () => {
     cy.visit("/");
     cy.get(objects.header).should("exist");
+  });
+
+  it("Verify Random Title is Loaded", () => {
+    cy.get(objects.random).click({ force: true });
+    cy.url().should("include", "/detail");
+    cy.get(objects.detailContainer).should("exist");
   });
 
   it("Add Movie", () => {

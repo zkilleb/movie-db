@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { searchMovie, getTMDBKeyword } from "../handlers";
 import { Result } from "../classes";
@@ -36,7 +37,7 @@ export function Search() {
         (searchResults && searchResults.length === 0 && (
           <div className={classes.linkWrapper}>
             <Link to="/add" className={classes.link}>
-              Add Movie
+              <Button variant="contained">Add Movie</Button>
             </Link>
           </div>
         ))}

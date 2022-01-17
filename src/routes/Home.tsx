@@ -23,6 +23,6 @@ const useStyles = makeStyles(() => ({
     margin: "auto",
     marginTop: 25,
     borderRadius: "10px 10px 10px 10px",
-    color: "white"
+    color: "white",
   },
 }));
