@@ -8,7 +8,7 @@ export async function filterTMDBResult(
   const minYear = year ? parseInt(year) - 1 : 0;
   const maxYear = year ? parseInt(year) + 1 : 0;
   if (title) {
-    const tmdbResults = await getTMDBKeyword(title);
+    const tmdbResults = await getTMDBKeyword(title, "title");
     if (tmdbResults) {
       const result: TMDBResult[] | undefined = tmdbResults.find(
         (movie: TMDBResult) =>

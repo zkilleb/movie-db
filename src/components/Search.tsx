@@ -1,7 +1,7 @@
 import React, { KeyboardEvent } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import { TextField, Icon } from "@material-ui/core";
+import { TextField, Icon, Select, MenuItem } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { Validation } from "../classes";
 import { Notification } from ".";
@@ -11,7 +11,19 @@ export function Search() {
   const history = useHistory();
   const [title, setTitle] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("title");
   const [validation, setValidation] = React.useState<Validation | undefined>();
+
+  const searchTypes = [
+    {
+      label: "Title",
+      value: "title",
+    },
+    {
+      label: "Director",
+      value: "director",
+    },
+  ];
 
   return (
     <div>
@@ -23,7 +35,22 @@ export function Search() {
           handleClose={handleClose}
         />
       )}
-
+      <Select
+        value={search}
+        className={classes.searchType}
+        onChange={handleChange}
+        inputProps={{
+          classes: {
+            icon: classes.icon,
+          },
+        }}
+      >
+        {searchTypes.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
       <TextField
         InputProps={{ className: classes.field }}
         InputLabelProps={{ className: classes.field }}
@@ -48,7 +75,7 @@ export function Search() {
     if (title.length > 2) {
       history.push({
         pathname: "/search",
-        search: `?title=${title}`,
+        search: `?title=${title}&type=${search}`,
       });
       setTitle("");
     } else {
@@ -58,6 +85,10 @@ export function Search() {
       });
       setOpen(true);
     }
+  }
+
+  function handleChange(event: any) {
+    setSearch(event.target.value);
   }
 
   function handleKeyPress(event: KeyboardEvent<HTMLDivElement>) {
@@ -98,5 +129,18 @@ const useStyles = makeStyles(() => ({
   searchIcon: {
     marginTop: 15,
     display: "inline-block",
+  },
+  searchType: {
+    color: "white",
+    marginRight: 10,
+    "&:before": {
+      borderColor: "white",
+    },
+    "&:after": {
+      borderColor: "white",
+    },
+  },
+  icon: {
+    color: "white",
   },
 }));

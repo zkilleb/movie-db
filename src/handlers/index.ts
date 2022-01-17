@@ -6,3 +6,4 @@ export { getRecommendations } from "./getRecommendations";
 export { deleteMovie } from "./deleteMovie";
 export { getReview } from "./getReview";
 export { getRandom } from "./getRandom";
+export { searchDirector } from "./searchDirector";

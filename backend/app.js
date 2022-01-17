@@ -46,6 +46,24 @@ app.get('/titles/:title', async (req, res) => {
     });
 });
 
+app.get('/director/:name', async (req, res) => {
+  const directorSchema = Joi.string().min(3);
+  const validation = directorSchema.validate(req.params.name);
+  if (!validation.error) {
+    const cursor = movies.find({ director: new RegExp(req.params.name, 'i') });
+    let results = [];
+    await cursor.forEach((result) => {
+      results.push(result);
+    });
+    res.status(200).send(results);
+  } else
+    res.status(400).json({
+      message: process.env.VERBOSE
+        ? validation.error.message
+        : 'Invalid request',
+    });
+});
+
 app.get('/title/id/:id', async (req, res) => {
   const titleSchema = Joi.string().alphanum().lowercase().length(24);
   const validation = titleSchema.validate(req.params.id);
@@ -141,6 +159,20 @@ app.get('/keyword-search/:keyword', async (req, res) => {
   )
     .then((response) => response.json())
     .then((json) => res.send(json.results));
+});
+
+app.get('/person-search/:keyword', async (req, res) => {
+  fetch(
+    `${BASE_URL}/search/person?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
+  )
+    .then((response) => response.json())
+    .then((json) => {
+      fetch(
+        `${BASE_URL}/person/${json.results[0].id}/movie_credits?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
+      )
+        .then((subResponse) => subResponse.json())
+        .then((subJson) => res.send(subJson.crew));
+    });
 });
 
 app.get('/recommendations/:id', (req, res) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { searchMovie, getTMDBKeyword } from "../handlers";
+import { searchMovie, getTMDBKeyword, searchDirector } from "../handlers";
 import { Result } from "../classes";
 import { SearchResult } from "../components";
 
@@ -14,19 +14,28 @@ export function Search() {
 
   const params = new URLSearchParams(window.location.search);
   const title = params.get("title");
+  const type = params.get("type");
 
   React.useEffect(() => {
     if (title) {
       setUrlParams(decodeURI(title));
       async function fetchData() {
-        const tmdbResults = await getTMDBKeyword(title);
-        const results = await searchMovie(title);
+        const tmdbResults = await getTMDBKeyword(title, type);
+        let results;
+        switch (type) {
+          case "title":
+            results = await searchMovie(title);
+            break;
+          case "director":
+            results = await searchDirector(title);
+            break;
+        }
         if (results) setSearchResults(results);
         if (tmdbResults) setKeywordResults(tmdbResults);
       }
       fetchData();
     }
-  }, [title]);
+  }, [title, type]);
 
   return (
     <div data-cy="SearchResultPage">
