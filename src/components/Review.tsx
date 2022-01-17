@@ -28,7 +28,7 @@ export function Review({
 const useStyles = makeStyles(() => ({
   review: {
     marginLeft: "auto",
-    marginRight: 10
+    marginRight: 10,
   },
   link: {
     textDecoration: "none",

@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { Result, Validation } from "../classes";
+import { Result, Validation, TMDBResult } from "../classes";
 import { addMovie, editMovie, getTMDBKeyword } from "../handlers";
 import { Notification } from ".";
 
@@ -64,8 +64,8 @@ export function AddForm(data: IAddForm) {
       async function fetchData() {
         const tmdbResults = await getTMDBKeyword(title);
         if (tmdbResults) {
-          const result: ITMDBResult[] | undefined = tmdbResults.find(
-            (movie: ITMDBResult) =>
+          const result: TMDBResult[] | undefined = tmdbResults.find(
+            (movie: TMDBResult) =>
               title &&
               movie.title.toLowerCase() === title.toLowerCase() &&
               parseInt(movie.release_date.substring(0, 4)) >= minYear &&
@@ -432,9 +432,4 @@ const useStyles = makeStyles((theme) => ({
 
 interface IAddForm {
   data?: Result;
-}
-
-export interface ITMDBResult {
-  title: string;
-  release_date: string;
 }

@@ -61,6 +61,15 @@ app.get('/title/id/:id', async (req, res) => {
     });
 });
 
+app.get('/random-title', async (req, res) => {
+  const results = await movies.find({});
+  let temp = [];
+  await results.forEach((result) => {
+    temp.push(result);
+  });
+  res.status(200).send(temp[Math.floor(Math.random() * temp.length)]);
+});
+
 app.post('/add/title', async (req, res) => {
   let doc = {};
   req.query.title && (doc.title = req.query.title);
