@@ -1,5 +1,5 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Paper,
   Button,
@@ -13,13 +13,13 @@ import {
   Checkbox,
   MenuItem,
   TextField,
-} from "@material-ui/core";
-import { useHistory } from "react-router-dom";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { Result, Validation } from "../classes";
-import { addMovie, editMovie } from "../handlers";
-import { Notification } from ".";
-import { filterTMDBResult } from "../util";
+} from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { Result, Validation } from '../classes';
+import { addMovie, editMovie } from '../handlers';
+import { Notification } from '.';
+import { filterTMDBResult } from '../util';
 
 export function AddForm(data: IAddForm) {
   const editResults = data.data;
@@ -27,33 +27,33 @@ export function AddForm(data: IAddForm) {
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState<string | null>(
-    editResults && editResults.title ? editResults.title : null
+    editResults && editResults.title ? editResults.title : null,
   );
   const [format, setFormat] = React.useState<string>(formats[0].value);
   const [length, setLength] = React.useState<string | null>(
-    editResults && editResults.length ? editResults.length.toString() : null
+    editResults && editResults.length ? editResults.length.toString() : null,
   );
   const [year, setYear] = React.useState<string | null>(
-    editResults && editResults.year ? editResults.year.toString() : null
+    editResults && editResults.year ? editResults.year.toString() : null,
   );
   const [color, setColor] = React.useState<boolean>(
-    editResults && editResults.color ? editResults.color : true
+    editResults && editResults.color ? editResults.color : true,
   );
   const [language, setLanguage] = React.useState<string | null>(
-    editResults && editResults.language ? editResults.language : null
+    editResults && editResults.language ? editResults.language : null,
   );
   const [director, setDirector] = React.useState<string | null>(
-    editResults && editResults.director ? editResults.director : null
+    editResults && editResults.director ? editResults.director : null,
   );
   const [label, setLabel] = React.useState<string | null>(
-    editResults && editResults.label ? editResults.label : null
+    editResults && editResults.label ? editResults.label : null,
   );
   const [actors, setActors] = React.useState<string[]>(
-    editResults && editResults.actors ? editResults.actors : []
+    editResults && editResults.actors ? editResults.actors : [],
   );
   const [addActor, setAddActor] = React.useState<string>();
   const [notes, setNotes] = React.useState<string | null>(
-    editResults && editResults.notes ? editResults.notes : null
+    editResults && editResults.notes ? editResults.notes : null,
   );
   const [validation, setValidation] = React.useState<Validation | undefined>();
   const [keyword, setKeyword] = React.useState();
@@ -131,7 +131,7 @@ export function AddForm(data: IAddForm) {
               <Checkbox
                 checked={color}
                 onChange={handleChange}
-                style={{ color: "#00b020" }}
+                style={{ color: '#00b020' }}
                 id="color"
               />
             }
@@ -221,31 +221,31 @@ export function AddForm(data: IAddForm) {
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setValidation(undefined);
     switch (event.target.id) {
-      case "title":
+      case 'title':
         setTitle(event.target.value);
         break;
-      case "format":
+      case 'format':
         setFormat(event.target.value);
         break;
-      case "length":
-        setLength(event.target.value.replace(/[^0-9]/g, ""));
+      case 'length':
+        setLength(event.target.value.replace(/[^0-9]/g, ''));
         break;
-      case "year":
-        setYear(event.target.value.replace(/[^0-9]/g, ""));
+      case 'year':
+        setYear(event.target.value.replace(/[^0-9]/g, ''));
         break;
-      case "color":
+      case 'color':
         setColor(event.target.checked);
         break;
-      case "language":
+      case 'language':
         setLanguage(event.target.value);
         break;
-      case "director":
+      case 'director':
         setDirector(event.target.value);
         break;
-      case "label":
+      case 'label':
         setLabel(event.target.value);
         break;
-      case "notes":
+      case 'notes':
         setNotes(event.target.value);
         break;
     }
@@ -253,7 +253,7 @@ export function AddForm(data: IAddForm) {
 
   function handleAddActor() {
     if (addActor) setActors([...actors, addActor]);
-    setAddActor("");
+    setAddActor('');
   }
 
   function handleNameField(event: React.ChangeEvent<HTMLInputElement>) {
@@ -282,11 +282,11 @@ export function AddForm(data: IAddForm) {
           });
           if (results.status === 200) {
             setValidation({
-              message: "Record Succesfully Created",
-              severity: "success",
+              message: 'Record Succesfully Created',
+              severity: 'success',
             });
             history.push({
-              pathname: "/detail",
+              pathname: '/detail',
               state: {
                 details: {
                   title,
@@ -321,7 +321,7 @@ export function AddForm(data: IAddForm) {
           });
           if (results.status === 200) {
             history.push({
-              pathname: "/detail",
+              pathname: '/detail',
               state: {
                 details: {
                   title,
@@ -342,53 +342,53 @@ export function AddForm(data: IAddForm) {
           }
         }
       } catch (e: any) {
-        setValidation({ message: e.response.data.message, severity: "error" });
+        setValidation({ message: e.response.data.message, severity: 'error' });
       }
-    } else setValidation({ message: "Title is required", severity: "error" });
+    } else setValidation({ message: 'Title is required', severity: 'error' });
     setOpen(true);
   }
 }
 
 const formats = [
   {
-    label: "Blu-ray",
-    value: "blu-ray",
+    label: 'Blu-ray',
+    value: 'blu-ray',
   },
   {
-    label: "DVD",
-    value: "dvd",
+    label: 'DVD',
+    value: 'dvd',
   },
   {
-    label: "VHS",
-    value: "vhs",
+    label: 'VHS',
+    value: 'vhs',
   },
   {
-    label: "4K Ultra HD",
-    value: "4k",
+    label: '4K Ultra HD',
+    value: '4k',
   },
   {
-    label: "Betamax",
-    value: "betamax",
+    label: 'Betamax',
+    value: 'betamax',
   },
 ];
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& > *": {
+    '& > *': {
       margin: theme.spacing(1),
     },
-    "& label.Mui-focused": {
-      color: "white",
+    '& label.Mui-focused': {
+      color: 'white',
     },
-    "& .MuiInput-underline:before": {
-      borderBottomColor: "white",
+    '& .MuiInput-underline:before': {
+      borderBottomColor: 'white',
     },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "white",
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'white',
     },
   },
   checkbox: {
-    color: "rgba(85,221,102,.25)",
+    color: 'rgba(85,221,102,.25)',
   },
   table: {
     minWidth: 200,
@@ -398,20 +398,20 @@ const useStyles = makeStyles((theme) => ({
     margin: 10,
   },
   field: {
-    color: "white",
+    color: 'white',
   },
   paper: {
-    backgroundColor: "#456",
-    width: "90%",
-    margin: "auto",
+    backgroundColor: '#456',
+    width: '90%',
+    margin: 'auto',
     marginTop: 25,
-    borderRadius: "10px 10px 10px 10px",
+    borderRadius: '10px 10px 10px 10px',
   },
   addActors: {
-    backgroundColor: "white",
-    width: "40%",
+    backgroundColor: 'white',
+    width: '40%',
     marginTop: 10,
-    margin: "auto",
+    margin: 'auto',
   },
   submit: {
     marginBottom: 10,

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export async function getReview(title: string, year: number): Promise<any> {
   return await axios

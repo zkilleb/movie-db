@@ -1,5 +1,5 @@
-import { Snackbar } from "@material-ui/core";
-import { Alert, Color } from "@material-ui/lab";
+import { Snackbar } from '@material-ui/core';
+import { Alert, Color } from '@material-ui/lab';
 
 export function Notification({
   message,

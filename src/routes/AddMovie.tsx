@@ -1,4 +1,4 @@
-import { AddForm } from "../components";
+import { AddForm } from '../components';
 
 export function AddMovie() {
   return (

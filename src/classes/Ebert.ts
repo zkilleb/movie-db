@@ -1,5 +1,5 @@
 export class Ebert {
-  reviewWriter: string = "";
+  reviewWriter: string = '';
   starRating: number = 0;
-  url: string = "";
+  url: string = '';
 }

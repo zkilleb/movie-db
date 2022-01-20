@@ -1,6 +1,6 @@
-import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-import { Search } from ".";
+import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
+import { Search } from '.';
 
 export function Header() {
   const classes = useStyles();
@@ -22,23 +22,23 @@ export function Header() {
 
 const useStyles = makeStyles(() => ({
   header: {
-    width: "100%",
+    width: '100%',
     height: 55,
-    backgroundColor: "#14181c",
-    display: "flex",
-    alignItems: "center",
+    backgroundColor: '#14181c',
+    display: 'flex',
+    alignItems: 'center',
   },
   link: {
     paddingLeft: 10,
     paddingRight: 10,
-    fontFamily: "Graphik-Semibold-Web,sans-serif",
-    fontWeight: "bold",
-    textDecoration: "none",
-    color: "white",
+    fontFamily: 'Graphik-Semibold-Web,sans-serif',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+    color: 'white',
   },
   search: {
     paddingRight: 10,
-    color: "white",
-    marginLeft: "auto",
+    color: 'white',
+    marginLeft: 'auto',
   },
 }));

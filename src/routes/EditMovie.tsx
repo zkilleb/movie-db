@@ -1,5 +1,5 @@
-import { AddForm } from "../components";
-import { Result } from "../classes";
+import { AddForm } from '../components';
+import { Result } from '../classes';
 
 export function EditMovie(props: any) {
   const data: Result =

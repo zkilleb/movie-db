@@ -1,27 +1,27 @@
-import React, { KeyboardEvent } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
-import { TextField, Icon, Select, MenuItem } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
-import { Validation } from "../classes";
-import { Notification } from ".";
+import React, { KeyboardEvent } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import SearchIcon from '@material-ui/icons/Search';
+import { TextField, Icon, Select, MenuItem } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { Validation } from '../classes';
+import { Notification } from '.';
 
 export function Search() {
   const classes = useStyles();
   const history = useHistory();
-  const [title, setTitle] = React.useState("");
+  const [title, setTitle] = React.useState('');
   const [open, setOpen] = React.useState(false);
-  const [search, setSearch] = React.useState("title");
+  const [search, setSearch] = React.useState('title');
   const [validation, setValidation] = React.useState<Validation | undefined>();
 
   const searchTypes = [
     {
-      label: "Title",
-      value: "title",
+      label: 'Title',
+      value: 'title',
     },
     {
-      label: "Director",
-      value: "director",
+      label: 'Director',
+      value: 'director',
     },
   ];
 
@@ -74,14 +74,14 @@ export function Search() {
   function handleSearchClick() {
     if (title.length > 2) {
       history.push({
-        pathname: "/search",
+        pathname: '/search',
         search: `?title=${title}&type=${search}`,
       });
-      setTitle("");
+      setTitle('');
     } else {
       setValidation({
-        message: "Search must be at least 3 charactes long",
-        severity: "error",
+        message: 'Search must be at least 3 charactes long',
+        severity: 'error',
       });
       setOpen(true);
     }
@@ -92,7 +92,7 @@ export function Search() {
   }
 
   function handleKeyPress(event: KeyboardEvent<HTMLDivElement>) {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       handleSearchClick();
     }
   }
@@ -109,38 +109,38 @@ export function Search() {
 
 const useStyles = makeStyles(() => ({
   root: {
-    "& > *": {
+    '& > *': {
       marginTop: 0,
       marginBottom: 10,
     },
-    "& label.Mui-focused": {
-      color: "white",
+    '& label.Mui-focused': {
+      color: 'white',
     },
-    "& .MuiInput-underline:before": {
-      borderBottomColor: "white",
+    '& .MuiInput-underline:before': {
+      borderBottomColor: 'white',
     },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "white",
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'white',
     },
   },
   field: {
-    color: "white",
+    color: 'white',
   },
   searchIcon: {
     marginTop: 15,
-    display: "inline-block",
+    display: 'inline-block',
   },
   searchType: {
-    color: "white",
+    color: 'white',
     marginRight: 10,
-    "&:before": {
-      borderColor: "white",
+    '&:before': {
+      borderColor: 'white',
     },
-    "&:after": {
-      borderColor: "white",
+    '&:after': {
+      borderColor: 'white',
     },
   },
   icon: {
-    color: "white",
+    color: 'white',
   },
 }));

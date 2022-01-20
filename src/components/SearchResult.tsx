@@ -1,12 +1,12 @@
-import { Result } from "../classes";
-import { makeStyles } from "@material-ui/core/styles";
-import { Paper } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { Result } from '../classes';
+import { makeStyles } from '@material-ui/core/styles';
+import { Paper } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 export function SearchResult({ data, keywordResults }: IResult) {
   const classes = useStyles();
   const history = useHistory();
-  const title = data.title ? data.title : "";
+  const title = data.title ? data.title : '';
   const actors = data.actors ? data.actors : [];
   // Check for between plus or minus 1 year to account for differences in international release dates
   const minYear = data.year ? data.year - 1 : 0;
@@ -15,7 +15,7 @@ export function SearchResult({ data, keywordResults }: IResult) {
     (movie: any) =>
       movie.title.toLowerCase() === title.toLowerCase() &&
       movie.release_date.substring(0, 4) >= minYear &&
-      movie.release_date.substring(0, 4) <= maxYear
+      movie.release_date.substring(0, 4) <= maxYear,
   );
 
   return (
@@ -43,14 +43,14 @@ export function SearchResult({ data, keywordResults }: IResult) {
         <div>Directed By: {data.director}</div>
         <div>Language: {data.language}</div>
         <div>Runtime: {data.length} mins.</div>
-        <div>Actors: {actors.toString().replaceAll(",", ", ")}</div>
+        <div>Actors: {actors.toString().replaceAll(',', ', ')}</div>
       </div>
     </Paper>
   );
 
   function handleClick() {
     history.push({
-      pathname: "/detail",
+      pathname: '/detail',
       state: { details: data, keyword: result },
     });
   }
@@ -58,15 +58,15 @@ export function SearchResult({ data, keywordResults }: IResult) {
 
 const useStyles = makeStyles(() => ({
   paper: {
-    backgroundColor: "#456",
-    width: "50%",
-    margin: "auto",
+    backgroundColor: '#456',
+    width: '50%',
+    margin: 'auto',
     marginTop: 25,
     fontSize: 15,
-    color: "white",
-    display: "flex",
-    textAlign: "left",
-    borderRadius: "10px 10px 10px 10px",
+    color: 'white',
+    display: 'flex',
+    textAlign: 'left',
+    borderRadius: '10px 10px 10px 10px',
   },
   poster: {
     padding: 10,
@@ -75,8 +75,8 @@ const useStyles = makeStyles(() => ({
     width: 106.7,
     height: 160,
     margin: 10,
-    textAlign: "center",
-    border: "solid",
+    textAlign: 'center',
+    border: 'solid',
   },
 }));
 

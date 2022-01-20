@@ -1,11 +1,11 @@
-import "./App.css";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { NotFound, AddMovie, EditMovie, Home, Search, Detail } from "./routes";
-import { Header } from "./components";
+import './App.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { NotFound, AddMovie, EditMovie, Home, Search, Detail } from './routes';
+import { Header } from './components';
 
 function App() {
   return (
-    <div className={"App"}>
+    <div className={'App'}>
       <BrowserRouter>
         <Header />
         <Switch>

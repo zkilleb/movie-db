@@ -1,5 +1,5 @@
-import axios from "axios";
-import { Result } from "../classes";
+import axios from 'axios';
+import { Result } from '../classes';
 
 export async function searchMovie(title: string | null): Promise<Result[]> {
   return await axios

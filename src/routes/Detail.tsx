@@ -1,5 +1,5 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Tooltip,
   Icon,
@@ -7,12 +7,12 @@ import {
   DialogContent,
   DialogActions,
   Button,
-} from "@material-ui/core";
-import { Delete, Edit } from "@material-ui/icons";
-import { Link, useHistory } from "react-router-dom";
-import { Result, Validation, Ebert } from "../classes";
-import { Notification, Review } from "../components";
-import { getRecommendations, deleteMovie, getReview } from "../handlers";
+} from '@material-ui/core';
+import { Delete, Edit } from '@material-ui/icons';
+import { Link, useHistory } from 'react-router-dom';
+import { Result, Validation, Ebert } from '../classes';
+import { Notification, Review } from '../components';
+import { getRecommendations, deleteMovie, getReview } from '../handlers';
 
 export function Detail(props: any) {
   const classes = useStyles();
@@ -47,7 +47,7 @@ export function Detail(props: any) {
           }
         }
       } catch (e: any) {
-        setValidation({ message: e.response.data, severity: "info" });
+        setValidation({ message: e.response.data, severity: 'info' });
         setOpen(true);
       }
     }
@@ -69,10 +69,10 @@ export function Detail(props: any) {
         open={dialogOpen}
         PaperProps={{
           style: {
-            backgroundColor: "#456",
-            color: "white",
-            width: "50%",
-            height: "15%",
+            backgroundColor: '#456',
+            color: 'white',
+            width: '50%',
+            height: '15%',
           },
         }}
       >
@@ -97,7 +97,7 @@ export function Detail(props: any) {
       {data ? (
         <div className={classes.header} data-cy="DetailContainer">
           {data.title}
-          <Tooltip title={"Edit Movie"}>
+          <Tooltip title={'Edit Movie'}>
             <Icon
               className={classes.editIcon}
               onClick={handleEditClick}
@@ -106,7 +106,7 @@ export function Detail(props: any) {
               <Edit />
             </Icon>
           </Tooltip>
-          <Tooltip title={"Delete Movie"}>
+          <Tooltip title={'Delete Movie'}>
             <Icon
               className={classes.deleteIcon}
               onClick={handleDeleteModal}
@@ -131,15 +131,15 @@ export function Detail(props: any) {
             <div>
               <div>Directed By: {data.director}</div>
               <div>
-                Starring:{" "}
+                Starring:{' '}
                 {data.actors
-                  ? data.actors.toString().replaceAll(",", ", ")
-                  : ""}
+                  ? data.actors.toString().replaceAll(',', ', ')
+                  : ''}
               </div>
               <div>Runtime: {data.length} mins.</div>
               <div>Release Year: {data.year}</div>
               <div>Language: {data.language}</div>
-              <div>Color: {data.color ? "Yes" : "No"}</div>
+              <div>Color: {data.color ? 'Yes' : 'No'}</div>
               <div>Format: {data.format}</div>
               <div>Label: {data.label}</div>
               <div>Notes: {data.notes}</div>
@@ -162,7 +162,7 @@ export function Detail(props: any) {
                       to={{
                         pathname: `https://letterboxd.com/film/${recommend.title
                           .toLowerCase()
-                          .replaceAll(" ", "-")}`,
+                          .replaceAll(' ', '-')}`,
                       }}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -201,12 +201,12 @@ export function Detail(props: any) {
         const response = await deleteMovie(data._id);
         if (response.status === 200) {
           history.push({
-            pathname: "/",
+            pathname: '/',
           });
         }
       }
     } catch (e: any) {
-      setValidation({ message: e.response.data.message, severity: "error" });
+      setValidation({ message: e.response.data.message, severity: 'error' });
     }
     setOpen(true);
   }
@@ -217,7 +217,7 @@ export function Detail(props: any) {
 
   function handleEditClick() {
     history.push({
-      pathname: "/edit",
+      pathname: '/edit',
       state: { details: data },
     });
   }
@@ -226,39 +226,39 @@ export function Detail(props: any) {
 const useStyles = makeStyles(() => ({
   header: {
     fontSize: 20,
-    color: "white",
+    color: 'white',
   },
   deleteIcon: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     marginRight: 10,
   },
   editIcon: {
-    position: "absolute",
+    position: 'absolute',
     right: 30,
     marginRight: 10,
   },
   details: {
-    display: "flex",
+    display: 'flex',
     marginTop: 20,
-    textAlign: "left",
+    textAlign: 'left',
   },
   poster: {
     margin: 10,
-    border: "solid",
-    textAlign: "center",
+    border: 'solid',
+    textAlign: 'center',
   },
   recommendations: {
     marginTop: 30,
   },
   recommendInfo: {
     marginTop: 10,
-    display: "inline-block",
+    display: 'inline-block',
     marginLeft: 5,
     marginRight: 5,
   },
   dialogButtons: {
-    color: "white",
+    color: 'white',
   },
 }));
 

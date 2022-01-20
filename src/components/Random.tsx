@@ -1,8 +1,8 @@
-import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
-import { getRandom } from "../handlers";
-import { filterTMDBResult } from "../util";
+import { makeStyles } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { getRandom } from '../handlers';
+import { filterTMDBResult } from '../util';
 
 export function Random() {
   const classes = useStyles();
@@ -18,7 +18,7 @@ export function Random() {
     const result = await getRandom();
     const tmdbResult = await filterTMDBResult(result.year, result.title);
     history.push({
-      pathname: "/detail",
+      pathname: '/detail',
       state: {
         details: {
           title: result.title,
@@ -41,7 +41,7 @@ export function Random() {
 
 const useStyles = makeStyles(() => ({
   random: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingTop: 65,
   },
 }));
