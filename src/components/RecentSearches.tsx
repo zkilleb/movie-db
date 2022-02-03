@@ -12,7 +12,7 @@ export function RecentSearches({
   return (
     <div>
       <span className={classes.header}>Recent Searches:</span>
-      {recentSearches.map((search: Search) => (
+      {recentSearches.reverse().map((search: Search) => (
         <Link
           key={search.params}
           className={classes.searches}

@@ -14,7 +14,7 @@ function App() {
         .length === 0
     ) {
       setRecentSearches(
-        [...recentSearches, { path, params }].slice(-5).reverse(),
+        [...recentSearches, { path, params }].slice(-5),
       );
     }
   }
