@@ -1,15 +1,32 @@
+import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { NotFound, AddMovie, EditMovie, Home, Search, Detail } from './routes';
 import { Header } from './components';
+import { Search as SearchClass } from './classes';
 
 function App() {
+  const [recentSearches, setRecentSearches] = React.useState<SearchClass[]>([]);
+
+  function callback(path: string, params: string) {
+    if (
+      recentSearches.filter((e) => e.path === path && e.params === params)
+        .length === 0
+    ) {
+      setRecentSearches(
+        [...recentSearches, { path, params }].slice(-5).reverse(),
+      );
+    }
+  }
+
   return (
     <div className={'App'}>
       <BrowserRouter>
-        <Header />
+        <Header callback={callback} />
         <Switch>
-          <Route path="/" component={Home} exact />
+          <Route path="/" exact>
+            <Home recentSearches={recentSearches} />
+          </Route>
           <Route path="/add" component={AddMovie} exact />
           <Route path="/edit" component={EditMovie} exact />
           <Route path="/search" component={Search} />

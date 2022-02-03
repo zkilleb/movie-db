@@ -1,10 +1,21 @@
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, useLocation } from 'react-router-dom';
 import { Search } from '.';
 
-export function Header() {
+export function Header({
+  callback,
+}: {
+  callback: (location: string, search: string) => void;
+}) {
   const classes = useStyles();
   const location = useLocation();
+
+  React.useEffect(() => {
+    if (location.pathname === '/search') {
+      callback(location.pathname, location.search);
+    }
+  }, [location, callback]);
 
   return (
     <div className={classes.header} data-cy="Header">

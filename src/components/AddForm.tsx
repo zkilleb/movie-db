@@ -26,34 +26,34 @@ export function AddForm(data: IAddForm) {
   const classes = useStyles();
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
-  const [title, setTitle] = React.useState<string | null>(
-    editResults && editResults.title ? editResults.title : null,
+  const [title, setTitle] = React.useState<string>(
+    editResults && editResults.title ? editResults.title : '',
   );
   const [format, setFormat] = React.useState<string>(formats[0].value);
-  const [length, setLength] = React.useState<string | null>(
-    editResults && editResults.length ? editResults.length.toString() : null,
+  const [length, setLength] = React.useState<string>(
+    editResults && editResults.length ? editResults.length.toString() : '',
   );
-  const [year, setYear] = React.useState<string | null>(
-    editResults && editResults.year ? editResults.year.toString() : null,
+  const [year, setYear] = React.useState<string>(
+    editResults && editResults.year ? editResults.year.toString() : '',
   );
   const [color, setColor] = React.useState<boolean>(
     editResults && editResults.color ? editResults.color : true,
   );
-  const [language, setLanguage] = React.useState<string | null>(
-    editResults && editResults.language ? editResults.language : null,
+  const [language, setLanguage] = React.useState<string>(
+    editResults && editResults.language ? editResults.language : '',
   );
-  const [director, setDirector] = React.useState<string | null>(
-    editResults && editResults.director ? editResults.director : null,
+  const [director, setDirector] = React.useState<string>(
+    editResults && editResults.director ? editResults.director : '',
   );
-  const [label, setLabel] = React.useState<string | null>(
-    editResults && editResults.label ? editResults.label : null,
+  const [label, setLabel] = React.useState<string>(
+    editResults && editResults.label ? editResults.label : '',
   );
   const [actors, setActors] = React.useState<string[]>(
     editResults && editResults.actors ? editResults.actors : [],
   );
   const [addActor, setAddActor] = React.useState<string>();
-  const [notes, setNotes] = React.useState<string | null>(
-    editResults && editResults.notes ? editResults.notes : null,
+  const [notes, setNotes] = React.useState<string>(
+    editResults && editResults.notes ? editResults.notes : '',
   );
   const [validation, setValidation] = React.useState<Validation | undefined>();
   const [keyword, setKeyword] = React.useState();

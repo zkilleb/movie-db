@@ -42,6 +42,7 @@ export function Random() {
 const useStyles = makeStyles(() => ({
   random: {
     alignItems: 'center',
-    paddingTop: 65,
+    paddingTop: 60,
+    paddingBottom: 60,
   },
 }));
