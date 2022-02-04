@@ -30,4 +30,4 @@ Create `.env` file in the top level directory with the following variables
 
 ### MongoDB
 
-Expects a database named `mydb` with a collection named `movies` if not of the optional enviornment variables are used
+Expects a database named `mydb` with a collection named `movies` if none of the optional enviornment variables are used

@@ -142,7 +142,10 @@ export async function getTMDBKeywordByPerson(req, res) {
         `${BASE_URL}/person/${temp[0].id}/movie_credits?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
       )
         .then((subResponse) => subResponse.json())
-        .then((subJson) => res.send(subJson.crew));
+        .then((subJson) => {
+          console.log(subJson)
+          res.send(subJson.crew)})
+        
     });
 }
 
