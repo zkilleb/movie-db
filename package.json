@@ -55,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/cypress": "^8.0.2",
     "@types/react-router-dom": "5.1.8",
     "cypress": "^9.2.1",
     "nodemon": "2.0.12",

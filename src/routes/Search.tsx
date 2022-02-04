@@ -40,16 +40,15 @@ export function Search() {
   return (
     <div data-cy="SearchResultPage">
       <div className={classes.results}>
-        Results for {urlParams}: {searchResults && searchResults.length}
+        Results for {urlParams}: {searchResults ? searchResults.length : '0'}
       </div>
-      {!searchResults ||
-        (searchResults && searchResults.length === 0 && (
-          <div className={classes.linkWrapper}>
-            <Link to="/add" className={classes.link}>
-              <Button variant="contained">Add Movie</Button>
-            </Link>
-          </div>
-        ))}
+      {(!searchResults || (searchResults && searchResults.length === 0)) && (
+        <div className={classes.linkWrapper}>
+          <Link to="/add" className={classes.link}>
+            <Button variant="contained">Add Movie</Button>
+          </Link>
+        </div>
+      )}
       <div>
         {searchResults &&
           searchResults.map((result, index) => {

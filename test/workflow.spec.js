@@ -26,11 +26,16 @@ const objects = {
   detailAlert: '[data-cy=DetailAlert]',
   review: '[data-cy=Review]',
   random: '[data-cy=Random]',
+  searchType: '[data-cy=SearchType]',
+  recentSearches: '[data-cy=RecentSearches]',
 };
 
 describe('Test Application Workflow', () => {
-  it('Verifies the Home Page Loads', () => {
+  before(() => {
     cy.visit('/');
+  });
+
+  it('Verifies the Home Page Loads', () => {
     cy.get(objects.header).should('exist');
   });
 
@@ -102,7 +107,38 @@ describe('Test Application Workflow', () => {
     cy.wait(3000);
   });
 
-  it('Search Added Movie', () => {
+  it('Search Added Movie By Director', () => {
+    cy.get(objects.searchType).click();
+    cy.findByRole('option', {
+      name: /director/i,
+    }).click();
+    cy.get(objects.searchTextField).type('Francis Ford Coppola');
+    cy.get(objects.searchButton).click();
+    cy.url().should('include', '/search');
+    cy.get(objects.posterImage)
+      .should('have.attr', 'alt')
+      .then((alt) => {
+        expect(alt).to.equal('The Godfather poster');
+      });
+    cy.get(objects.searchResultPage).should(
+      'contain',
+      'Results for Francis Ford Coppola: 1',
+    );
+    cy.get(objects.searchResult).eq(0).should('contain', 'The Godfather');
+    cy.get(objects.searchResult).eq(0).should('contain', '1972');
+    cy.get(objects.searchResult)
+      .eq(0)
+      .should('contain', 'Directed By: Francis Ford Coppola');
+    cy.get(objects.searchResult).eq(0).should('contain', 'Language: English');
+    cy.get(objects.searchResult).eq(0).should('contain', 'Runtime: 175 mins.');
+    cy.get(objects.searchResult).eq(0).should('contain', 'Actors: Al Pacino');
+  });
+
+  it('Search Added Movie By Title', () => {
+    cy.get(objects.searchType).click();
+    cy.findByRole('option', {
+      name: /title/i,
+    }).click();
     cy.get(objects.searchTextField).type('Th');
     cy.get(objects.searchButton).click();
     cy.get(objects.detailAlert).should(
@@ -225,6 +261,11 @@ describe('Test Application Workflow', () => {
     cy.get(objects.deleteIcon).click();
     cy.get(objects.confirmDelete).click();
     cy.wait(3000);
+    cy.get(objects.recentSearches).should(
+      'contain',
+      'director: Francis Ford Coppola',
+    );
+    cy.get(objects.recentSearches).should('contain', 'title: The Godfather');
     cy.get(objects.searchTextField).type('The Godfather');
     cy.get(objects.searchButton).click();
     cy.get(objects.searchResultPage).should(

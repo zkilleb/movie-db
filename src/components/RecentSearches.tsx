@@ -10,7 +10,7 @@ export function RecentSearches({
   const classes = useStyles();
 
   return (
-    <div>
+    <div data-cy="RecentSearches">
       <span className={classes.header}>Recent Searches:</span>
       {recentSearches.reverse().map((search: Search) => (
         <Link

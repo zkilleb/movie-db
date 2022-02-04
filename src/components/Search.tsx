@@ -36,6 +36,7 @@ export function Search() {
         />
       )}
       <Select
+        data-cy="SearchType"
         value={search}
         className={classes.searchType}
         onChange={handleChange}
@@ -45,7 +46,7 @@ export function Search() {
           },
         }}
       >
-        {searchTypes.map((option) => (
+        {searchTypes.map((option, index) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>

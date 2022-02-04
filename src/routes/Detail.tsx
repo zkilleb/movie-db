@@ -31,7 +31,7 @@ export function Detail(props: any) {
     if (tmdbData && tmdbData.id) {
       async function fetchData() {
         const response = await getRecommendations(tmdbData.id);
-        setRecommendations(response.results.splice(0, 8));
+        setRecommendations(response.splice(0, 8));
       }
       fetchData();
     }

@@ -13,9 +13,7 @@ function App() {
       recentSearches.filter((e) => e.path === path && e.params === params)
         .length === 0
     ) {
-      setRecentSearches(
-        [...recentSearches, { path, params }].slice(-5),
-      );
+      setRecentSearches([...recentSearches, { path, params }].slice(-5));
     }
   }
 

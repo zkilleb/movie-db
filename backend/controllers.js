@@ -2,6 +2,7 @@ import Joi from 'joi';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import { fetchReview, fetchGreatMovie } from 'eberts-api';
+import axios from 'axios';
 import { MongoClient, ObjectId } from 'mongodb';
 import { removeEmptyFields } from './util.js';
 
@@ -88,10 +89,11 @@ export async function addMovie(req, res) {
         message: 'Error adding record to database',
       });
     }
-  } else
+  } else {
     res.status(409).json({
       message: 'Record already exists',
     });
+  }
 }
 
 export async function editMovie(req, res) {
@@ -119,42 +121,65 @@ export async function deleteMovie(req, res) {
 }
 
 export async function getTMDBKeyword(req, res) {
-  fetch(
-    `${BASE_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
-  )
-    .then((response) => response.json())
-    .then((json) => res.send(json.results));
+  const result = await axios.get(`${BASE_URL}/search/movie`, {
+    params: {
+      api_key: API_KEY,
+      language: 'en-US',
+      query: req.params.keyword,
+      page: 1,
+      include_adult: true,
+    },
+  });
+  res.send(result.data.results);
 }
 
 export async function getTMDBKeywordByPerson(req, res) {
   let knownFor = '';
   if (req.params.type === 'director') knownFor = 'Directing';
-  fetch(
-    `${BASE_URL}/search/person?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
-  )
-    .then((response) => response.json())
-    .then((json) => {
-      let temp = [];
-      json.results.forEach((element) => {
-        if (element.known_for_department === knownFor) temp.push(element);
-      });
-      fetch(
-        `${BASE_URL}/person/${temp[0].id}/movie_credits?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
-      )
-        .then((subResponse) => subResponse.json())
-        .then((subJson) => {
-          console.log(subJson)
-          res.send(subJson.crew)})
-        
-    });
+  let temp = [];
+  const personResult = await axios.get(`${BASE_URL}/search/person`, {
+    params: {
+      api_key: API_KEY,
+      language: 'en-US',
+      query: req.params.keyword,
+      page: 1,
+      include_adult: true,
+    },
+  });
+  personResult.data.results.forEach((element) => {
+    if (element.known_for_department === knownFor) temp.push(element);
+  });
+  if (temp[0]) {
+    const result = await axios.get(
+      `${BASE_URL}/person/${temp[0].id}/movie_credits`,
+      {
+        params: {
+          api_key: API_KEY,
+          language: 'en-US',
+          query: req.params.keyword,
+          page: 1,
+          include_adult: true,
+        },
+      },
+    );
+    res.send(result.data.crew);
+  } else res.status(204);
 }
 
 export async function getRecommendations(req, res) {
-  fetch(
-    `${BASE_URL}/movie/${req.params.id}/recommendations?api_key=${API_KEY}&language=en-US&query=${req.params.keyword}&page=1&include_adult=true`,
-  )
-    .then((response) => response.json())
-    .then((json) => res.send(json));
+  const result = await axios.get(
+    `${BASE_URL}/movie/${req.params.id}/recommendations`,
+    {
+      params: {
+        api_key: API_KEY,
+        language: 'en-US',
+        query: req.params.keyword,
+        page: 1,
+        include_adult: true,
+      },
+    },
+  );
+  res.send(result.data.results);
 }
 
 export async function getReview(req, res) {
