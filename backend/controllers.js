@@ -1,10 +1,9 @@
 import Joi from 'joi';
 import dotenv from 'dotenv';
-import fetch from 'node-fetch';
 import { fetchReview, fetchGreatMovie } from 'eberts-api';
 import axios from 'axios';
 import { MongoClient, ObjectId } from 'mongodb';
-import { removeEmptyFields } from './util.js';
+import { removeEmptyFields, generateTMDBParams } from './util.js';
 
 dotenv.config();
 
@@ -121,15 +120,10 @@ export async function deleteMovie(req, res) {
 }
 
 export async function getTMDBKeyword(req, res) {
-  const result = await axios.get(`${BASE_URL}/search/movie`, {
-    params: {
-      api_key: API_KEY,
-      language: 'en-US',
-      query: req.params.keyword,
-      page: 1,
-      include_adult: true,
-    },
-  });
+  const result = await axios.get(
+    `${BASE_URL}/search/movie`,
+    generateTMDBParams(req, API_KEY),
+  );
   res.send(result.data.results);
 }
 
@@ -137,47 +131,32 @@ export async function getTMDBKeywordByPerson(req, res) {
   let knownFor = '';
   if (req.params.type === 'director') knownFor = 'Directing';
   let temp = [];
-  const personResult = await axios.get(`${BASE_URL}/search/person`, {
-    params: {
-      api_key: API_KEY,
-      language: 'en-US',
-      query: req.params.keyword,
-      page: 1,
-      include_adult: true,
-    },
-  });
+  const personResult = await axios.get(
+    `${BASE_URL}/search/person`,
+    generateTMDBParams(req, API_KEY),
+  );
   personResult.data.results.forEach((element) => {
     if (element.known_for_department === knownFor) temp.push(element);
   });
   if (temp[0]) {
-    const result = await axios.get(
-      `${BASE_URL}/person/${temp[0].id}/movie_credits`,
-      {
-        params: {
-          api_key: API_KEY,
-          language: 'en-US',
-          query: req.params.keyword,
-          page: 1,
-          include_adult: true,
-        },
-      },
-    );
-    res.send(result.data.crew);
-  } else res.status(204);
+    let results = [];
+    for (const person of temp) {
+      const result = await axios.get(
+        `${BASE_URL}/person/${person.id}/movie_credits`,
+        generateTMDBParams(req, API_KEY),
+      );
+      results.push(result.data.crew);
+    }
+    res.send(results.flat());
+  } else {
+    res.status(204);
+  }
 }
 
 export async function getRecommendations(req, res) {
   const result = await axios.get(
     `${BASE_URL}/movie/${req.params.id}/recommendations`,
-    {
-      params: {
-        api_key: API_KEY,
-        language: 'en-US',
-        query: req.params.keyword,
-        page: 1,
-        include_adult: true,
-      },
-    },
+    generateTMDBParams(req, API_KEY),
   );
   res.send(result.data.results);
 }
@@ -189,3 +168,5 @@ export async function getReview(req, res) {
     if (result.error) res.status(404).send(result.error);
   } else res.status(200).send(result);
 }
+
+export async function addImage(req, res) {}

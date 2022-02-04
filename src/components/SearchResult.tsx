@@ -1,5 +1,6 @@
 import { Result } from '../classes';
 import { makeStyles } from '@material-ui/core/styles';
+import { CircularProgress } from '@material-ui/core';
 import { Paper } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 
@@ -19,33 +20,39 @@ export function SearchResult({ data, keywordResults }: IResult) {
   );
 
   return (
-    <Paper
-      data-cy="SearchResult"
-      elevation={1}
-      className={classes.paper}
-      onClick={handleClick}
-    >
+    <>
       {result ? (
-        <img
-          className={classes.poster}
-          src={`https://image.tmdb.org/t/p/original${result.poster_path}`}
-          alt={`${data.title} poster`}
-          width="106.7"
-          height="160"
-          data-cy="PosterImage"
-        />
+        <Paper
+          data-cy="SearchResult"
+          elevation={1}
+          className={classes.paper}
+          onClick={handleClick}
+        >
+          {result ? (
+            <img
+              className={classes.poster}
+              src={`https://image.tmdb.org/t/p/original${result.poster_path}`}
+              alt={`${data.title} poster`}
+              width="106.7"
+              height="160"
+              data-cy="PosterImage"
+            />
+          ) : (
+            <div className={classes.noPoster}>No Poster Found</div>
+          )}
+          <div>
+            <div>{data.title} </div>
+            <div>{data.year}</div>
+            <div>Directed By: {data.director}</div>
+            <div>Language: {data.language}</div>
+            <div>Runtime: {data.length} mins.</div>
+            <div>Actors: {actors.toString().replaceAll(',', ', ')}</div>
+          </div>
+        </Paper>
       ) : (
-        <div className={classes.noPoster}>No Poster Found</div>
+        <CircularProgress />
       )}
-      <div>
-        <div>{data.title} </div>
-        <div>{data.year}</div>
-        <div>Directed By: {data.director}</div>
-        <div>Language: {data.language}</div>
-        <div>Runtime: {data.length} mins.</div>
-        <div>Actors: {actors.toString().replaceAll(',', ', ')}</div>
-      </div>
-    </Paper>
+    </>
   );
 
   function handleClick() {

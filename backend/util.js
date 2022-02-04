@@ -14,3 +14,15 @@ export function removeEmptyFields(req) {
   req.query.notes !== '' && (doc.notes = req.query.notes);
   return doc;
 }
+
+export function generateTMDBParams(req, apiKey) {
+  return {
+    params: {
+      api_key: apiKey,
+      language: 'en-US',
+      query: req.params.keyword,
+      page: 1,
+      include_adult: true,
+    },
+  };
+}
