@@ -53,6 +53,24 @@ export async function getDirector(req, res) {
     });
 }
 
+export async function getActor(req, res) {
+  const actorSchema = Joi.string().min(3);
+  const validation = actorSchema.validate(req.params.name);
+  if (!validation.error) {
+    const cursor = movies.find({ actors: new RegExp(req.params.name, 'i') });
+    let results = [];
+    await cursor.forEach((result) => {
+      results.push(result);
+    });
+    res.status(200).send(results);
+  } else
+    res.status(400).json({
+      message: process.env.VERBOSE
+        ? validation.error.message
+        : 'Invalid request',
+    });
+}
+
 export async function getTitleById(req, res) {
   const titleSchema = Joi.string().alphanum().lowercase().length(24);
   const validation = titleSchema.validate(req.params.id);
@@ -128,24 +146,19 @@ export async function getTMDBKeyword(req, res) {
 }
 
 export async function getTMDBKeywordByPerson(req, res) {
-  let knownFor = '';
-  if (req.params.type === 'director') knownFor = 'Directing';
-  let temp = [];
   const personResult = await axios.get(
     `${BASE_URL}/search/person`,
     generateTMDBParams(req, API_KEY),
   );
-  personResult.data.results.forEach((element) => {
-    if (element.known_for_department === knownFor) temp.push(element);
-  });
-  if (temp[0]) {
+  if (personResult.data.results[0]) {
     let results = [];
-    for (const person of temp) {
+    for (const person of personResult.data.results) {
       const result = await axios.get(
         `${BASE_URL}/person/${person.id}/movie_credits`,
         generateTMDBParams(req, API_KEY),
       );
-      results.push(result.data.crew);
+      if (req.params.type === 'actor') results.push(result.data.cast);
+      else results.push(result.data.crew);
     }
     res.send(results.flat());
   } else {

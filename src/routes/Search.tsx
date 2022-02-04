@@ -2,7 +2,12 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { searchMovie, getTMDBKeyword, searchDirector } from '../handlers';
+import {
+  searchMovie,
+  getTMDBKeyword,
+  searchDirector,
+  searchActor,
+} from '../handlers';
 import { Result } from '../classes';
 import { SearchResult } from '../components';
 
@@ -28,6 +33,11 @@ export function Search() {
             break;
           case 'director':
             results = await searchDirector(title);
+            break;
+          case 'actor':
+            results = await searchActor(title);
+            break;
+          default:
             break;
         }
         if (results) setSearchResults(results);

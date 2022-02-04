@@ -12,6 +12,7 @@ import {
   getTMDBKeywordByPerson,
   getRecommendations,
   getReview,
+  getActor,
 } from './controllers.js';
 
 dotenv.config();
@@ -32,6 +33,8 @@ app.use((req, res, next) => {
 app.get('/titles/:title', getTitles);
 
 app.get('/director/:name', getDirector);
+
+app.get('/actor/:name', getActor);
 
 app.get('/title/id/:id', getTitleById);
 

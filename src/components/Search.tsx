@@ -23,6 +23,10 @@ export function Search() {
       label: 'Director',
       value: 'director',
     },
+    {
+      label: 'Actor',
+      value: 'actor',
+    },
   ];
 
   return (
@@ -46,7 +50,7 @@ export function Search() {
           },
         }}
       >
-        {searchTypes.map((option, index) => (
+        {searchTypes.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
