@@ -129,11 +129,25 @@ export function Detail(props: any) {
               <div className={classes.poster}>No Poster Found</div>
             )}
             <div>
-              <div>Directed By: {data.director}</div>
+              <div onDoubleClick={handleDirectorClick}>
+                Directed By: {data.director}
+              </div>
               <div>
                 Starring:{' '}
                 {data.actors
-                  ? data.actors.toString().replaceAll(',', ', ')
+                  ? data.actors.map((actor, index) => {
+                      return (
+                        <span
+                          key={index}
+                          onDoubleClick={() => handleActorClick(actor)}
+                        >
+                          {actor}
+                          {data.actors &&
+                            index < data.actors.length - 1 &&
+                            ', '}
+                        </span>
+                      );
+                    })
                   : ''}
               </div>
               <div>Runtime: {data.length} mins.</div>
@@ -219,6 +233,20 @@ export function Detail(props: any) {
     history.push({
       pathname: '/edit',
       state: { details: data },
+    });
+  }
+
+  function handleDirectorClick() {
+    history.push({
+      pathname: '/search',
+      search: `?title=${data.director}&type=director`,
+    });
+  }
+
+  function handleActorClick(actor: string) {
+    history.push({
+      pathname: '/search',
+      search: `?title=${actor}&type=actor`,
     });
   }
 }
