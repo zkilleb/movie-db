@@ -132,7 +132,7 @@ export function Detail(props: any) {
             <div>
               <div
                 className={classes.field}
-                onDoubleClick={handleDirectorClick}
+                onClick={handleDirectorClick}
               >
                 Directed By: {data.director}
               </div>
@@ -143,7 +143,7 @@ export function Detail(props: any) {
                       return (
                         <span
                           key={index}
-                          onDoubleClick={() => handleActorClick(actor)}
+                          onClick={() => handleActorClick(actor)}
                           className={classes.field}
                         >
                           {actor}
