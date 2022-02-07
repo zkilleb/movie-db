@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { Delete } from '@material-ui/icons';
 import { Result, Validation } from '../classes';
 import { addMovie, editMovie } from '../handlers';
 import { Notification } from '.';
@@ -167,13 +168,18 @@ export function AddForm(data: IAddForm) {
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Actor Name</TableCell>
+                  <TableCell colSpan={2} align="center">
+                    Actor Name
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {actors.map((actor) => (
+                {actors.map((actor, index) => (
                   <TableRow data-cy="AddActorRow" key={actor}>
                     <TableCell align="center">{actor}</TableCell>
+                    <TableCell align="center">
+                      <Delete onClick={() => deleteActor(index)} />
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -252,6 +258,12 @@ export function AddForm(data: IAddForm) {
 
   function handleClose() {
     setOpen(false);
+  }
+
+  function deleteActor(index: number) {
+    let tempActors = [...actors];
+    tempActors.splice(index, 1);
+    setActors(tempActors);
   }
 
   async function handleSubmit() {
@@ -385,6 +397,7 @@ const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 200,
     maxWidth: 400,
+    margin: 'auto',
   },
   addButton: {
     margin: 10,
@@ -401,7 +414,7 @@ const useStyles = makeStyles((theme) => ({
   },
   addActors: {
     backgroundColor: 'white',
-    width: '40%',
+    width: '25%',
     marginTop: 10,
     margin: 'auto',
   },
