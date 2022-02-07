@@ -1,3 +1,4 @@
+import React from 'react';
 import { Result } from '../classes';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
@@ -11,12 +12,17 @@ export function SearchResult({ data, keywordResults }: IResult) {
   // Check for between plus or minus 1 year to account for differences in international release dates
   const minYear = data.year ? data.year - 1 : 0;
   const maxYear = data.year ? data.year + 1 : 0;
-  const result: any = keywordResults.find(
-    (movie: any) =>
-      movie.title.toLowerCase() === title.toLowerCase() &&
-      movie.release_date.substring(0, 4) >= minYear &&
-      movie.release_date.substring(0, 4) <= maxYear,
-  );
+  const [result, setResult] = React.useState<ITMDBResult>();
+
+  React.useEffect(() => {
+    const tempResult = keywordResults.find(
+      (movie: any) =>
+        movie.title.toLowerCase() === title.toLowerCase() &&
+        movie.release_date.substring(0, 4) >= minYear &&
+        movie.release_date.substring(0, 4) <= maxYear,
+    );
+    setResult(tempResult);
+  }, [keywordResults, minYear, maxYear, title]);
 
   return (
     <Paper
@@ -51,7 +57,7 @@ export function SearchResult({ data, keywordResults }: IResult) {
   function handleClick() {
     history.push({
       pathname: '/detail',
-      state: { details: data, keyword: result },
+      state: { details: data },
     });
   }
 }
@@ -83,4 +89,8 @@ const useStyles = makeStyles(() => ({
 interface IResult {
   data: Result;
   keywordResults: [];
+}
+
+interface ITMDBResult {
+  poster_path: string;
 }

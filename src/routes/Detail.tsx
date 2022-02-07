@@ -15,18 +15,24 @@ import { Notification, Review } from '../components';
 import { getRecommendations, deleteMovie, getReview } from '../handlers';
 import { filterTMDBResult } from '../util';
 
-export function Detail(props: any) {
+export function Detail(props: IDetailProps) {
   const classes = useStyles();
   const history = useHistory();
-  const data: Result = props.location.state.details
-    ? props.location.state.details
-    : null;
-  const tmdbData = props.location.state.keyword;
+  const data: Result = props.location.state.details;
   const [recommendations, setRecommendations] = React.useState<IRecommend[]>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [validation, setValidation] = React.useState<Validation | undefined>();
   const [review, setReview] = React.useState<Ebert>();
   const [open, setOpen] = React.useState(false);
+  const [tmdbData, setTmdbData] = React.useState<any>();
+
+  React.useEffect(() => {
+    async function fetchData() {
+      const result = await filterTMDBResult(data.year.toString(), data.title);
+      setTmdbData(result);
+    }
+    fetchData();
+  }, [data.year, data.title]);
 
   React.useEffect(() => {
     if (tmdbData && tmdbData.id) {
@@ -130,10 +136,7 @@ export function Detail(props: any) {
               <div className={classes.poster}>No Poster Found</div>
             )}
             <div>
-              <div
-                className={classes.field}
-                onClick={handleDirectorClick}
-              >
+              <div className={classes.field} onClick={handleDirectorClick}>
                 Directed By: {data.director}
               </div>
               <div>
@@ -250,10 +253,6 @@ export function Detail(props: any) {
 
   async function handleClick(recommend: IRecommend) {
     if (recommend.inCollection && recommend.state) {
-      const keyword = await filterTMDBResult(
-        recommend.state.year ? recommend.state.year.toString() : null,
-        recommend.state.title ? recommend.state.title.toString() : null,
-      );
       history.push({
         pathname: '/detail',
         state: {
@@ -270,7 +269,6 @@ export function Detail(props: any) {
             notes: recommend.state.notes,
             _id: recommend.state._id,
           },
-          keyword,
         },
       });
     } else {
@@ -334,4 +332,12 @@ interface IRecommend {
   title: string;
   inCollection?: boolean;
   state?: Result;
+}
+
+interface IDetailProps {
+  location: {
+    state: {
+      details: Result;
+    };
+  };
 }

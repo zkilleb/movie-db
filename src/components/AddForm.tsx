@@ -19,7 +19,6 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { Result, Validation } from '../classes';
 import { addMovie, editMovie } from '../handlers';
 import { Notification } from '.';
-import { filterTMDBResult } from '../util';
 
 export function AddForm(data: IAddForm) {
   const editResults = data.data;
@@ -56,15 +55,6 @@ export function AddForm(data: IAddForm) {
     editResults && editResults.notes ? editResults.notes : '',
   );
   const [validation, setValidation] = React.useState<Validation | undefined>();
-  const [keyword, setKeyword] = React.useState();
-
-  React.useEffect(() => {
-    async function fetchData() {
-      const result = await filterTMDBResult(year, title);
-      setKeyword(result);
-    }
-    fetchData();
-  }, [title, year]);
 
   return (
     <div>
@@ -265,7 +255,7 @@ export function AddForm(data: IAddForm) {
   }
 
   async function handleSubmit() {
-    if (title) {
+    if (title && director && year) {
       try {
         if (!editResults) {
           const results = await addMovie({
@@ -301,7 +291,6 @@ export function AddForm(data: IAddForm) {
                   notes,
                   _id: results.data.insertedId,
                 },
-                keyword,
               },
             });
           }
@@ -336,7 +325,6 @@ export function AddForm(data: IAddForm) {
                   notes,
                   _id: editResults._id,
                 },
-                keyword,
               },
             });
           }
@@ -344,7 +332,11 @@ export function AddForm(data: IAddForm) {
       } catch (e: any) {
         setValidation({ message: e.response.data.message, severity: 'error' });
       }
-    } else setValidation({ message: 'Title is required', severity: 'error' });
+    } else
+      setValidation({
+        message: 'Title, director and year are required',
+        severity: 'error',
+      });
     setOpen(true);
   }
 }
