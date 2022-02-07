@@ -171,7 +171,20 @@ export async function getRecommendations(req, res) {
     `${BASE_URL}/movie/${req.params.id}/recommendations`,
     generateTMDBParams(req, API_KEY),
   );
-  res.send(result.data.results);
+  let tempResult = [...result.data.results.splice(0, 8)];
+  for (let result of tempResult) {
+    let cursor = await movies.find({
+      title: new RegExp(result.title, 'i'),
+    });
+    while (await cursor.hasNext()) {
+      const doc = await cursor.next();
+      if (doc) {
+        result.inCollection = true;
+        result.state = doc;
+      }
+    }
+  }
+  res.send(tempResult);
 }
 
 export async function getReview(req, res) {

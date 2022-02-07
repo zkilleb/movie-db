@@ -9,10 +9,11 @@ import {
   Button,
 } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Result, Validation, Ebert } from '../classes';
 import { Notification, Review } from '../components';
 import { getRecommendations, deleteMovie, getReview } from '../handlers';
+import { filterTMDBResult } from '../util';
 
 export function Detail(props: any) {
   const classes = useStyles();
@@ -31,7 +32,7 @@ export function Detail(props: any) {
     if (tmdbData && tmdbData.id) {
       async function fetchData() {
         const response = await getRecommendations(tmdbData.id);
-        setRecommendations(response.splice(0, 8));
+        setRecommendations(response);
       }
       fetchData();
     }
@@ -176,28 +177,21 @@ export function Detail(props: any) {
               {recommendations &&
                 recommendations.map((recommend: IRecommend) => {
                   return (
-                    <Link
-                      to={{
-                        pathname: `https://letterboxd.com/film/${recommend.title
-                          .toLowerCase()
-                          .replaceAll(' ', '-')}`,
-                      }}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <div
                       key={JSON.stringify(recommend)}
+                      className={classes.recommendInfo}
+                      onClick={() => handleClick(recommend)}
                     >
-                      <div className={classes.recommendInfo}>
-                        <Tooltip title={recommend.title}>
-                          <img
-                            src={`https://image.tmdb.org/t/p/original${recommend.poster_path}`}
-                            alt={`${recommend.title} poster`}
-                            width="106.7"
-                            height="160"
-                            data-cy="RecommendedFilm"
-                          />
-                        </Tooltip>
-                      </div>
-                    </Link>
+                      <Tooltip title={recommend.title}>
+                        <img
+                          src={`https://image.tmdb.org/t/p/original${recommend.poster_path}`}
+                          alt={`${recommend.title} poster`}
+                          width="106.7"
+                          height="160"
+                          data-cy="RecommendedFilm"
+                        />
+                      </Tooltip>
+                    </div>
                   );
                 })}
             </div>
@@ -253,6 +247,41 @@ export function Detail(props: any) {
       search: `?title=${actor}&type=actor`,
     });
   }
+
+  async function handleClick(recommend: IRecommend) {
+    if (recommend.inCollection && recommend.state) {
+      const keyword = await filterTMDBResult(
+        recommend.state.year ? recommend.state.year.toString() : null,
+        recommend.state.title ? recommend.state.title.toString() : null,
+      );
+      history.push({
+        pathname: '/detail',
+        state: {
+          details: {
+            title: recommend.state.title,
+            format: recommend.state.format,
+            length: recommend.state.length,
+            year: recommend.state.year,
+            color: recommend.state.color,
+            language: recommend.state.language,
+            director: recommend.state.director,
+            label: recommend.state.label,
+            actors: recommend.state.actors,
+            notes: recommend.state.notes,
+            _id: recommend.state._id,
+          },
+          keyword,
+        },
+      });
+    } else {
+      window.open(
+        `https://letterboxd.com/film/${recommend.title
+          .toLowerCase()
+          .replaceAll(' ', '-')}`,
+        '_blank',
+      );
+    }
+  }
 }
 
 const useStyles = makeStyles(() => ({
@@ -303,4 +332,6 @@ const useStyles = makeStyles(() => ({
 interface IRecommend {
   poster_path: string;
   title: string;
+  inCollection?: boolean;
+  state?: Result;
 }
