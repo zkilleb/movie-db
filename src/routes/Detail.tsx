@@ -129,7 +129,10 @@ export function Detail(props: any) {
               <div className={classes.poster}>No Poster Found</div>
             )}
             <div>
-              <div onDoubleClick={handleDirectorClick}>
+              <div
+                className={classes.field}
+                onDoubleClick={handleDirectorClick}
+              >
                 Directed By: {data.director}
               </div>
               <div>
@@ -140,6 +143,7 @@ export function Detail(props: any) {
                         <span
                           key={index}
                           onDoubleClick={() => handleActorClick(actor)}
+                          className={classes.field}
                         >
                           {actor}
                           {data.actors &&
@@ -287,6 +291,12 @@ const useStyles = makeStyles(() => ({
   },
   dialogButtons: {
     color: 'white',
+  },
+  field: {
+    '&:hover': {
+      textDecoration: 'underline',
+      cursor: 'pointer',
+    },
   },
 }));
 
