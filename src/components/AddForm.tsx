@@ -14,8 +14,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { Delete } from '@material-ui/icons';
+import { Delete, AddCircle } from '@material-ui/icons';
 import { Result, Validation } from '../classes';
 import { addMovie, editMovie } from '../handlers';
 import { Notification } from '.';
@@ -180,7 +179,7 @@ export function AddForm(data: IAddForm) {
             variant="contained"
             data-cy="AddActorButton"
           >
-            <AddCircleIcon />
+            <AddCircle />
           </Button>
         </form>
         <Button

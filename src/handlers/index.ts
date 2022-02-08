@@ -10,3 +10,4 @@ export { searchDirector } from './searchDirector';
 export { searchActor } from './searchActor';
 export { addRelease } from './addRelease';
 export { getMovieById } from './getMovieById';
+export { deleteRelease } from './deleteRelease';

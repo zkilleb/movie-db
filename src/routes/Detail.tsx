@@ -47,7 +47,11 @@ export function Detail(props: IDetailProps) {
           setRecommendations(recommendationResponse);
         }
         try {
-          if (result.title && result.year) {
+          if (
+            result.title &&
+            result.year &&
+            !props.location.state.reviewLoaded
+          ) {
             const response = await getReview(result.title, result.year);
             if (response.status === 200) {
               setReview(response.data);
@@ -342,6 +346,7 @@ interface IDetailProps {
   location: {
     state: {
       id: string;
+      reviewLoaded?: boolean;
     };
   };
 }

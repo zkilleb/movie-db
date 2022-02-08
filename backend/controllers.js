@@ -213,3 +213,19 @@ export async function addRelease(req, res) {
       message: 'Error adding record to database',
     });
 }
+
+export async function deleteRelease(req, res) {
+  const doc = removeEmptyFields(req);
+  let tempReleases = [...doc.releases];
+  tempReleases.splice(req.query.index, 1);
+  doc.releases = tempReleases;
+  const response = await movies.replaceOne(
+    { _id: ObjectId(req.query._id) },
+    doc,
+  );
+  if (response.acknowledged) res.status(200).send(doc.releases);
+  else
+    res.status(400).json({
+      message: 'Error editing record in database',
+    });
+}

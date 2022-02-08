@@ -10,10 +10,10 @@ import {
   TextField,
   MenuItem,
 } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Add, Delete } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { Result, Validation } from '../classes';
-import { addRelease } from '../handlers';
+import { addRelease, deleteRelease } from '../handlers';
 import { Notification } from '.';
 
 export function Releases({ data }: { data: Result }) {
@@ -106,10 +106,11 @@ export function Releases({ data }: { data: Result }) {
         </Tooltip>
       </div>
       {data.releases &&
-        data.releases.map((release) => {
+        data.releases.map((release, index) => {
           return (
-            <li key={JSON.stringify(release)}>
+            <li key={JSON.stringify(release)} className={classes.release}>
               {release.label} {release.format} {release.notes}
+              <Delete onClick={() => handleDelete(index)} />
             </li>
           );
         })}
@@ -118,6 +119,40 @@ export function Releases({ data }: { data: Result }) {
 
   function handleClick() {
     setDialogOpen(true);
+  }
+
+  async function handleDelete(index: number) {
+    try {
+      const result = await deleteRelease({
+        title: data.title,
+        length: data.length,
+        year: data.year,
+        color: data.color,
+        language: data.language,
+        studio: data.studio,
+        director: data.director,
+        actors: data.actors,
+        notes: data.notes,
+        releases: data.releases,
+        _id: data._id,
+        index,
+      });
+      if (result.status === 200) {
+        setDialogOpen(false);
+        setLabel('');
+        setNotes('');
+        history.push({
+          pathname: '/detail',
+          state: {
+            id: data._id,
+            reviewLoaded: true,
+          },
+        });
+      }
+    } catch (e: any) {
+      setValidation({ message: e.response.data.message, severity: 'error' });
+      setOpen(true);
+    }
   }
 
   function handleCancel() {
@@ -152,6 +187,7 @@ export function Releases({ data }: { data: Result }) {
           pathname: '/detail',
           state: {
             id: data._id,
+            reviewLoaded: true,
           },
         });
       }
@@ -234,5 +270,10 @@ const useStyles = makeStyles((theme) => ({
   },
   field: {
     color: 'white',
+  },
+  release: {
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
 }));
