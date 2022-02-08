@@ -1,7 +1,10 @@
 import { getTMDBKeyword } from '../handlers';
 import { TMDBResult } from '../classes';
 
-export async function filterTMDBResult(year: string, title: string) {
+export async function filterTMDBResult(
+  year: string,
+  title: string,
+): Promise<TMDBResult | undefined> {
   const minYear = year ? parseInt(year) - 1 : 0;
   const maxYear = year ? parseInt(year) + 1 : 0;
   const tmdbResults = await getTMDBKeyword(title, 'title');
@@ -15,4 +18,5 @@ export async function filterTMDBResult(year: string, title: string) {
     );
     return result;
   }
+  return;
 }

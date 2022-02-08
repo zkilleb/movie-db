@@ -195,4 +195,21 @@ export async function getReview(req, res) {
   } else res.status(200).send(result);
 }
 
-export async function addImage(req, res) {}
+export async function addRelease(req, res) {
+  const doc = removeEmptyFields(req);
+  if (!doc.releases) doc.releases = [];
+  doc.releases.push({
+    label: req.query.label,
+    notes: req.query.releaseNotes,
+    format: req.query.format,
+  });
+  const response = await movies.replaceOne(
+    { _id: ObjectId(req.query._id) },
+    doc,
+  );
+  if (response.acknowledged) res.status(200).send(doc.releases);
+  else
+    res.status(400).json({
+      message: 'Error adding record to database',
+    });
+}

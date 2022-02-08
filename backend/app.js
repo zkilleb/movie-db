@@ -13,6 +13,7 @@ import {
   getRecommendations,
   getReview,
   getActor,
+  addRelease,
 } from './controllers.js';
 
 dotenv.config();
@@ -53,6 +54,8 @@ app.get('/person-search/:keyword/:type', getTMDBKeywordByPerson);
 app.get('/recommendations/:id', getRecommendations);
 
 app.get('/review/:title/:year', getReview);
+
+app.put('/add/release', addRelease);
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);

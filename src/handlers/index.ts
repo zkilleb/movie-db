@@ -8,3 +8,5 @@ export { getReview } from './getReview';
 export { getRandom } from './getRandom';
 export { searchDirector } from './searchDirector';
 export { searchActor } from './searchActor';
+export { addRelease } from './addRelease';
+export { getMovieById } from './getMovieById';

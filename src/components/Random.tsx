@@ -18,19 +18,7 @@ export function Random() {
     history.push({
       pathname: '/detail',
       state: {
-        details: {
-          title: result.title,
-          format: result.format,
-          length: result.length,
-          year: result.year,
-          color: result.color,
-          language: result.language,
-          director: result.director,
-          label: result.label,
-          actors: result.actors,
-          notes: result.notes,
-          _id: result._id,
-        },
+        id: result._id,
       },
     });
   }

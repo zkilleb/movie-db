@@ -7,61 +7,66 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  CircularProgress,
 } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
-import { Result, Validation, Ebert } from '../classes';
-import { Notification, Review } from '../components';
-import { getRecommendations, deleteMovie, getReview } from '../handlers';
+import { Result, Validation, Ebert, TMDBResult } from '../classes';
+import { Notification, Review, Releases } from '../components';
+import {
+  getRecommendations,
+  deleteMovie,
+  getReview,
+  getMovieById,
+} from '../handlers';
 import { filterTMDBResult } from '../util';
 
 export function Detail(props: IDetailProps) {
   const classes = useStyles();
   const history = useHistory();
-  const data: Result = props.location.state.details;
   const [recommendations, setRecommendations] = React.useState<IRecommend[]>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [validation, setValidation] = React.useState<Validation | undefined>();
   const [review, setReview] = React.useState<Ebert>();
   const [open, setOpen] = React.useState(false);
-  const [tmdbData, setTmdbData] = React.useState<any>();
+  const [tmdbData, setTmdbData] = React.useState<TMDBResult | undefined>();
+  const [data, setData] = React.useState<Result>();
 
   React.useEffect(() => {
-    async function fetchData() {
-      const result = await filterTMDBResult(data.year.toString(), data.title);
-      setTmdbData(result);
-    }
-    fetchData();
-  }, [data.year, data.title]);
-
-  React.useEffect(() => {
-    if (tmdbData && tmdbData.id) {
+    if (props.location.state && props.location.state.id) {
       async function fetchData() {
-        const response = await getRecommendations(tmdbData.id);
-        setRecommendations(response);
+        const result = await getMovieById(props.location.state.id);
+        const tmdbResult: TMDBResult | undefined = await filterTMDBResult(
+          result.year,
+          result.title,
+        );
+        if (tmdbResult && tmdbResult.id) {
+          const recommendationResponse = await getRecommendations(
+            tmdbResult.id,
+          );
+          setRecommendations(recommendationResponse);
+        }
+        try {
+          if (result.title && result.year) {
+            const response = await getReview(result.title, result.year);
+            if (response.status === 200) {
+              setReview(response.data);
+            }
+          }
+        } catch (e: any) {
+          setValidation({ message: e.response.data, severity: 'info' });
+          setOpen(true);
+        }
+        setData(result);
+        setTmdbData(tmdbResult);
       }
       fetchData();
     }
-  }, [tmdbData]);
+  }, [props]);
 
-  React.useEffect(() => {
-    async function fetchData() {
-      try {
-        if (data.title && data.year) {
-          const response = await getReview(data.title, data.year);
-          if (response.status === 200) {
-            setReview(response.data);
-          }
-        }
-      } catch (e: any) {
-        setValidation({ message: e.response.data, severity: 'info' });
-        setOpen(true);
-      }
-    }
-    fetchData();
-  }, [data]);
-
-  return (
+  return props.location.state && props.location.state.id && !data ? (
+    <CircularProgress className={classes.loading} />
+  ) : (
     <div>
       {validation && open && (
         <Notification
@@ -84,7 +89,7 @@ export function Detail(props: IDetailProps) {
         }}
       >
         <DialogContent>
-          Are you sure you want to delete {data.title}?
+          Are you sure you want to delete {data && data.title}?
         </DialogContent>
 
         <DialogActions>
@@ -162,17 +167,19 @@ export function Detail(props: IDetailProps) {
               <div>Release Year: {data.year}</div>
               <div>Language: {data.language}</div>
               <div>Color: {data.color ? 'Yes' : 'No'}</div>
-              <div>Format: {data.format}</div>
-              <div>Label: {data.label}</div>
+              <div>Studio: {data.studio}</div>
               <div>Notes: {data.notes}</div>
             </div>
-            {review && (
-              <Review
-                writer={review.reviewWriter}
-                stars={review.starRating}
-                url={review.url}
-              />
-            )}
+            <div className={classes.extraInfo}>
+              {review && (
+                <Review
+                  writer={review.reviewWriter}
+                  stars={review.starRating}
+                  url={review.url}
+                />
+              )}
+              <Releases data={data} />
+            </div>
           </div>
           <div className={classes.recommendations} data-cy="Recommendations">
             Similar Films:
@@ -212,7 +219,7 @@ export function Detail(props: IDetailProps) {
 
   async function handleDelete() {
     try {
-      if (data._id) {
+      if (data && data._id) {
         const response = await deleteMovie(data._id);
         if (response.status === 200) {
           history.push({
@@ -238,10 +245,12 @@ export function Detail(props: IDetailProps) {
   }
 
   function handleDirectorClick() {
-    history.push({
-      pathname: '/search',
-      search: `?title=${data.director}&type=director`,
-    });
+    if (data) {
+      history.push({
+        pathname: '/search',
+        search: `?title=${data.director}&type=director`,
+      });
+    }
   }
 
   function handleActorClick(actor: string) {
@@ -256,19 +265,7 @@ export function Detail(props: IDetailProps) {
       history.push({
         pathname: '/detail',
         state: {
-          details: {
-            title: recommend.state.title,
-            format: recommend.state.format,
-            length: recommend.state.length,
-            year: recommend.state.year,
-            color: recommend.state.color,
-            language: recommend.state.language,
-            director: recommend.state.director,
-            label: recommend.state.label,
-            actors: recommend.state.actors,
-            notes: recommend.state.notes,
-            _id: recommend.state._id,
-          },
+          id: recommend.state._id,
         },
       });
     } else {
@@ -325,6 +322,13 @@ const useStyles = makeStyles(() => ({
       cursor: 'pointer',
     },
   },
+  loading: {
+    marginTop: '20%',
+  },
+  extraInfo: {
+    marginLeft: 'auto',
+    marginRight: 10,
+  },
 }));
 
 interface IRecommend {
@@ -337,7 +341,7 @@ interface IRecommend {
 interface IDetailProps {
   location: {
     state: {
-      details: Result;
+      id: string;
     };
   };
 }

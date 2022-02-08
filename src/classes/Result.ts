@@ -1,13 +1,15 @@
+import { Release } from '.';
 export class Result {
-  actors?: [];
+  actors?: string[];
   color: boolean = true;
   director: string = '';
-  format: string = 'blu-ray';
   label?: string;
   language?: string;
   length?: number;
   notes?: string;
+  studio?: string;
   title: string = '';
   year: number = 0;
-  _id?: string;
+  _id: string = '0000';
+  releases: Release[] = [];
 }

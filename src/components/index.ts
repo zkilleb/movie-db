@@ -6,3 +6,4 @@ export { Notification } from './Notification';
 export { Review } from './Review';
 export { Random } from './Random';
 export { RecentSearches } from './RecentSearches';
+export { Releases } from './Releases';

@@ -57,7 +57,7 @@ export function SearchResult({ data, keywordResults }: IResult) {
   function handleClick() {
     history.push({
       pathname: '/detail',
-      state: { details: data },
+      state: { id: data._id },
     });
   }
 }

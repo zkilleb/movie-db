@@ -11,7 +11,6 @@ import {
   Table,
   FormControlLabel,
   Checkbox,
-  MenuItem,
   TextField,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
@@ -29,7 +28,6 @@ export function AddForm(data: IAddForm) {
   const [title, setTitle] = React.useState<string>(
     editResults && editResults.title ? editResults.title : '',
   );
-  const [format, setFormat] = React.useState<string>(formats[0].value);
   const [length, setLength] = React.useState<string>(
     editResults && editResults.length ? editResults.length.toString() : '',
   );
@@ -45,8 +43,8 @@ export function AddForm(data: IAddForm) {
   const [director, setDirector] = React.useState<string>(
     editResults && editResults.director ? editResults.director : '',
   );
-  const [label, setLabel] = React.useState<string>(
-    editResults && editResults.label ? editResults.label : '',
+  const [studio, setStudio] = React.useState<string>(
+    editResults && editResults.studio ? editResults.studio : '',
   );
   const [actors, setActors] = React.useState<string[]>(
     editResults && editResults.actors ? editResults.actors : [],
@@ -79,23 +77,6 @@ export function AddForm(data: IAddForm) {
             onChange={handleChange}
             data-cy="TitleField"
           />
-          <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
-            select
-            label="Format"
-            id="format"
-            value={format}
-            onChange={handleChange}
-            helperText="Please select your format"
-            disabled //TODO: Re-enable after material-ui issue is fixed
-          >
-            {formats.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
           <TextField
             InputProps={{ className: classes.field }}
             InputLabelProps={{ className: classes.field }}
@@ -149,11 +130,11 @@ export function AddForm(data: IAddForm) {
           <TextField
             InputProps={{ className: classes.field }}
             InputLabelProps={{ className: classes.field }}
-            label="Label"
-            id="label"
-            value={label}
+            label="Studio"
+            id="studio"
+            value={studio}
             onChange={handleChange}
-            data-cy="LabelField"
+            data-cy="StudioField"
           />
           <TextField
             InputProps={{ className: classes.field }}
@@ -220,9 +201,6 @@ export function AddForm(data: IAddForm) {
       case 'title':
         setTitle(event.target.value);
         break;
-      case 'format':
-        setFormat(event.target.value);
-        break;
       case 'length':
         setLength(event.target.value.replace(/[^0-9]/g, ''));
         break;
@@ -238,8 +216,8 @@ export function AddForm(data: IAddForm) {
       case 'director':
         setDirector(event.target.value);
         break;
-      case 'label':
-        setLabel(event.target.value);
+      case 'studio':
+        setStudio(event.target.value);
         break;
       case 'notes':
         setNotes(event.target.value);
@@ -272,13 +250,12 @@ export function AddForm(data: IAddForm) {
         if (!editResults) {
           const results = await addMovie({
             title,
-            format,
             length,
             year,
             color,
             language,
             director,
-            label,
+            studio,
             actors,
             notes,
           });
@@ -290,53 +267,29 @@ export function AddForm(data: IAddForm) {
             history.push({
               pathname: '/detail',
               state: {
-                details: {
-                  title,
-                  format,
-                  length,
-                  year,
-                  color,
-                  language,
-                  director,
-                  label,
-                  actors,
-                  notes,
-                  _id: results.data.insertedId,
-                },
+                id: results.data.insertedId,
               },
             });
           }
         } else {
           const results = await editMovie({
             title,
-            format,
             length,
             year,
             color,
             language,
             director,
-            label,
+            studio,
             actors,
             notes,
+            releases: editResults.releases,
             id: editResults._id,
           });
           if (results.status === 200) {
             history.push({
               pathname: '/detail',
               state: {
-                details: {
-                  title,
-                  format,
-                  length,
-                  year,
-                  color,
-                  language,
-                  director,
-                  label,
-                  actors,
-                  notes,
-                  _id: editResults._id,
-                },
+                id: editResults._id,
               },
             });
           }
@@ -352,29 +305,6 @@ export function AddForm(data: IAddForm) {
     setOpen(true);
   }
 }
-
-const formats = [
-  {
-    label: 'Blu-ray',
-    value: 'blu-ray',
-  },
-  {
-    label: 'DVD',
-    value: 'dvd',
-  },
-  {
-    label: 'VHS',
-    value: 'vhs',
-  },
-  {
-    label: '4K Ultra HD',
-    value: '4k',
-  },
-  {
-    label: 'Betamax',
-    value: 'betamax',
-  },
-];
 
 const useStyles = makeStyles((theme) => ({
   root: {

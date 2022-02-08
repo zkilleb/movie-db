@@ -5,7 +5,7 @@ const objects = {
   releaseYearField: '[data-cy=ReleaseYearField]',
   languageField: '[data-cy=LanguageField]',
   directorField: '[data-cy=DirectorField]',
-  labelField: '[data-cy=LabelField]',
+  studioField: '[data-cy=StudioField]',
   notesField: '[data-cy=NotesField]',
   addActorField: '[data-cy=AddActorField]',
   addActorButton: '[data-cy=AddActorButton]',
@@ -61,8 +61,8 @@ describe('Test Application Workflow', () => {
       'have.value',
       'Francis Ford Coppola',
     );
-    cy.get(objects.labelField).type('Paramount');
-    cy.get(`${objects.labelField} >>`).should('have.value', 'Paramount');
+    cy.get(objects.studioField).type('Paramount');
+    cy.get(`${objects.studioField} >>`).should('have.value', 'Paramount');
     cy.get(objects.notesField).type('Part of The Godfather Trilogy release');
     cy.get(`${objects.notesField} >>`).should(
       'have.value',
@@ -91,8 +91,8 @@ describe('Test Application Workflow', () => {
       'have.value',
       'Francis Ford Coppola',
     );
-    cy.get(objects.labelField).type('Paramount');
-    cy.get(`${objects.labelField} >>`).should('have.value', 'Paramount');
+    cy.get(objects.studioField).type('Paramount');
+    cy.get(`${objects.studioField} >>`).should('have.value', 'Paramount');
     cy.get(objects.notesField).type('Part of The Godfather Trilogy release');
     cy.get(`${objects.notesField} >>`).should(
       'have.value',
@@ -185,7 +185,7 @@ describe('Test Application Workflow', () => {
     cy.get(objects.detailContainer).should('contain', 'Language: English');
     cy.get(objects.detailContainer).should('contain', 'Runtime: 175 mins.');
     cy.get(objects.detailContainer).should('contain', 'Starring: Al Pacino');
-    cy.get(objects.detailContainer).should('contain', 'Label: Paramount');
+    cy.get(objects.detailContainer).should('contain', 'Studio: Paramount');
     cy.get(objects.detailContainer).should(
       'contain',
       'Notes: Part of The Godfather Trilogy release',
@@ -210,7 +210,7 @@ describe('Test Application Workflow', () => {
       'have.value',
       'Francis Ford Coppola',
     );
-    cy.get(`${objects.labelField} >>`).should('have.value', 'Paramount');
+    cy.get(`${objects.studioField} >>`).should('have.value', 'Paramount');
     cy.get(`${objects.notesField} >>`).should(
       'have.value',
       'Part of The Godfather Trilogy release',
@@ -240,7 +240,7 @@ describe('Test Application Workflow', () => {
       'contain',
       'Starring: Al Pacino, Marlon Brando',
     );
-    cy.get(objects.detailContainer).should('contain', 'Label: Paramount');
+    cy.get(objects.detailContainer).should('contain', 'Studio: Paramount');
     cy.get(objects.detailContainer).should(
       'contain',
       'Notes: Part of The Godfather Trilogy release',
