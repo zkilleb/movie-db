@@ -38,6 +38,7 @@ export function Releases({ data }: { data: Result }) {
       )}
 
       <Dialog
+      data-cy="ReleaseDialog"
         fullWidth
         maxWidth="xl"
         open={dialogOpen}
@@ -60,6 +61,7 @@ export function Releases({ data }: { data: Result }) {
               id="label"
               value={label}
               onChange={handleChange}
+              data-cy="ReleaseLabel"
             />
             <TextField
               InputProps={{ className: classes.field }}
@@ -85,6 +87,7 @@ export function Releases({ data }: { data: Result }) {
               id="notes"
               value={notes}
               onChange={handleChange}
+              data-cy="ReleaseNotes"
             />
           </form>
         </DialogContent>
@@ -93,7 +96,7 @@ export function Releases({ data }: { data: Result }) {
           <Button className={classes.field} onClick={handleCancel}>
             Cancel
           </Button>
-          <Button className={classes.field} onClick={handleAddRelease}>
+          <Button className={classes.field} onClick={handleAddRelease} data-cy="ConfirmAddReleaseButton">
             Add
           </Button>
         </DialogActions>
@@ -102,7 +105,7 @@ export function Releases({ data }: { data: Result }) {
       <div className={classes.header}>
         Releases:
         <Tooltip title={'Add Release'}>
-          <Add className={classes.addButton} onClick={handleClick} />
+          <Add className={classes.addButton} onClick={handleClick} data-cy='AddReleaseButton'/>
         </Tooltip>
       </div>
       {data.releases &&
@@ -110,7 +113,7 @@ export function Releases({ data }: { data: Result }) {
           return (
             <li key={JSON.stringify(release)} className={classes.release}>
               {release.label} {release.format} {release.notes}
-              <Delete onClick={() => handleDelete(index)} />
+              <Delete onClick={() => handleDelete(index)} data-cy="DeleteRelease"/>
             </li>
           );
         })}
