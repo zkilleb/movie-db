@@ -11,3 +11,4 @@ export { searchActor } from './searchActor';
 export { addRelease } from './addRelease';
 export { getMovieById } from './getMovieById';
 export { deleteRelease } from './deleteRelease';
+export { getAllMovies } from './getAllMovies';

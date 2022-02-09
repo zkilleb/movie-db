@@ -72,18 +72,9 @@ export async function getActor(req, res) {
 }
 
 export async function getTitleById(req, res) {
-  const titleSchema = Joi.string().alphanum().lowercase().length(24);
-  const validation = titleSchema.validate(req.params.id);
-  if (!validation.error) {
-    const movie = await movies.findOne({ _id: ObjectId(req.params.id) });
-    if (!movie) res.status(204).send();
-    else res.status(200).send(movie);
-  } else
-    res.status(400).json({
-      message: process.env.VERBOSE
-        ? validation.error.message
-        : 'Invalid request',
-    });
+  const movie = await movies.findOne({ _id: ObjectId(req.params.id) });
+  if (!movie) res.status(204).send();
+  else res.status(200).send(movie);
 }
 
 export async function getRandomTitle(req, res) {
@@ -93,6 +84,15 @@ export async function getRandomTitle(req, res) {
     temp.push(result);
   });
   res.status(200).send(temp[Math.floor(Math.random() * temp.length)]);
+}
+
+export async function getAllTitles(req, res) {
+  let resultArr = [];
+  const results = await movies.find({});
+  await results.forEach((result) => {
+    resultArr.push(result);
+  });
+  res.status(200).send(resultArr.sort((a, b) => (a.title > b.title ? 1 : -1)));
 }
 
 export async function addMovie(req, res) {

@@ -36,6 +36,10 @@ const objects = {
   releaseNotes: '[data-cy=ReleaseNotes]',
   confirmAddRelease: '[data-cy=ConfirmAddReleaseButton]',
   deleteRelease: '[data-cy=DeleteRelease]',
+  allMoviesHeaderRow: '[data-cy=AllMoviesHeaderRow]',
+  allMoviesResultRow: '[data-cy=AllMoviesResultRow]',
+  addMovieButton: '[data-cy=AddMovieButton]',
+  viewAllButton: '[data-cy=ViewAllButton]'
 };
 
 describe('Test Application Workflow', () => {
@@ -54,7 +58,7 @@ describe('Test Application Workflow', () => {
   });
 
   it('Add Movie', () => {
-    cy.get(`${objects.header} > :nth-child(2)`).click();
+    cy.get(`${objects.header} > :nth-child(3)`).click();
     cy.url().should('include', '/add');
     cy.get(objects.titleField).type('The Godfather');
     cy.get(`${objects.titleField} >>`).should('have.value', 'The Godfather');
@@ -90,7 +94,7 @@ describe('Test Application Workflow', () => {
   });
 
   it('Verify Duplicate Cannot Be Added', () => {
-    cy.get(`${objects.header} > :nth-child(2)`).click();
+    cy.get(`${objects.header} > :nth-child(3)`).click();
     cy.url().should('include', '/add');
     cy.get(objects.titleField).type('The Godfather');
     cy.get(objects.runtimeField).type('175');
@@ -106,6 +110,31 @@ describe('Test Application Workflow', () => {
     cy.get(objects.submitButton).click();
     cy.get(objects.detailAlert).should('contain', 'Record already exists');
     cy.wait(3000);
+  });
+
+  it('Check All Movies Page', () => {
+    cy.get(`${objects.header} > :nth-child(2)`).click();
+    cy.url().should('include', '/all-movies');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Title');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Director');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Release Year');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Runtime');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Language');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Color');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Studio');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Notes');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Genre');
+    cy.get(objects.allMoviesHeaderRow).should('contain', 'Actors');
+    cy.get(objects.allMoviesResultRow).should('contain', 'The Godfather');
+    cy.get(objects.allMoviesResultRow).should('contain', 'Francis Ford Coppola');
+    cy.get(objects.allMoviesResultRow).should('contain', '1972');
+    cy.get(objects.allMoviesResultRow).should('contain', '175 mins.');
+    cy.get(objects.allMoviesResultRow).should('contain', 'English');
+    cy.get(objects.allMoviesResultRow).should('contain', 'true');
+    cy.get(objects.allMoviesResultRow).should('contain', 'Paramount');
+    cy.get(objects.allMoviesResultRow).should('contain', 'Part of The Godfather Trilogy release');
+    cy.get(objects.allMoviesResultRow).should('contain', 'Gangster');
+    cy.get(objects.allMoviesResultRow).should('contain', 'Al Pacino');
   });
 
   it('Search Added Movie By Director', () => {
@@ -323,6 +352,7 @@ describe('Test Application Workflow', () => {
       'contain',
       'Results for The Godfather: 0',
     );
-    cy.get(objects.searchResultPage).should('contain', 'Add Movie');
+    cy.get(objects.addMovieButton).should('be.visible');
+    cy.get(objects.viewAllButton).should('be.visible');
   });
 });

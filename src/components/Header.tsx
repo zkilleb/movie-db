@@ -28,6 +28,14 @@ export function Header({
         Home
       </Link>
       <Link
+        to="/all-movies"
+        className={`${classes.link} ${
+          location.pathname === '/all-movies' && classes.current
+        }`}
+      >
+        All Movies
+      </Link>
+      <Link
         to="/add"
         className={`${classes.link} ${
           location.pathname === '/add' && classes.current

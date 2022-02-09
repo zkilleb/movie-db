@@ -55,7 +55,10 @@ export function Search() {
       {(!searchResults || (searchResults && searchResults.length === 0)) && (
         <div className={classes.linkWrapper}>
           <Link to="/add" className={classes.link}>
-            <Button variant="contained">Add Movie</Button>
+            <Button data-cy="AddMovieButton" variant="contained">Add Movie</Button>
+          </Link> 
+          <Link to="/all-movies" className={classes.link}>
+            <Button data-cy="ViewAllButton" variant="contained">View All Movies</Button>
           </Link>
         </div>
       )}

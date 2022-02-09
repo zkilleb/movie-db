@@ -1,7 +1,15 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { NotFound, AddMovie, EditMovie, Home, Search, Detail } from './routes';
+import {
+  NotFound,
+  AddMovie,
+  EditMovie,
+  Home,
+  Search,
+  Detail,
+  AllMovies,
+} from './routes';
 import { Header } from './components';
 import { Search as SearchClass } from './classes';
 
@@ -29,6 +37,7 @@ function App() {
           <Route path="/edit" component={EditMovie} exact />
           <Route path="/search" component={Search} />
           <Route path="/detail" component={Detail} />
+          <Route path="/all-movies" component={AllMovies} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

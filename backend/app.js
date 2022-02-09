@@ -15,6 +15,7 @@ import {
   getActor,
   addRelease,
   deleteRelease,
+  getAllTitles,
 } from './controllers.js';
 
 dotenv.config();
@@ -31,6 +32,8 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   next();
 });
+
+app.get('/titles', getAllTitles);
 
 app.get('/titles/:title', getTitles);
 
