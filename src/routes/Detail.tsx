@@ -172,6 +172,7 @@ export function Detail(props: IDetailProps) {
               <div>Language: {data.language}</div>
               <div>Color: {data.color ? 'Yes' : 'No'}</div>
               <div>Studio: {data.studio}</div>
+              <div>Genre: {data.genre}</div>
               <div>Notes: {data.notes}</div>
             </div>
             <div className={classes.extraInfo}>

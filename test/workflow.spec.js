@@ -6,6 +6,7 @@ const objects = {
   languageField: '[data-cy=LanguageField]',
   directorField: '[data-cy=DirectorField]',
   studioField: '[data-cy=StudioField]',
+  genreField: '[data-cy=GenreField]',
   notesField: '[data-cy=NotesField]',
   addActorField: '[data-cy=AddActorField]',
   addActorButton: '[data-cy=AddActorButton]',
@@ -63,6 +64,8 @@ describe('Test Application Workflow', () => {
     );
     cy.get(objects.studioField).type('Paramount');
     cy.get(`${objects.studioField} >>`).should('have.value', 'Paramount');
+    cy.get(objects.genreField).type('Gangster');
+    cy.get(`${objects.genreField} >>`).should('have.value', 'Gangster');
     cy.get(objects.notesField).type('Part of The Godfather Trilogy release');
     cy.get(`${objects.notesField} >>`).should(
       'have.value',
@@ -79,28 +82,15 @@ describe('Test Application Workflow', () => {
     cy.get(`${objects.header} > :nth-child(2)`).click();
     cy.url().should('include', '/add');
     cy.get(objects.titleField).type('The Godfather');
-    cy.get(`${objects.titleField} >>`).should('have.value', 'The Godfather');
     cy.get(objects.runtimeField).type('175');
-    cy.get(`${objects.runtimeField} >>`).should('have.value', '175');
     cy.get(objects.releaseYearField).type('1972');
-    cy.get(`${objects.releaseYearField} >>`).should('have.value', '1972');
     cy.get(objects.languageField).type('English');
-    cy.get(`${objects.languageField} >>`).should('have.value', 'English');
     cy.get(objects.directorField).type('Francis Ford Coppola');
-    cy.get(`${objects.directorField} >>`).should(
-      'have.value',
-      'Francis Ford Coppola',
-    );
     cy.get(objects.studioField).type('Paramount');
-    cy.get(`${objects.studioField} >>`).should('have.value', 'Paramount');
+    cy.get(objects.genreField).type('Gangster');
     cy.get(objects.notesField).type('Part of The Godfather Trilogy release');
-    cy.get(`${objects.notesField} >>`).should(
-      'have.value',
-      'Part of The Godfather Trilogy release',
-    );
     cy.get(objects.addActorField).type('Al Pacino');
     cy.get(objects.addActorButton).click();
-    cy.get(objects.addActorRow).eq(0).should('contain', 'Al Pacino');
     cy.intercept('PUT', '**/add**', {}).as('addMovie');
     cy.get(objects.submitButton).click();
     cy.get(objects.detailAlert).should('contain', 'Record already exists');
@@ -186,6 +176,7 @@ describe('Test Application Workflow', () => {
     cy.get(objects.detailContainer).should('contain', 'Runtime: 175 mins.');
     cy.get(objects.detailContainer).should('contain', 'Starring: Al Pacino');
     cy.get(objects.detailContainer).should('contain', 'Studio: Paramount');
+    cy.get(objects.detailContainer).should('contain', 'Gangster');
     cy.get(objects.detailContainer).should(
       'contain',
       'Notes: Part of The Godfather Trilogy release',
@@ -211,6 +202,7 @@ describe('Test Application Workflow', () => {
       'Francis Ford Coppola',
     );
     cy.get(`${objects.studioField} >>`).should('have.value', 'Paramount');
+    cy.get(`${objects.genreField} >>`).should('have.value', 'Gangster');
     cy.get(`${objects.notesField} >>`).should(
       'have.value',
       'Part of The Godfather Trilogy release',
@@ -241,6 +233,7 @@ describe('Test Application Workflow', () => {
       'Starring: Al Pacino, Marlon Brando',
     );
     cy.get(objects.detailContainer).should('contain', 'Studio: Paramount');
+    cy.get(objects.detailContainer).should('contain', 'Gangster');
     cy.get(objects.detailContainer).should(
       'contain',
       'Notes: Part of The Godfather Trilogy release',

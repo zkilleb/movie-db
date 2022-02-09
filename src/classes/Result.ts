@@ -13,4 +13,5 @@ export class Result {
   _id: string = '0000';
   releases: Release[] = [];
   reviewLoaded: boolean = false;
+  genre?: string;
 }

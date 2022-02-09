@@ -124,17 +124,7 @@ export function Releases({ data }: { data: Result }) {
   async function handleDelete(index: number) {
     try {
       const result = await deleteRelease({
-        title: data.title,
-        length: data.length,
-        year: data.year,
-        color: data.color,
-        language: data.language,
-        studio: data.studio,
-        director: data.director,
-        actors: data.actors,
-        notes: data.notes,
-        releases: data.releases,
-        _id: data._id,
+        ...data,
         index,
       });
       if (result.status === 200) {
@@ -164,20 +154,10 @@ export function Releases({ data }: { data: Result }) {
   async function handleAddRelease() {
     try {
       const result = await addRelease({
-        title: data.title,
+        ...data,
         format,
-        length: data.length,
-        year: data.year,
-        color: data.color,
-        language: data.language,
-        studio: data.studio,
-        director: data.director,
         label,
-        actors: data.actors,
-        notes: data.notes,
         releaseNotes: notes,
-        releases: data.releases,
-        _id: data._id,
       });
       if (result.status === 200) {
         setDialogOpen(false);

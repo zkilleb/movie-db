@@ -1,22 +1,21 @@
 export function removeEmptyFields(req) {
   let doc = {};
-  req.query.title !== '' && (doc.title = req.query.title);
-  req.query.color !== '' && (doc.color = req.query.color);
-  req.query.length !== '' && (doc.length = req.query.length);
-  req.query.year !== '' && (doc.year = req.query.year);
-  req.query.language !== '' && (doc.language = req.query.language);
-  req.query.director !== '' && (doc.director = req.query.director);
-  req.query.studio !== '' && (doc.studio = req.query.studio);
-  req.query.actors &&
-    req.query.actors.length !== 0 &&
-    (doc.actors = req.query.actors);
-  req.query.notes !== '' && (doc.notes = req.query.notes);
   let releases = [];
-  if (req.query.releases && req.query.releases.length !== 0) {
-    req.query.releases.forEach((release) => {
-      releases.push(JSON.parse(release));
-    });
-  }
+  Object.keys(req.query).forEach((key) => {
+    if (key !== '_id') {
+      if (key === 'releases' && req.query[key].length !== 0) {
+        req.query[key].forEach((release) => {
+          releases.push(JSON.parse(release));
+        });
+      } else if (
+        key === 'actors' &&
+        req.query[key] &&
+        req.query[key].length !== 0
+      ) {
+        doc[key] = req.query[key];
+      } else req.query[key] !== '' && (doc[key] = req.query[key]);
+    }
+  });
   doc.releases = releases;
   return doc;
 }

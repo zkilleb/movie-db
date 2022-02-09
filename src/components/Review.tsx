@@ -18,7 +18,13 @@ export function Review({
       <div>
         <Link className={classes.link} to={url}>
           Review By {writer}:{' '}
-          <Rating name={'Review Rating'} className={classes.rating} value={stars} max={4} disabled />
+          <Rating
+            name={'Review Rating'}
+            className={classes.rating}
+            value={stars}
+            max={4}
+            disabled
+          />
         </Link>
       </div>
     </div>

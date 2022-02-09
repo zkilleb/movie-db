@@ -52,6 +52,9 @@ export function AddForm(data: IAddForm) {
   const [notes, setNotes] = React.useState<string>(
     editResults && editResults.notes ? editResults.notes : '',
   );
+  const [genre, setGenre] = React.useState<string>(
+    editResults && editResults.genre ? editResults.genre : '',
+  );
   const [validation, setValidation] = React.useState<Validation | undefined>();
 
   return (
@@ -138,6 +141,15 @@ export function AddForm(data: IAddForm) {
           <TextField
             InputProps={{ className: classes.field }}
             InputLabelProps={{ className: classes.field }}
+            label="Genre"
+            id="genre"
+            value={genre}
+            onChange={handleChange}
+            data-cy="GenreField"
+          />
+          <TextField
+            InputProps={{ className: classes.field }}
+            InputLabelProps={{ className: classes.field }}
             label="Notes"
             id="notes"
             value={notes}
@@ -218,6 +230,9 @@ export function AddForm(data: IAddForm) {
       case 'studio':
         setStudio(event.target.value);
         break;
+      case 'genre':
+        setGenre(event.target.value);
+        break;
       case 'notes':
         setNotes(event.target.value);
         break;
@@ -255,6 +270,7 @@ export function AddForm(data: IAddForm) {
             language,
             director,
             studio,
+            genre,
             actors,
             notes,
           });
@@ -281,6 +297,7 @@ export function AddForm(data: IAddForm) {
             studio,
             actors,
             notes,
+            genre,
             releases: editResults.releases,
             id: editResults._id,
           });
