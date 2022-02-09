@@ -39,7 +39,7 @@ const objects = {
   allMoviesHeaderRow: '[data-cy=AllMoviesHeaderRow]',
   allMoviesResultRow: '[data-cy=AllMoviesResultRow]',
   addMovieButton: '[data-cy=AddMovieButton]',
-  viewAllButton: '[data-cy=ViewAllButton]'
+  viewAllButton: '[data-cy=ViewAllButton]',
 };
 
 describe('Test Application Workflow', () => {
@@ -126,13 +126,19 @@ describe('Test Application Workflow', () => {
     cy.get(objects.allMoviesHeaderRow).should('contain', 'Genre');
     cy.get(objects.allMoviesHeaderRow).should('contain', 'Actors');
     cy.get(objects.allMoviesResultRow).should('contain', 'The Godfather');
-    cy.get(objects.allMoviesResultRow).should('contain', 'Francis Ford Coppola');
+    cy.get(objects.allMoviesResultRow).should(
+      'contain',
+      'Francis Ford Coppola',
+    );
     cy.get(objects.allMoviesResultRow).should('contain', '1972');
     cy.get(objects.allMoviesResultRow).should('contain', '175 mins.');
     cy.get(objects.allMoviesResultRow).should('contain', 'English');
     cy.get(objects.allMoviesResultRow).should('contain', 'true');
     cy.get(objects.allMoviesResultRow).should('contain', 'Paramount');
-    cy.get(objects.allMoviesResultRow).should('contain', 'Part of The Godfather Trilogy release');
+    cy.get(objects.allMoviesResultRow).should(
+      'contain',
+      'Part of The Godfather Trilogy release',
+    );
     cy.get(objects.allMoviesResultRow).should('contain', 'Gangster');
     cy.get(objects.allMoviesResultRow).should('contain', 'Al Pacino');
   });
@@ -323,6 +329,7 @@ describe('Test Application Workflow', () => {
 
   it('Delete Release', () => {
     cy.get(objects.deleteRelease).eq(0).click();
+    cy.get(objects.confirmDelete).click();
     cy.get(objects.detailContainer).should(
       'not.contain',
       'Paramount blu-ray The Godfather Trilogy Boxset',

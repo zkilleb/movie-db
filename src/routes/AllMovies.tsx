@@ -279,6 +279,6 @@ const useStyles = makeStyles(() => ({
     color: 'white',
   },
   container: {
-    overflow: 'hidden'
-  }
+    overflow: 'hidden',
+  },
 }));

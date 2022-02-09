@@ -20,10 +20,12 @@ export function Releases({ data }: { data: Result }) {
   const classes = useStyles();
   const history = useHistory();
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [label, setLabel] = React.useState<string>();
   const [format, setFormat] = React.useState<string>(formats[0].value);
   const [notes, setNotes] = React.useState<string>();
   const [validation, setValidation] = React.useState<Validation | undefined>();
+  const [deleteIndex, setDeleteIndex] = React.useState<number>();
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -36,6 +38,38 @@ export function Releases({ data }: { data: Result }) {
           handleClose={handleClose}
         />
       )}
+
+      <Dialog
+        open={deleteDialogOpen}
+        PaperProps={{
+          style: {
+            backgroundColor: '#456',
+            color: 'white',
+            width: '50%',
+            height: '15%',
+          },
+        }}
+      >
+        <DialogContent>
+          Are you sure you want to delete this release?
+        </DialogContent>
+
+        <DialogActions>
+          <Button
+            className={classes.dialogButtons}
+            onClick={() => handleDeleteModal()}
+          >
+            No
+          </Button>
+          <Button
+            className={classes.dialogButtons}
+            onClick={() => handleDelete()}
+            data-cy="ConfirmDelete"
+          >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog
         data-cy="ReleaseDialog"
@@ -122,7 +156,7 @@ export function Releases({ data }: { data: Result }) {
             <li key={JSON.stringify(release)} className={classes.release}>
               {release.label} {release.format} {release.notes}
               <Delete
-                onClick={() => handleDelete(index)}
+                onClick={() => handleDeleteModal(index)}
                 data-cy="DeleteRelease"
               />
             </li>
@@ -135,14 +169,19 @@ export function Releases({ data }: { data: Result }) {
     setDialogOpen(true);
   }
 
-  async function handleDelete(index: number) {
+  function handleDeleteModal(index?: number) {
+    setDeleteDialogOpen(!deleteDialogOpen);
+    setDeleteIndex(index);
+  }
+
+  async function handleDelete() {
     try {
       const result = await deleteRelease({
         ...data,
-        index,
+        index: deleteIndex,
       });
       if (result.status === 200) {
-        setDialogOpen(false);
+        setDeleteDialogOpen(false);
         setLabel('');
         setNotes('');
         history.push({
@@ -269,5 +308,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     flexWrap: 'wrap',
+  },
+  dialogButtons: {
+    color: 'white',
   },
 }));
