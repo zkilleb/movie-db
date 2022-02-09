@@ -48,7 +48,7 @@ export function AddForm(data: IAddForm) {
   const [actors, setActors] = React.useState<string[]>(
     editResults && editResults.actors ? editResults.actors : [],
   );
-  const [addActor, setAddActor] = React.useState<string>();
+  const [addActor, setAddActor] = React.useState<string>('');
   const [notes, setNotes] = React.useState<string>(
     editResults && editResults.notes ? editResults.notes : '',
   );
