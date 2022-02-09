@@ -35,7 +35,7 @@ const objects = {
   releaseLabel: '[data-cy=ReleaseLabel]',
   releaseNotes: '[data-cy=ReleaseNotes]',
   confirmAddRelease: '[data-cy=ConfirmAddReleaseButton]',
-  deleteRelease: '[data-cy=DeleteRelease]'
+  deleteRelease: '[data-cy=DeleteRelease]',
 };
 
 describe('Test Application Workflow', () => {
@@ -259,13 +259,22 @@ describe('Test Application Workflow', () => {
 
   it('Add Release to Movie', () => {
     cy.get(objects.addReleaseButton).click();
-    cy.get(objects.releaseDialog).should('contain', 'Add a release for The Godfather');
+    cy.get(objects.releaseDialog).should(
+      'contain',
+      'Add a release for The Godfather',
+    );
     cy.get(objects.releaseLabel).type('Paramount');
     cy.get(`${objects.releaseLabel} >>`).should('have.value', 'Paramount');
     cy.get(objects.releaseNotes).type('The Godfather Trilogy Boxset');
-    cy.get(`${objects.releaseNotes} >>`).should('have.value', 'The Godfather Trilogy Boxset');
+    cy.get(`${objects.releaseNotes} >>`).should(
+      'have.value',
+      'The Godfather Trilogy Boxset',
+    );
     cy.get(objects.confirmAddRelease).click();
-    cy.get(objects.detailContainer).should('contain', 'Paramount blu-ray The Godfather Trilogy Boxset');
+    cy.get(objects.detailContainer).should(
+      'contain',
+      'Paramount blu-ray The Godfather Trilogy Boxset',
+    );
   });
 
   it('Add Second Release to Movie', () => {
@@ -273,14 +282,26 @@ describe('Test Application Workflow', () => {
     cy.get(objects.releaseLabel).type('Paramount');
     cy.get(objects.releaseNotes).type('The Godfather Re-Release');
     cy.get(objects.confirmAddRelease).click();
-    cy.get(objects.detailContainer).should('contain', 'Paramount blu-ray The Godfather Trilogy Boxset');
-    cy.get(objects.detailContainer).should('contain', 'Paramount blu-ray The Godfather Re-Release');
+    cy.get(objects.detailContainer).should(
+      'contain',
+      'Paramount blu-ray The Godfather Trilogy Boxset',
+    );
+    cy.get(objects.detailContainer).should(
+      'contain',
+      'Paramount blu-ray The Godfather Re-Release',
+    );
   });
 
   it('Delete Release', () => {
     cy.get(objects.deleteRelease).eq(0).click();
-    cy.get(objects.detailContainer).should('not.contain', 'Paramount blu-ray The Godfather Trilogy Boxset');
-    cy.get(objects.detailContainer).should('contain', 'Paramount blu-ray The Godfather Re-Release');
+    cy.get(objects.detailContainer).should(
+      'not.contain',
+      'Paramount blu-ray The Godfather Trilogy Boxset',
+    );
+    cy.get(objects.detailContainer).should(
+      'contain',
+      'Paramount blu-ray The Godfather Re-Release',
+    );
   });
 
   it('Delete Movie', () => {

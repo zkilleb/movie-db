@@ -38,7 +38,7 @@ export function Releases({ data }: { data: Result }) {
       )}
 
       <Dialog
-      data-cy="ReleaseDialog"
+        data-cy="ReleaseDialog"
         fullWidth
         maxWidth="xl"
         open={dialogOpen}
@@ -96,7 +96,11 @@ export function Releases({ data }: { data: Result }) {
           <Button className={classes.field} onClick={handleCancel}>
             Cancel
           </Button>
-          <Button className={classes.field} onClick={handleAddRelease} data-cy="ConfirmAddReleaseButton">
+          <Button
+            className={classes.field}
+            onClick={handleAddRelease}
+            data-cy="ConfirmAddReleaseButton"
+          >
             Add
           </Button>
         </DialogActions>
@@ -105,7 +109,11 @@ export function Releases({ data }: { data: Result }) {
       <div className={classes.header}>
         Releases:
         <Tooltip title={'Add Release'}>
-          <Add className={classes.addButton} onClick={handleClick} data-cy='AddReleaseButton'/>
+          <Add
+            className={classes.addButton}
+            onClick={handleClick}
+            data-cy="AddReleaseButton"
+          />
         </Tooltip>
       </div>
       {data.releases &&
@@ -113,7 +121,10 @@ export function Releases({ data }: { data: Result }) {
           return (
             <li key={JSON.stringify(release)} className={classes.release}>
               {release.label} {release.format} {release.notes}
-              <Delete onClick={() => handleDelete(index)} data-cy="DeleteRelease"/>
+              <Delete
+                onClick={() => handleDelete(index)}
+                data-cy="DeleteRelease"
+              />
             </li>
           );
         })}

@@ -170,7 +170,10 @@ export function AddForm(data: IAddForm) {
                   <TableRow data-cy="AddActorRow" key={actor}>
                     <TableCell align="center">{actor}</TableCell>
                     <TableCell align="center">
-                      <Delete data-cy='DeleteActor' onClick={() => deleteActor(index)} />
+                      <Delete
+                        data-cy="DeleteActor"
+                        onClick={() => deleteActor(index)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
