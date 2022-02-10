@@ -6,7 +6,6 @@ import {
   TableRow,
   TableHead,
   TableContainer,
-  TableCell,
   TableBody,
   Table,
   FormControlLabel,
@@ -17,7 +16,7 @@ import { useHistory } from 'react-router-dom';
 import { Delete, AddCircle } from '@material-ui/icons';
 import { Result, Validation } from '../classes';
 import { addMovie, editMovie } from '../handlers';
-import { Notification } from '.';
+import { Notification, StyledTableCell, StyledTableHeaderCell } from '.';
 
 export function AddForm(data: IAddForm) {
   const editResults = data.data;
@@ -156,25 +155,25 @@ export function AddForm(data: IAddForm) {
             onChange={handleChange}
             data-cy="NotesField"
           />
-          <TableContainer component={Paper} className={classes.addActors}>
-            <Table className={classes.table} aria-label="simple table">
+          <TableContainer component={Paper} className={classes.table}>
+            <Table aria-label="simple table">
               <TableHead>
-                <TableRow>
-                  <TableCell colSpan={2} align="center">
+                <TableRow className={classes.headerRow}>
+                  <StyledTableHeaderCell colSpan={2} align="center">
                     Actor Name
-                  </TableCell>
+                  </StyledTableHeaderCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {actors.map((actor, index) => (
                   <TableRow data-cy="AddActorRow" key={actor}>
-                    <TableCell align="center">{actor}</TableCell>
-                    <TableCell align="center">
+                    <StyledTableCell align="center">{actor}</StyledTableCell>
+                    <StyledTableCell align="center">
                       <Delete
                         data-cy="DeleteActor"
                         onClick={() => deleteActor(index)}
                       />
-                    </TableCell>
+                    </StyledTableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -344,9 +343,11 @@ const useStyles = makeStyles((theme) => ({
     color: 'rgba(85,221,102,.25)',
   },
   table: {
-    minWidth: 200,
-    maxWidth: 400,
+    backgroundColor: '#456',
+    width: '25%',
+    marginTop: 10,
     margin: 'auto',
+    border: '2px solid white',
   },
   addButton: {
     margin: 10,
@@ -361,14 +362,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 25,
     borderRadius: '10px 10px 10px 10px',
   },
-  addActors: {
-    backgroundColor: 'white',
-    width: '25%',
-    marginTop: 10,
-    margin: 'auto',
-  },
   submit: {
     marginBottom: 10,
+  },
+  headerRow: {
+    backgroundColor: '#14181c',
   },
 }));
 

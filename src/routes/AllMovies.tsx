@@ -12,11 +12,15 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { Result, Validation } from '../classes';
 import { getAllMovies, deleteMovie } from '../handlers';
-import { Notification } from '../components';
+import {
+  Notification,
+  StyledTableCell,
+  StyledTableHeaderCell,
+} from '../components';
 import { Delete } from '@material-ui/icons';
 
 export function AllMovies() {
@@ -244,19 +248,6 @@ export function AllMovies() {
     setData(result);
   }
 }
-
-const StyledTableCell = withStyles({
-  root: {
-    color: 'white',
-  },
-})(TableCell);
-
-const StyledTableHeaderCell = withStyles({
-  root: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-})(TableCell);
 
 const useStyles = makeStyles(() => ({
   body: {

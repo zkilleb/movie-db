@@ -306,9 +306,11 @@ describe('Test Application Workflow', () => {
       'The Godfather Trilogy Boxset',
     );
     cy.get(objects.confirmAddRelease).click();
+    cy.get(objects.detailContainer).should('contain', 'Paramount');
+    cy.get(objects.detailContainer).should('contain', 'blu-ray');
     cy.get(objects.detailContainer).should(
       'contain',
-      'Paramount blu-ray The Godfather Trilogy Boxset',
+      'The Godfather Trilogy Boxset',
     );
   });
 
@@ -317,13 +319,17 @@ describe('Test Application Workflow', () => {
     cy.get(objects.releaseLabel).type('Paramount');
     cy.get(objects.releaseNotes).type('The Godfather Re-Release');
     cy.get(objects.confirmAddRelease).click();
+    cy.get(objects.detailContainer).should('contain', 'Paramount');
+    cy.get(objects.detailContainer).should('contain', 'blu-ray');
     cy.get(objects.detailContainer).should(
       'contain',
-      'Paramount blu-ray The Godfather Trilogy Boxset',
+      'The Godfather Trilogy Boxset',
     );
+    cy.get(objects.detailContainer).should('contain', 'Paramount');
+    cy.get(objects.detailContainer).should('contain', 'blu-ray');
     cy.get(objects.detailContainer).should(
       'contain',
-      'Paramount blu-ray The Godfather Re-Release',
+      'The Godfather Re-Release',
     );
   });
 
@@ -332,11 +338,13 @@ describe('Test Application Workflow', () => {
     cy.get(objects.confirmDelete).click();
     cy.get(objects.detailContainer).should(
       'not.contain',
-      'Paramount blu-ray The Godfather Trilogy Boxset',
+      'The Godfather Trilogy Boxset',
     );
+    cy.get(objects.detailContainer).should('contain', 'Paramount');
+    cy.get(objects.detailContainer).should('contain', 'blu-ray');
     cy.get(objects.detailContainer).should(
       'contain',
-      'Paramount blu-ray The Godfather Re-Release',
+      'The Godfather Re-Release',
     );
   });
 

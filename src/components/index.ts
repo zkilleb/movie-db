@@ -7,3 +7,5 @@ export { Review } from './Review';
 export { Random } from './Random';
 export { RecentSearches } from './RecentSearches';
 export { Releases } from './Releases';
+export { StyledTableCell } from './StyledTableCell';
+export { StyledTableHeaderCell } from './StyledTableCell';

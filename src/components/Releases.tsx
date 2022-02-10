@@ -9,12 +9,18 @@ import {
   Button,
   TextField,
   MenuItem,
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableBody,
+  Table,
+  Paper,
 } from '@material-ui/core';
 import { Add, Delete } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { Result, Validation } from '../classes';
 import { addRelease, deleteRelease } from '../handlers';
-import { Notification } from '.';
+import { Notification, StyledTableCell, StyledTableHeaderCell } from '.';
 
 export function Releases({ data }: { data: Result }) {
   const classes = useStyles();
@@ -140,28 +146,43 @@ export function Releases({ data }: { data: Result }) {
         </DialogActions>
       </Dialog>
 
-      <div className={classes.header}>
-        Releases:
-        <Tooltip title={'Add Release'}>
-          <Add
-            className={classes.addButton}
-            onClick={handleClick}
-            data-cy="AddReleaseButton"
-          />
-        </Tooltip>
-      </div>
-      {data.releases &&
-        data.releases.map((release, index) => {
-          return (
-            <li key={JSON.stringify(release)} className={classes.release}>
-              {release.label} {release.format} {release.notes}
-              <Delete
-                onClick={() => handleDeleteModal(index)}
-                data-cy="DeleteRelease"
-              />
-            </li>
-          );
-        })}
+      <TableContainer className={classes.table} component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead data-cy="ReleasesHeaderRow">
+            <TableRow className={classes.headerRow}>
+              <StyledTableHeaderCell colSpan={4} align="center">
+                <div className={classes.header}>
+                  Releases:
+                  <Tooltip title={'Add Release'}>
+                    <Add
+                      className={classes.addButton}
+                      onClick={handleClick}
+                      data-cy="AddReleaseButton"
+                    />
+                  </Tooltip>
+                </div>
+              </StyledTableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.releases.map((release, index) => {
+              return (
+                <TableRow key={index} data-cy="ReleaseResultRow">
+                  <StyledTableCell>{release.label}</StyledTableCell>
+                  <StyledTableCell>{release.format}</StyledTableCell>
+                  <StyledTableCell>{release.notes}</StyledTableCell>
+                  <StyledTableCell>
+                    <Delete
+                      onClick={() => handleDeleteModal(index)}
+                      data-cy="DeleteRelease"
+                    />
+                  </StyledTableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 
@@ -311,5 +332,11 @@ const useStyles = makeStyles((theme) => ({
   },
   dialogButtons: {
     color: 'white',
+  },
+  headerRow: {
+    backgroundColor: '#14181c',
+  },
+  table: {
+    backgroundColor: '#456',
   },
 }));
