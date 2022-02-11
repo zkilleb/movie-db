@@ -250,9 +250,6 @@ export function AllMovies() {
 }
 
 const useStyles = makeStyles(() => ({
-  body: {
-    color: 'white',
-  },
   header: {
     color: 'white',
     fontSize: 30,

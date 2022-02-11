@@ -44,6 +44,6 @@ const useStyles = makeStyles(() => ({
     flexWrap: 'wrap',
   },
   rating: {
-    marginLeft: 2
+    marginLeft: 2,
   },
 }));

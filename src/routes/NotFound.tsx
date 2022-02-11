@@ -5,8 +5,8 @@ export function NotFound() {
   const classes = useStyles();
 
   return (
-    <div>
-      <div>Page Not Found</div>
+    <div data-cy="NotFound">
+      <div className={classes.header}>Page Not Found</div>
       <Link className={classes.link} to="/">
         Return Home
       </Link>
@@ -15,10 +15,12 @@ export function NotFound() {
 }
 
 const useStyles = makeStyles(() => ({
+  header: {
+    color: 'white',
+    fontSize: 30,
+  },
   link: {
     paddingLeft: 10,
-    fontFamily: 'Graphik-Semibold-Web,sans-serif',
-    fontWeight: 'bold',
     textDecoration: 'none',
     color: 'white',
   },

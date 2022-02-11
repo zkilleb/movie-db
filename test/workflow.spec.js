@@ -40,6 +40,7 @@ const objects = {
   allMoviesResultRow: '[data-cy=AllMoviesResultRow]',
   addMovieButton: '[data-cy=AddMovieButton]',
   viewAllButton: '[data-cy=ViewAllButton]',
+  notFound: '[data-cy=NotFound]'
 };
 
 describe('Test Application Workflow', () => {
@@ -84,11 +85,11 @@ describe('Test Application Workflow', () => {
     );
     cy.get(objects.addActorField).type('Alpha Cino');
     cy.get(objects.addActorButton).click();
-    cy.get(objects.addActorRow).eq(0).should('contain', 'Alpha Cino');
+    cy.get(`${objects.addActorRow} >>>`).eq(0).should('have.value', 'Alpha Cino');
     cy.get(objects.deleteActor).click();
     cy.get(objects.addActorField).type('Al Pacino');
     cy.get(objects.addActorButton).click();
-    cy.get(objects.addActorRow).eq(0).should('contain', 'Al Pacino');
+    cy.get(`${objects.addActorRow} >>>`).eq(0).should('have.value', 'Al Pacino');
     cy.get(objects.submitButton).click();
     cy.wait(3000);
   });
@@ -253,11 +254,11 @@ describe('Test Application Workflow', () => {
       'have.value',
       'Part of The Godfather Trilogy release',
     );
-    cy.get(objects.addActorRow).eq(0).should('contain', 'Al Pacino');
+    cy.get(`${objects.addActorRow} >>>`).eq(0).should('have.value', 'Al Pacino');
     cy.get(objects.addActorField).type('Marlon Brando');
     cy.get(objects.addActorButton).click();
-    cy.get(objects.addActorRow).eq(0).should('contain', 'Al Pacino');
-    cy.get(objects.addActorRow).eq(1).should('contain', 'Marlon Brando');
+    cy.get(`${objects.addActorRow} >>>`).eq(0).should('have.value', 'Al Pacino');
+    cy.get(`${objects.addActorRow} >>>`).eq(1).should('have.value', 'Marlon Brando');
     cy.get(objects.submitButton).click();
     cy.wait(3000);
     cy.url().should('include', '/detail');
@@ -369,5 +370,11 @@ describe('Test Application Workflow', () => {
     );
     cy.get(objects.addMovieButton).should('be.visible');
     cy.get(objects.viewAllButton).should('be.visible');
+  });
+
+  it('Route is Not Found', () => {
+    cy.visit('/not-a-real-route');
+    cy.get(objects.notFound).should('contain', 'Page Not Found');
+    cy.get(objects.notFound).should('contain', 'Return Home');
   });
 });

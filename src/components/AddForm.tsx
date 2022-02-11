@@ -99,7 +99,7 @@ export function AddForm(data: IAddForm) {
             data-cy="ReleaseYearField"
           />
           <FormControlLabel
-            className={classes.field}
+            className={`${classes.field} ${classes.checkbox}`}
             control={
               <Checkbox
                 checked={color}
@@ -166,8 +166,23 @@ export function AddForm(data: IAddForm) {
               </TableHead>
               <TableBody>
                 {actors.map((actor, index) => (
-                  <TableRow data-cy="AddActorRow" key={actor}>
-                    <StyledTableCell align="center">{actor}</StyledTableCell>
+                  <TableRow key={index.toString()}>
+                    <StyledTableCell align="center" data-cy="AddActorRow">
+                      <TextField
+                        InputProps={{
+                          disableUnderline: true,
+                          className: classes.field,
+                        }}
+                        InputLabelProps={{ className: classes.field }}
+                        className={classes.actorEditField}
+                        value={actor}
+                        onChange={(value) =>
+                          handleAddedActorChange(value, index)
+                        }
+                      >
+                        {actor}
+                      </TextField>
+                    </StyledTableCell>
                     <StyledTableCell align="center">
                       <Delete
                         data-cy="DeleteActor"
@@ -176,25 +191,31 @@ export function AddForm(data: IAddForm) {
                     </StyledTableCell>
                   </TableRow>
                 ))}
+                <StyledTableCell
+                  className={actors.length > 0 ? classes.headerRow : classes.field}
+                  colSpan={2}
+                  align="center"
+                >
+                  <TextField
+                    InputProps={{ className: classes.field }}
+                    InputLabelProps={{ className: classes.field }}
+                    onChange={handleNameField}
+                    label="Actor Name"
+                    value={addActor}
+                    data-cy="AddActorField"
+                  />
+                  <Button
+                    className={classes.addButton}
+                    onClick={handleAddActor}
+                    variant="contained"
+                    data-cy="AddActorButton"
+                  >
+                    <AddCircle />
+                  </Button>
+                </StyledTableCell>
               </TableBody>
             </Table>
           </TableContainer>
-          <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
-            onChange={handleNameField}
-            label="Actor Name"
-            value={addActor}
-            data-cy="AddActorField"
-          />
-          <Button
-            className={classes.addButton}
-            onClick={handleAddActor}
-            variant="contained"
-            data-cy="AddActorButton"
-          >
-            <AddCircle />
-          </Button>
         </form>
         <Button
           className={classes.submit}
@@ -239,6 +260,12 @@ export function AddForm(data: IAddForm) {
         setNotes(event.target.value);
         break;
     }
+  }
+
+  function handleAddedActorChange(event: any, index: number) {
+    const tempActors = [...actors];
+    tempActors[index] = event.target.value;
+    setActors(tempActors);
   }
 
   function handleAddActor() {
@@ -340,7 +367,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   checkbox: {
-    color: 'rgba(85,221,102,.25)',
+    marginTop: 20,
   },
   table: {
     backgroundColor: '#456',
@@ -348,6 +375,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     margin: 'auto',
     border: '2px solid white',
+    marginBottom: 10,
   },
   addButton: {
     margin: 10,
@@ -367,6 +395,17 @@ const useStyles = makeStyles((theme) => ({
   },
   headerRow: {
     backgroundColor: '#14181c',
+  },
+  actorEditField: {
+    '& label.Mui-focused': {
+      color: 'white',
+    },
+    '& .MuiInput-underline:before': {
+      borderBottomColor: 'white',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'white',
+    },
   },
 }));
 
