@@ -174,7 +174,6 @@ export function AddForm(data: IAddForm) {
                           className: classes.field,
                         }}
                         InputLabelProps={{ className: classes.field }}
-                        className={classes.actorEditField}
                         value={actor}
                         onChange={(value) =>
                           handleAddedActorChange(value, index)
@@ -395,17 +394,6 @@ const useStyles = makeStyles((theme) => ({
   },
   headerRow: {
     backgroundColor: '#14181c',
-  },
-  actorEditField: {
-    '& label.Mui-focused': {
-      color: 'white',
-    },
-    '& .MuiInput-underline:before': {
-      borderBottomColor: 'white',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'white',
-    },
   },
 }));
 
