@@ -17,7 +17,7 @@ export function Review({
     <div className={classes.review} data-cy="Review">
       <div>
         <Link className={classes.link} to={url}>
-          Review By {writer}:{' '}
+          Review By {writer}:
           <Rating
             name={'Review Rating'}
             className={classes.rating}
@@ -39,8 +39,11 @@ const useStyles = makeStyles(() => ({
   link: {
     textDecoration: 'none',
     color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
   rating: {
-    marginTop: 5,
+    marginLeft: 2
   },
 }));
