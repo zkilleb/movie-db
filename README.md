@@ -22,11 +22,12 @@ Create `.env` file in the top level directory with the following variables
 
 - DB_HOST - Connection string to MongoDB
 - VERBOSE - Boolean value to allow for verbose logging from the endpoints
-- SERVER_PORT - Port to run the endpoints on
+- REACT_APP_SERVER_HOST - URL to where the server is hosted, defaults to `localhost`
+- REACT_APP_SERVER_PORT - Port to run the endpoints on, defaults to `8080`
 - API_KEY - API key for TMDB to get recommendations
   - Can be acquired [here](https://developers.themoviedb.org/3/getting-started/introduction)
-- Optional: DB_NAME - Name of Mongo database to be used
-- Optional: COLLECTION - Collection to be used in the Mongo databse
+- DB_NAME - Name of Mongo database to be used, defaults to `mydb`
+- COLLECTION - Collection to be used in the Mongo database, defaults to `movies`
 
 ### MongoDB
 

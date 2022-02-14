@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from './axios';
 
 export async function getTMDBKeyword(
   title: string | null,
@@ -8,7 +8,7 @@ export async function getTMDBKeyword(
   if (type === 'title') route = `keyword-search/${title}`;
   if (type === 'director' || type === 'actor')
     route = `person-search/${title}/${type}`;
-  return await axios.get(`http://localhost:8080/${route}`).then((res) => {
+  return await api.get(`/${route}`).then((res) => {
     return res.data;
   });
 }

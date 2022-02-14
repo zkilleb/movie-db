@@ -1,9 +1,7 @@
-import axios from 'axios';
+import { api } from './axios';
 
 export async function getRecommendations(id: string): Promise<any> {
-  return await axios
-    .get(`http://localhost:8080/recommendations/${id}`)
-    .then((res) => {
-      return res.data;
-    });
+  return await api.get(`/recommendations/${id}`).then((res) => {
+    return res.data;
+  });
 }

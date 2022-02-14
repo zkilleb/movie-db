@@ -21,7 +21,8 @@ import {
 dotenv.config();
 
 const app = express();
-const port = process.env.SERVER_PORT || 8080;
+const host = process.env.REACT_APP_SERVER_HOST || 'http://localhost';
+const port = process.env.REACT_APP_SERVER_PORT || 8080;
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -64,5 +65,5 @@ app.put('/add/release', addRelease);
 app.put('/delete/release', deleteRelease);
 
 app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
+  console.log(`App listening at ${host}:${port}`);
 });

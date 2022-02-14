@@ -191,7 +191,9 @@ export function AddForm(data: IAddForm) {
                   </TableRow>
                 ))}
                 <StyledTableCell
-                  className={actors.length > 0 ? classes.headerRow : classes.field}
+                  className={
+                    actors.length > 0 ? classes.headerRow : classes.field
+                  }
                   colSpan={2}
                   align="center"
                 >

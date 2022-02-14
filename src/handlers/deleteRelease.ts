@@ -1,7 +1,7 @@
-import axios from 'axios';
+import { api } from './axios';
 
 export async function deleteRelease(params: {}) {
-  return await axios.put('http://localhost:8080/delete/release', undefined, {
+  return await api.put('/delete/release', undefined, {
     params,
   });
 }

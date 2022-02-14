@@ -1,9 +1,7 @@
-import axios from 'axios';
+import { api } from './axios';
 
 export async function searchDirector(name: string | null): Promise<[]> {
-  return await axios
-    .get(`http://localhost:8080/director/${name}`)
-    .then((res) => {
-      return res.data;
-    });
+  return await api.get(`/director/${name}`).then((res) => {
+    return res.data;
+  });
 }
