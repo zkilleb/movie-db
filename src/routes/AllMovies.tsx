@@ -21,6 +21,7 @@ import {
   StyledTableCell,
   StyledTableHeaderCell,
 } from '../components';
+import { colors } from '../constants';
 import { Delete } from '@material-ui/icons';
 
 export function AllMovies() {
@@ -52,7 +53,7 @@ export function AllMovies() {
         open={dialogOpen}
         PaperProps={{
           style: {
-            backgroundColor: '#456',
+            backgroundColor: colors.tableBackground,
             color: 'white',
             width: '50%',
             height: '15%',
@@ -255,13 +256,13 @@ const useStyles = makeStyles(() => ({
     fontSize: 30,
   },
   table: {
-    backgroundColor: '#456',
+    backgroundColor: colors.tableBackground,
     width: '95%',
     marginTop: 10,
     margin: 'auto',
   },
   headerRow: {
-    backgroundColor: '#14181c',
+    backgroundColor: colors.tableHeaderRowBackground,
   },
   dialogButtons: {
     color: 'white',

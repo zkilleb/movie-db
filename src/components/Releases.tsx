@@ -20,6 +20,7 @@ import { Add, Delete } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { Result, Validation } from '../classes';
 import { addRelease, deleteRelease } from '../handlers';
+import { colors } from '../constants';
 import { Notification, StyledTableCell, StyledTableHeaderCell } from '.';
 
 export function Releases({ data }: { data: Result }) {
@@ -49,7 +50,7 @@ export function Releases({ data }: { data: Result }) {
         open={deleteDialogOpen}
         PaperProps={{
           style: {
-            backgroundColor: '#456',
+            backgroundColor: colors.tableBackground,
             color: 'white',
             width: '50%',
             height: '15%',
@@ -84,7 +85,7 @@ export function Releases({ data }: { data: Result }) {
         open={dialogOpen}
         PaperProps={{
           style: {
-            backgroundColor: '#456',
+            backgroundColor: colors.tableBackground,
             color: 'white',
             width: '35%',
             height: '25%',
@@ -334,9 +335,9 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
   },
   headerRow: {
-    backgroundColor: '#14181c',
+    backgroundColor: colors.tableHeaderRowBackground,
   },
   table: {
-    backgroundColor: '#456',
+    backgroundColor: colors.tableBackground,
   },
 }));

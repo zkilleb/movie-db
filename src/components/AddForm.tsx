@@ -16,6 +16,7 @@ import { useHistory } from 'react-router-dom';
 import { Delete, AddCircle } from '@material-ui/icons';
 import { Result, Validation } from '../classes';
 import { addMovie, editMovie } from '../handlers';
+import { colors } from '../constants';
 import { Notification, StyledTableCell, StyledTableHeaderCell } from '.';
 
 export function AddForm(data: IAddForm) {
@@ -104,7 +105,7 @@ export function AddForm(data: IAddForm) {
               <Checkbox
                 checked={color}
                 onChange={handleChange}
-                style={{ color: '#00b020' }}
+                style={{ color: colors.checkBoxColor }}
                 id="color"
               />
             }
@@ -371,7 +372,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
   },
   table: {
-    backgroundColor: '#456',
+    backgroundColor: colors.tableBackground,
     width: '25%',
     marginTop: 10,
     margin: 'auto',
@@ -385,7 +386,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
   },
   paper: {
-    backgroundColor: '#456',
+    backgroundColor: colors.tableBackground,
     width: '90%',
     margin: 'auto',
     marginTop: 25,
@@ -395,7 +396,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 10,
   },
   headerRow: {
-    backgroundColor: '#14181c',
+    backgroundColor: colors.tableHeaderRowBackground,
   },
 }));
 

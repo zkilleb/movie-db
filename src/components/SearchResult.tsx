@@ -1,8 +1,9 @@
 import React from 'react';
-import { Result } from '../classes';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { Result } from '../classes';
+import { colors } from '../constants';
 
 export function SearchResult({ data, keywordResults }: IResult) {
   const classes = useStyles();
@@ -64,7 +65,7 @@ export function SearchResult({ data, keywordResults }: IResult) {
 
 const useStyles = makeStyles(() => ({
   paper: {
-    backgroundColor: '#456',
+    backgroundColor: colors.tableBackground,
     width: '50%',
     margin: 'auto',
     marginTop: 25,

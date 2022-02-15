@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, useLocation } from 'react-router-dom';
 import { Search } from '.';
+import { colors } from '../constants';
 
 export function Header({
   callback,
@@ -54,7 +55,7 @@ const useStyles = makeStyles(() => ({
   header: {
     width: '100%',
     height: 55,
-    backgroundColor: '#14181c',
+    backgroundColor: colors.tableHeaderRowBackground,
     display: 'flex',
     alignItems: 'center',
   },

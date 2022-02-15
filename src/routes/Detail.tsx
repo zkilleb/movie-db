@@ -13,6 +13,7 @@ import { Delete, Edit } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { Result, Validation, Ebert, TMDBResult } from '../classes';
 import { Notification, Review, Releases } from '../components';
+import { colors } from '../constants';
 import {
   getRecommendations,
   deleteMovie,
@@ -85,7 +86,7 @@ export function Detail(props: IDetailProps) {
         open={dialogOpen}
         PaperProps={{
           style: {
-            backgroundColor: '#456',
+            backgroundColor: colors.tableBackground,
             color: 'white',
             width: '50%',
             height: '15%',

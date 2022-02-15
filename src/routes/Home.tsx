@@ -2,6 +2,7 @@ import { Random, RecentSearches } from '../components';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import { Search } from '../classes';
+import { colors } from '../constants';
 
 export function Home({ recentSearches }: { recentSearches: Search[] }) {
   const classes = useStyles();
@@ -21,7 +22,7 @@ export function Home({ recentSearches }: { recentSearches: Search[] }) {
 
 const useStyles = makeStyles(() => ({
   paper: {
-    backgroundColor: '#456',
+    backgroundColor: colors.tableBackground,
     width: '90%',
     height: 500,
     margin: 'auto',
