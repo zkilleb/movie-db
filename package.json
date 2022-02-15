@@ -47,6 +47,7 @@
     "start:backend": "node backend/app.js",
     "start:backend:dev": "nodemon backend/app.js",
     "cypress:open": "cypress open",
+    "cypress:run": "cypress run --config video=false",
     "prettier": "prettier --write ./**/*.{js,ts,tsx}",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
