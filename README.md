@@ -21,7 +21,8 @@ Starts the backend with nodemon for development
 Create `.env` file in the top level directory with the following variables
 
 - DB_HOST - Connection string to MongoDB
-- VERBOSE - Boolean value to allow for verbose logging from the endpoints
+- LOGGING - Boolean value to allow general logging
+- VERBOSE - Boolean value to allow for verbose error logging from the endpoints
 - REACT_APP_SERVER_HOST - URL to where the server is hosted, defaults to `localhost`
 - REACT_APP_SERVER_PORT - Port to run the endpoints on, defaults to `8080`
 - API_KEY - API key for TMDB to get recommendations

@@ -25,6 +25,26 @@ const host = process.env.REACT_APP_SERVER_HOST || 'http://localhost';
 const port = process.env.REACT_APP_SERVER_PORT || 8080;
 
 app.use((req, res, next) => {
+  if (process.env.LOGGING === 'true') {
+    const currentDate = new Date();
+    const formattedDate =
+      currentDate.getFullYear() +
+      '-' +
+      (currentDate.getMonth() + 1) +
+      '-' +
+      currentDate.getDate() +
+      ' ' +
+      currentDate.getHours() +
+      ':' +
+      currentDate.getMinutes() +
+      ':' +
+      currentDate.getSeconds();
+    console.log(`${formattedDate}: ${req.method} ${req.url} ${res.statusCode}`);
+  }
+  next();
+});
+
+app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',

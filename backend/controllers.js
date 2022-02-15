@@ -11,6 +11,7 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = process.env.API_KEY;
 
 const uri = process.env.DB_HOST;
+const verbose = process.env.VERBOSE === 'true';
 const client = new MongoClient(uri);
 
 client.connect();
@@ -29,9 +30,7 @@ export async function getTitles(req, res) {
     res.status(200).send(results);
   } else
     res.status(400).json({
-      message: process.env.VERBOSE
-        ? validation.error.message
-        : 'Invalid request',
+      message: verbose ? validation.error.message : 'Invalid request',
     });
 }
 
@@ -47,9 +46,7 @@ export async function getDirector(req, res) {
     res.status(200).send(results);
   } else
     res.status(400).json({
-      message: process.env.VERBOSE
-        ? validation.error.message
-        : 'Invalid request',
+      message: verbose ? validation.error.message : 'Invalid request',
     });
 }
 
@@ -65,9 +62,7 @@ export async function getActor(req, res) {
     res.status(200).send(results);
   } else
     res.status(400).json({
-      message: process.env.VERBOSE
-        ? validation.error.message
-        : 'Invalid request',
+      message: verbose ? validation.error.message : 'Invalid request',
     });
 }
 
