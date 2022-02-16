@@ -6,8 +6,10 @@ import {
   Icon,
   Select,
   MenuItem,
-  Menu,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { Validation } from '../classes';
@@ -20,7 +22,6 @@ export function Search() {
   const [title, setTitle] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [minMenuOpen, setMinMenuOpen] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [search, setSearch] = React.useState('title');
   const [validation, setValidation] = React.useState<Validation | undefined>();
   const [width, setWidth] = React.useState(window.innerWidth);
@@ -93,10 +94,9 @@ export function Search() {
         </>
       ) : (
         <>
-          <SearchIcon onClick={handleMenuClick} />
-          <Menu
+          <SearchIcon data-cy="SearchFieldButton" onClick={handleMenuClick} />
+          <Dialog
             open={minMenuOpen}
-            anchorEl={anchorEl}
             onClose={handleMenuClose}
             PaperProps={{
               style: {
@@ -104,6 +104,7 @@ export function Search() {
               },
             }}
           >
+            <DialogTitle className={classes.button}>Search</DialogTitle>
             <Select
               data-cy="SearchType"
               value={search}
@@ -124,21 +125,26 @@ export function Search() {
             <TextField
               InputProps={{ className: classes.field }}
               InputLabelProps={{ className: classes.field }}
-              className={`${classes.root} ${classes.minField}`}
+              className={`${classes.root} ${classes.minSelect}`}
               label="Search"
               value={title}
               onChange={handleSearchChange}
               onKeyPress={(e) => handleKeyPress(e)}
               data-cy="SearchTextField"
             />
-            <Button
-              variant="contained"
-              className={classes.button}
-              onClick={handleSearchClick}
-            >
-              Search
-            </Button>
-          </Menu>
+            <DialogActions>
+              <Button className={classes.button} onClick={handleMenuClose}>
+                Cancel
+              </Button>
+              <Button
+                className={classes.button}
+                onClick={handleSearchClick}
+                data-cy="MinSearchButton"
+              >
+                Search
+              </Button>
+            </DialogActions>
+          </Dialog>
         </>
       )}
     </div>
@@ -146,7 +152,6 @@ export function Search() {
 
   function handleMenuClick(event: any) {
     setMinMenuOpen(true);
-    setAnchorEl(event.currentTarget);
   }
 
   function handleMenuClose() {
@@ -160,6 +165,7 @@ export function Search() {
         search: `?title=${title}&type=${search}`,
       });
       setTitle('');
+      setMinMenuOpen(false);
     } else {
       setValidation({
         message: 'Search must be at least 3 charactes long',
@@ -167,7 +173,6 @@ export function Search() {
       });
       setOpen(true);
     }
-    setMinMenuOpen(false);
   }
 
   function handleChange(event: any) {
@@ -226,14 +231,11 @@ const useStyles = makeStyles(() => ({
   icon: {
     color: 'white',
   },
-  minField: {
+  minSelect: {
     marginLeft: '8%',
     width: '80%',
   },
-  minSelect: {
-    marginLeft: '8%',
-  },
   button: {
-    marginLeft: '40%',
+    color: 'white',
   },
 }));
