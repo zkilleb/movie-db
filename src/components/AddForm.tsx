@@ -373,7 +373,7 @@ const useStyles = makeStyles((theme) => ({
   },
   table: {
     backgroundColor: colors.tableBackground,
-    width: '25%',
+    width: '50%',
     marginTop: 10,
     margin: 'auto',
     border: '2px solid white',
