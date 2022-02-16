@@ -14,6 +14,11 @@ export function SearchResult({ data, keywordResults }: IResult) {
   const minYear = data.year ? data.year - 1 : 0;
   const maxYear = data.year ? data.year + 1 : 0;
   const [result, setResult] = React.useState<ITMDBResult>();
+  const [width, setWidth] = React.useState(window.innerWidth);
+
+  window.addEventListener('resize', () => {
+    setWidth(window.innerWidth);
+  });
 
   React.useEffect(() => {
     const tempResult = keywordResults.find(
@@ -29,7 +34,7 @@ export function SearchResult({ data, keywordResults }: IResult) {
     <Paper
       data-cy="SearchResult"
       elevation={1}
-      className={classes.paper}
+      className={`${classes.paper} ${width > 576 ? classes.max : classes.min}`}
       onClick={handleClick}
     >
       {result ? (
@@ -66,7 +71,6 @@ export function SearchResult({ data, keywordResults }: IResult) {
 const useStyles = makeStyles(() => ({
   paper: {
     backgroundColor: colors.tableBackground,
-    width: '50%',
     margin: 'auto',
     marginTop: 25,
     fontSize: 15,
@@ -74,6 +78,12 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     textAlign: 'left',
     borderRadius: '10px 10px 10px 10px',
+  },
+  max: {
+    width: '50%',
+  },
+  min: {
+    width: '75%',
   },
   poster: {
     padding: 10,

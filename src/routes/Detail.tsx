@@ -32,6 +32,11 @@ export function Detail(props: IDetailProps) {
   const [open, setOpen] = React.useState(false);
   const [tmdbData, setTmdbData] = React.useState<TMDBResult | undefined>();
   const [data, setData] = React.useState<Result>();
+  const [width, setWidth] = React.useState(window.innerWidth);
+
+  window.addEventListener('resize', () => {
+    setWidth(window.innerWidth);
+  });
 
   React.useEffect(() => {
     if (props.location.state && props.location.state.id) {
@@ -88,8 +93,6 @@ export function Detail(props: IDetailProps) {
           style: {
             backgroundColor: colors.tableBackground,
             color: 'white',
-            width: '50%',
-            height: '15%',
           },
         }}
       >
@@ -112,27 +115,32 @@ export function Detail(props: IDetailProps) {
       </Dialog>
 
       {data ? (
-        <div className={classes.header} data-cy="DetailContainer">
-          {data.title}
-          <Tooltip title={'Edit Movie'}>
-            <Icon
-              className={classes.editIcon}
-              onClick={handleEditClick}
-              data-cy="EditIcon"
-            >
-              <Edit />
-            </Icon>
-          </Tooltip>
-          <Tooltip title={'Delete Movie'}>
-            <Icon
-              className={classes.deleteIcon}
-              onClick={handleDeleteModal}
-              data-cy="DeleteIcon"
-            >
-              <Delete />
-            </Icon>
-          </Tooltip>
-          <div className={classes.details}>
+        <div>
+          <div className={classes.header}>
+            <div className={classes.headerText}>{data.title}</div>
+            <Tooltip title={'Edit Movie'}>
+              <Icon
+                className={classes.editIcon}
+                onClick={handleEditClick}
+                data-cy="EditIcon"
+              >
+                <Edit />
+              </Icon>
+            </Tooltip>
+            <Tooltip title={'Delete Movie'}>
+              <Icon
+                className={classes.deleteIcon}
+                onClick={handleDeleteModal}
+                data-cy="DeleteIcon"
+              >
+                <Delete />
+              </Icon>
+            </Tooltip>
+          </div>
+          <div
+            className={`${classes.details} ${classes.wrap}`}
+            data-cy="DetailContainer"
+          >
             {tmdbData && tmdbData.poster_path ? (
               <img
                 data-cy="DetailPoster"
@@ -176,7 +184,9 @@ export function Detail(props: IDetailProps) {
               <div>Genre: {data.genre}</div>
               <div>Notes: {data.notes}</div>
             </div>
-            <div className={classes.extraInfo}>
+            <div
+              className={width > 576 ? classes.extraInfo : classes.minExtraInfo}
+            >
               {review && (
                 <Review
                   writer={review.reviewWriter}
@@ -287,23 +297,29 @@ export function Detail(props: IDetailProps) {
 
 const useStyles = makeStyles(() => ({
   header: {
+    width: '100%',
+    display: 'flex',
     fontSize: 20,
     color: 'white',
   },
   deleteIcon: {
-    position: 'absolute',
-    right: 0,
-    marginRight: 10,
+    paddingRight: 10,
+    marginLeft: 'auto',
   },
   editIcon: {
-    position: 'absolute',
-    right: 30,
-    marginRight: 10,
+    paddingRight: 10,
+    marginLeft: 'auto',
   },
   details: {
     display: 'flex',
     marginTop: 20,
     textAlign: 'left',
+    fontSize: 20,
+    color: 'white',
+  },
+  wrap: {
+    flexWrap: 'wrap',
+    width: '100%',
   },
   poster: {
     margin: 10,
@@ -312,6 +328,8 @@ const useStyles = makeStyles(() => ({
   },
   recommendations: {
     marginTop: 30,
+    color: 'white',
+    fontSize: 20,
   },
   recommendInfo: {
     marginTop: 10,
@@ -333,7 +351,16 @@ const useStyles = makeStyles(() => ({
   },
   extraInfo: {
     marginLeft: 'auto',
-    marginRight: 10,
+    marginRight: 'auto',
+  },
+  minExtraInfo: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  headerText: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
 }));
 

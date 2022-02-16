@@ -52,8 +52,6 @@ export function Releases({ data }: { data: Result }) {
           style: {
             backgroundColor: colors.tableBackground,
             color: 'white',
-            width: '50%',
-            height: '15%',
           },
         }}
       >
@@ -87,8 +85,6 @@ export function Releases({ data }: { data: Result }) {
           style: {
             backgroundColor: colors.tableBackground,
             color: 'white',
-            width: '35%',
-            height: '25%',
           },
         }}
       >
@@ -313,6 +309,7 @@ const useStyles = makeStyles((theme) => ({
   releases: {
     marginLeft: 'auto',
     marginRight: 10,
+    width: '100%',
   },
   header: {
     display: 'flex',
@@ -329,7 +326,6 @@ const useStyles = makeStyles((theme) => ({
   release: {
     display: 'flex',
     alignItems: 'center',
-    flexWrap: 'wrap',
   },
   dialogButtons: {
     color: 'white',
