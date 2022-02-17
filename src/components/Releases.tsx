@@ -20,7 +20,7 @@ import { Add, Delete } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { Result, Validation } from '../classes';
 import { addRelease, deleteRelease } from '../handlers';
-import { colors } from '../constants';
+import { colors, formats } from '../constants';
 import { Notification, StyledTableCell, StyledTableHeaderCell } from '.';
 
 export function Releases({ data }: { data: Result }) {
@@ -266,29 +266,6 @@ export function Releases({ data }: { data: Result }) {
     setOpen(false);
   }
 }
-
-const formats = [
-  {
-    label: 'Blu-ray',
-    value: 'blu-ray',
-  },
-  {
-    label: 'DVD',
-    value: 'dvd',
-  },
-  {
-    label: 'VHS',
-    value: 'vhs',
-  },
-  {
-    label: '4K Ultra HD',
-    value: '4k',
-  },
-  {
-    label: 'Betamax',
-    value: 'betamax',
-  },
-];
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -11,12 +11,13 @@ import {
   FormControlLabel,
   Checkbox,
   TextField,
+  MenuItem,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { Delete, AddCircle } from '@material-ui/icons';
-import { Result, Validation } from '../classes';
+import { Release, Result, Validation } from '../classes';
 import { addMovie, editMovie } from '../handlers';
-import { colors } from '../constants';
+import { colors, formats } from '../constants';
 import { Notification, StyledTableCell, StyledTableHeaderCell } from '.';
 
 export function AddForm(data: IAddForm) {
@@ -56,6 +57,12 @@ export function AddForm(data: IAddForm) {
     editResults && editResults.genre ? editResults.genre : '',
   );
   const [validation, setValidation] = React.useState<Validation | undefined>();
+  const [releases, setReleases] = React.useState<Release[]>(
+    editResults && editResults?.releases ? editResults.releases : [],
+  );
+  const [label, setLabel] = React.useState<string>();
+  const [format, setFormat] = React.useState<string>(formats[0].value);
+  const [releaseNotes, setReleaseNotes] = React.useState<string>();
 
   return (
     <div>
@@ -218,6 +225,82 @@ export function AddForm(data: IAddForm) {
               </TableBody>
             </Table>
           </TableContainer>
+          <TableContainer className={classes.table} component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead data-cy="ReleasesHeaderRow">
+                <TableRow className={classes.headerRow}>
+                  <StyledTableHeaderCell colSpan={4} align="center">
+                    <div className={classes.header}>Releases</div>
+                  </StyledTableHeaderCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {releases.map((release, index) => {
+                  return (
+                    <TableRow key={index} data-cy="ReleaseResultRow">
+                      <StyledTableCell>{release.label}</StyledTableCell>
+                      <StyledTableCell>{release.format}</StyledTableCell>
+                      <StyledTableCell>{release.notes}</StyledTableCell>
+                      <StyledTableCell>
+                        <Delete
+                          onClick={() => deleteRelease(index)}
+                          data-cy="DeleteRelease"
+                        />
+                      </StyledTableCell>
+                    </TableRow>
+                  );
+                })}
+                <StyledTableCell
+                  className={
+                    releases.length > 0 ? classes.headerRow : classes.field
+                  }
+                  colSpan={4}
+                  align="center"
+                >
+                  <TextField
+                    InputProps={{ className: classes.releaseField }}
+                    InputLabelProps={{ className: classes.releaseField }}
+                    onChange={handleReleaseChange}
+                    label="Label"
+                    id="label"
+                    value={label}
+                  />
+                  <TextField
+                    InputProps={{ className: classes.releaseField }}
+                    InputLabelProps={{ className: classes.releaseField }}
+                    select
+                    label="Format"
+                    id="format"
+                    value={format}
+                    onChange={handleReleaseChange}
+                    helperText="Please select your format"
+                    disabled //TODO: Re-enable after material-ui issue is fixed
+                  >
+                    {formats.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField
+                    InputProps={{ className: classes.releaseField }}
+                    InputLabelProps={{ className: classes.releaseField }}
+                    onChange={handleReleaseChange}
+                    id="notes"
+                    label="Notes"
+                    value={releaseNotes}
+                  />
+                  <Button
+                    className={classes.addButton}
+                    onClick={handleAddRelease}
+                    variant="contained"
+                  >
+                    <AddCircle />
+                  </Button>
+                </StyledTableCell>
+              </TableBody>
+            </Table>
+          </TableContainer>
         </form>
         {window.location.pathname === '/edit' && (
           <Button
@@ -278,6 +361,28 @@ export function AddForm(data: IAddForm) {
     }
   }
 
+  function handleReleaseChange(event: React.ChangeEvent<HTMLInputElement>) {
+    switch (event.target.id) {
+      case 'label':
+        setLabel(event.target.value);
+        break;
+      case 'format':
+        setFormat(event.target.value);
+        break;
+      case 'notes':
+        setReleaseNotes(event.target.value);
+        break;
+    }
+  }
+
+  function handleAddRelease() {
+    if (format || releaseNotes || label)
+      setReleases([...releases, { format, notes: releaseNotes, label }]);
+    setLabel('');
+    setFormat('blu-ray');
+    setReleaseNotes('');
+  }
+
   function handleAddedActorChange(event: any, index: number) {
     const tempActors = [...actors];
     tempActors[index] = event.target.value;
@@ -303,6 +408,12 @@ export function AddForm(data: IAddForm) {
     setActors(tempActors);
   }
 
+  function deleteRelease(index: number) {
+    let tempReleases = [...releases];
+    tempReleases.splice(index, 1);
+    setReleases(tempReleases);
+  }
+
   async function handleSubmit() {
     if (title && director && year) {
       try {
@@ -318,6 +429,7 @@ export function AddForm(data: IAddForm) {
             genre,
             actors,
             notes,
+            releases,
           });
           if (results.status === 200) {
             setValidation({
@@ -343,7 +455,7 @@ export function AddForm(data: IAddForm) {
             actors,
             notes,
             genre,
-            releases: editResults.releases,
+            releases,
             id: editResults._id,
           });
           if (results.status === 200) {
@@ -399,6 +511,10 @@ const useStyles = makeStyles((theme) => ({
   field: {
     color: 'white',
   },
+  releaseField: {
+    color: 'white',
+    marginRight: 10,
+  },
   paper: {
     backgroundColor: colors.tableBackground,
     width: '90%',
@@ -413,6 +529,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: colors.tableHeaderRowBackground,
   },
   cancel: {
+    marginRight: 10,
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
     marginRight: 10,
   },
 }));
