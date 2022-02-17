@@ -139,7 +139,7 @@ describe('Test Application Workflow', () => {
     cy.get(objects.allMoviesResultRow).should('contain', '1972');
     cy.get(objects.allMoviesResultRow).should('contain', '175 mins.');
     cy.get(objects.allMoviesResultRow).should('contain', 'English');
-    cy.get(objects.allMoviesResultRow).should('contain', 'true');
+    cy.get(objects.allMoviesResultRow).should('contain', 'Yes');
     cy.get(objects.allMoviesResultRow).should('contain', 'Paramount');
     cy.get(objects.allMoviesResultRow).should(
       'contain',
