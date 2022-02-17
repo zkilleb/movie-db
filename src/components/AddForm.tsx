@@ -219,6 +219,16 @@ export function AddForm(data: IAddForm) {
             </Table>
           </TableContainer>
         </form>
+        {window.location.pathname === '/edit' && (
+          <Button
+            className={`${classes.submit} ${classes.cancel}`}
+            onClick={handleCancel}
+            variant="contained"
+            data-cy="CancelButton"
+          >
+            Cancel
+          </Button>
+        )}
         <Button
           className={classes.submit}
           onClick={handleSubmit}
@@ -230,6 +240,10 @@ export function AddForm(data: IAddForm) {
       </Paper>
     </div>
   );
+
+  function handleCancel() {
+    history.goBack();
+  }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setValidation(undefined);
@@ -397,6 +411,9 @@ const useStyles = makeStyles((theme) => ({
   },
   headerRow: {
     backgroundColor: colors.tableHeaderRowBackground,
+  },
+  cancel: {
+    marginRight: 10,
   },
 }));
 

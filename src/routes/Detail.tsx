@@ -157,32 +157,30 @@ export function Detail(props: IDetailProps) {
               <div className={classes.field} onClick={handleDirectorClick}>
                 Directed By: {data.director}
               </div>
-              <div>
-                Starring:{' '}
-                {data.actors
-                  ? data.actors.map((actor, index) => {
-                      return (
-                        <span
-                          key={index}
-                          onClick={() => handleActorClick(actor)}
-                          className={classes.field}
-                        >
-                          {actor}
-                          {data.actors &&
-                            index < data.actors.length - 1 &&
-                            ', '}
-                        </span>
-                      );
-                    })
-                  : ''}
-              </div>
-              <div>Runtime: {data.length} mins.</div>
+              {data.actors && data.actors.length > 0 && (
+                <div>
+                  Starring:{' '}
+                  {data.actors.map((actor, index) => {
+                    return (
+                      <span
+                        key={index}
+                        onClick={() => handleActorClick(actor)}
+                        className={classes.field}
+                      >
+                        {actor}
+                        {data.actors && index < data.actors.length - 1 && ', '}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+              {data.length && <div>Runtime: {data.length} mins.</div>}
               <div>Release Year: {data.year}</div>
-              <div>Language: {data.language}</div>
+              {data.language && <div>Language: {data.language}</div>}
               <div>Color: {data.color ? 'Yes' : 'No'}</div>
-              <div>Studio: {data.studio}</div>
-              <div>Genre: {data.genre}</div>
-              <div>Notes: {data.notes}</div>
+              {data.studio && <div>Studio: {data.studio}</div>}
+              {data.genre && <div>Genre: {data.genre}</div>}
+              {data.notes && <div>Notes: {data.notes}</div>}
             </div>
             <div
               className={width > 576 ? classes.extraInfo : classes.minExtraInfo}
@@ -322,7 +320,8 @@ const useStyles = makeStyles(() => ({
     width: '100%',
   },
   poster: {
-    margin: 10,
+    marginLeft: 'auto',
+    marginRight: 'auto',
     border: 'solid',
     textAlign: 'center',
   },
@@ -356,11 +355,13 @@ const useStyles = makeStyles(() => ({
   minExtraInfo: {
     marginLeft: 'auto',
     marginRight: 'auto',
+    marginTop: 10,
   },
   headerText: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    marginLeft: 60,
   },
 }));
 

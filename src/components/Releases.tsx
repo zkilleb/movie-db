@@ -78,7 +78,6 @@ export function Releases({ data }: { data: Result }) {
 
       <Dialog
         data-cy="ReleaseDialog"
-        fullWidth
         maxWidth="xl"
         open={dialogOpen}
         PaperProps={{

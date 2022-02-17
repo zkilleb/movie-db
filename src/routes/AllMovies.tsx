@@ -158,7 +158,7 @@ export function AllMovies() {
                       align="center"
                       onClick={() => handleRowClick(movie._id)}
                     >
-                      {movie.color}
+                      {movie.color ? 'Yes' : 'No'}
                     </StyledTableCell>
                     <StyledTableCell
                       align="center"
