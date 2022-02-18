@@ -1,52 +1,12 @@
-const objects = {
-  header: '[data-cy=Header]',
-  titleField: '[data-cy=TitleField]',
-  runtimeField: '[data-cy=RuntimeField]',
-  releaseYearField: '[data-cy=ReleaseYearField]',
-  languageField: '[data-cy=LanguageField]',
-  directorField: '[data-cy=DirectorField]',
-  studioField: '[data-cy=StudioField]',
-  genreField: '[data-cy=GenreField]',
-  notesField: '[data-cy=NotesField]',
-  addActorField: '[data-cy=AddActorField]',
-  addActorButton: '[data-cy=AddActorButton]',
-  deleteActor: '[data-cy=DeleteActor]',
-  addActorRow: '[data-cy=AddActorRow]',
-  submitButton: '[data-cy=SubmitButton]',
-  searchTextField: '[data-cy=SearchTextField]',
-  searchButton: '[data-cy=SearchFieldButton]',
-  posterImage: '[data-cy=PosterImage]',
-  searchResultPage: '[data-cy=SearchResultPage]',
-  searchResult: '[data-cy=SearchResult]',
-  detailPoster: '[data-cy=DetailPoster]',
-  detailContainer: '[data-cy=DetailContainer]',
-  recommendations: '[data-cy=Recommendations]',
-  recommendedFilm: '[data-cy=RecommendedFilm]',
-  editIcon: '[data-cy=EditIcon]',
-  deleteIcon: '[data-cy=DeleteIcon]',
-  confirmDelete: '[data-cy=ConfirmDelete]',
-  detailAlert: '[data-cy=DetailAlert]',
-  review: '[data-cy=Review]',
-  random: '[data-cy=Random]',
-  searchType: '[data-cy=SearchType]',
-  recentSearches: '[data-cy=RecentSearches]',
-  addReleaseButton: '[data-cy=AddReleaseButton]',
-  releaseDialog: '[data-cy=ReleaseDialog]',
-  releaseLabel: '[data-cy=ReleaseLabel]',
-  releaseNotes: '[data-cy=ReleaseNotes]',
-  confirmAddRelease: '[data-cy=ConfirmAddReleaseButton]',
-  deleteRelease: '[data-cy=DeleteRelease]',
-  allMoviesHeaderRow: '[data-cy=AllMoviesHeaderRow]',
-  allMoviesResultRow: '[data-cy=AllMoviesResultRow]',
-  addMovieButton: '[data-cy=AddMovieButton]',
-  viewAllButton: '[data-cy=ViewAllButton]',
-  notFound: '[data-cy=NotFound]',
-  minSearchButton: '[data-cy=MinSearchButton]',
-};
+import { objects } from '../pageObjects';
 
 describe('Test Application Workflow', () => {
   before(() => {
     cy.visit('/');
+  });
+
+  beforeEach(() => {
+    cy.viewport(576, 660);
   });
 
   it('Verifies the Home Page Loads', () => {
@@ -84,7 +44,9 @@ describe('Test Application Workflow', () => {
       'have.value',
       'Part of The Godfather Trilogy release',
     );
+    cy.get(objects.addActorButton).should('be.disabled');
     cy.get(objects.addActorField).type('Alpha Cino');
+    cy.get(objects.addActorButton).should('not.be.disabled');
     cy.get(objects.addActorButton).click();
     cy.get(`${objects.addActorRow} >>>`)
       .eq(0)
@@ -95,6 +57,20 @@ describe('Test Application Workflow', () => {
     cy.get(`${objects.addActorRow} >>>`)
       .eq(0)
       .should('have.value', 'Al Pacino');
+    cy.get(objects.addReleaseButton).should('be.disabled');
+    cy.get(objects.releaseLabelField).type('Paramount');
+    cy.get(objects.addReleaseButton).should('not.be.disabled');
+    cy.get(objects.releaseNotesField).type('Individual releaze');
+    cy.get(objects.addReleaseButton).click();
+    cy.get(objects.deleteRelease).click();
+    cy.get(objects.releaseLabelField).type('Paramount');
+    cy.get(objects.releaseNotesField).type('Individual release');
+    cy.get(objects.addReleaseButton).click();
+    cy.get(objects.releaseResultRow).eq(0).should('contain', 'Paramount');
+    cy.get(objects.releaseResultRow).eq(0).should('contain', 'blu-ray');
+    cy.get(objects.releaseResultRow)
+      .eq(0)
+      .should('contain', 'Individual release');
     cy.get(objects.submitButton).click();
     cy.wait(3000);
   });
@@ -112,6 +88,9 @@ describe('Test Application Workflow', () => {
     cy.get(objects.notesField).type('Part of The Godfather Trilogy release');
     cy.get(objects.addActorField).type('Al Pacino');
     cy.get(objects.addActorButton).click();
+    cy.get(objects.releaseLabelField).type('Paramount');
+    cy.get(objects.releaseNotesField).type('Individual release');
+    cy.get(objects.addReleaseButton).click();
     cy.intercept('PUT', '**/add**', {}).as('addMovie');
     cy.get(objects.submitButton).click();
     cy.get(objects.detailAlert).should('contain', 'Record already exists');
@@ -149,69 +128,7 @@ describe('Test Application Workflow', () => {
     cy.get(objects.allMoviesResultRow).should('contain', 'Al Pacino');
   });
 
-  it('Search Added Movie By Director', () => {
-    cy.get(objects.searchType).click();
-    cy.findByRole('option', {
-      name: /director/i,
-    }).click();
-    cy.get(objects.searchTextField).type('Francis Ford Coppola');
-    cy.get(objects.searchButton).click();
-    cy.url().should('include', '/search');
-    cy.get(objects.posterImage)
-      .should('have.attr', 'alt')
-      .then((alt) => {
-        expect(alt).to.equal('The Godfather poster');
-      });
-    cy.get(objects.searchResultPage).should(
-      'contain',
-      'Results for Francis Ford Coppola: 1',
-    );
-    cy.get(objects.searchResult).eq(0).should('contain', 'The Godfather');
-    cy.get(objects.searchResult).eq(0).should('contain', '1972');
-    cy.get(objects.searchResult)
-      .eq(0)
-      .should('contain', 'Directed By: Francis Ford Coppola');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Language: English');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Runtime: 175 mins.');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Actors: Al Pacino');
-  });
-
-  it('Search Added Movie By Title', () => {
-    cy.get(objects.searchType).click();
-    cy.findByRole('option', {
-      name: /title/i,
-    }).click();
-    cy.get(objects.searchTextField).type('Th');
-    cy.get(objects.searchButton).click();
-    cy.get(objects.detailAlert).should(
-      'contain',
-      'Search must be at least 3 charactes long',
-    );
-    cy.get(`${objects.searchTextField} >>`).clear();
-    cy.get(objects.searchTextField).type('The Godfather');
-    cy.get(objects.searchButton).click();
-    cy.url().should('include', '/search');
-    cy.get(objects.posterImage)
-      .should('have.attr', 'alt')
-      .then((alt) => {
-        expect(alt).to.equal('The Godfather poster');
-      });
-    cy.get(objects.searchResultPage).should(
-      'contain',
-      'Results for The Godfather: 1',
-    );
-    cy.get(objects.searchResult).eq(0).should('contain', 'The Godfather');
-    cy.get(objects.searchResult).eq(0).should('contain', '1972');
-    cy.get(objects.searchResult)
-      .eq(0)
-      .should('contain', 'Directed By: Francis Ford Coppola');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Language: English');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Runtime: 175 mins.');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Actors: Al Pacino');
-  });
-
   it('Search Added Movie By Title In Minimal View', () => {
-    cy.viewport(576, 660);
     cy.get(objects.searchType).should('not.exist');
     cy.get(objects.searchTextField).should('not.exist');
     cy.get(objects.searchButton).click();
@@ -343,6 +260,8 @@ describe('Test Application Workflow', () => {
   });
 
   it('Add Release to Movie', () => {
+    cy.get(objects.deleteRelease).click();
+    cy.get(objects.confirmDelete).click();
     cy.get(objects.addReleaseButton).click();
     cy.get(objects.releaseDialog).should(
       'contain',
@@ -400,19 +319,26 @@ describe('Test Application Workflow', () => {
 
   it('Delete Movie', () => {
     cy.wait(3000);
-    cy.get(objects.searchTextField).type('The Godfather');
     cy.get(objects.searchButton).click();
+    cy.get(objects.searchType).click();
+    cy.findByRole('option', {
+      name: /title/i,
+    }).click();
+    cy.get(`${objects.searchTextField} >>`).type('The Godfather');
+    cy.get(objects.minSearchButton).click();
     cy.get(objects.searchResult).eq(0).dblclick();
     cy.get(objects.deleteIcon).click();
     cy.get(objects.confirmDelete).click();
     cy.wait(3000);
-    cy.get(objects.recentSearches).should(
-      'contain',
-      'director: Francis Ford Coppola',
-    );
     cy.get(objects.recentSearches).should('contain', 'title: The Godfather');
-    cy.get(objects.searchTextField).type('The Godfather');
+    cy.get(objects.recentSearches).should('contain', 'title: The Godfather');
     cy.get(objects.searchButton).click();
+    cy.get(objects.searchType).click();
+    cy.findByRole('option', {
+      name: /title/i,
+    }).click();
+    cy.get(`${objects.searchTextField} >>`).type('The Godfather');
+    cy.get(objects.minSearchButton).click();
     cy.get(objects.searchResultPage).should(
       'contain',
       'Results for The Godfather: 0',

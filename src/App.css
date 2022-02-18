@@ -11,3 +11,7 @@ body {
   padding: 0px;
   overflow-x: hidden;
 }
+
+.example::-webkit-scrollbar {
+  display: none;
+}

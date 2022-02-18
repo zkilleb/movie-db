@@ -92,7 +92,11 @@ export async function getAllTitles(req, res) {
 
 export async function addMovie(req, res) {
   const doc = removeEmptyFields(req);
-  const movie = await movies.findOne(doc);
+  const movie = await movies.findOne({
+    director: new RegExp(doc.director, 'i'),
+    title: new RegExp(doc.title, 'i'),
+    year: new RegExp(doc.year, 'i'),
+  });
   if (!movie) {
     const response = await movies.insertOne(doc);
     if (response.acknowledged) res.status(200).send(response);

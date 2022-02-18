@@ -1,4 +1,4 @@
-export { AddForm } from './AddForm';
+export { AddForm } from './AddForm/AddForm';
 export { Header } from './Header';
 export { Search } from './Search';
 export { SearchResult } from './SearchResult';
@@ -7,5 +7,4 @@ export { Review } from './Review';
 export { Random } from './Random';
 export { RecentSearches } from './RecentSearches';
 export { Releases } from './Releases';
-export { StyledTableCell } from './StyledTableCell';
-export { StyledTableHeaderCell } from './StyledTableCell';
+export { StyledTableCell, StyledTableHeaderCell } from './StyledTableCell';
