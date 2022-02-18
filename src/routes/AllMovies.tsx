@@ -12,6 +12,7 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core';
+import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { Result, Validation } from '../classes';
@@ -33,6 +34,10 @@ export function AllMovies() {
   const [deleteId, setDeleteId] = React.useState<string>();
   const [deleteTitle, setDeleteTitle] = React.useState<string>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [sortedColumn, setSortedColumn] = React.useState({
+    field: 'title',
+    asc: true,
+  });
 
   React.useEffect(() => {
     fetchData();
@@ -87,32 +92,72 @@ export function AllMovies() {
           <Table aria-label="simple table">
             <TableHead data-cy="AllMoviesHeaderRow">
               <TableRow className={classes.headerRow}>
-                <StyledTableHeaderCell align="center">
-                  Title
+                <StyledTableHeaderCell
+                  onClick={() => sortData('title')}
+                  align="center"
+                >
+                  <span className={classes.headerContent}>
+                    Title{renderSortArrow('title')}
+                  </span>
                 </StyledTableHeaderCell>
-                <StyledTableHeaderCell align="center">
-                  Director
+                <StyledTableHeaderCell
+                  onClick={() => sortData('director')}
+                  align="center"
+                >
+                  <span className={classes.headerContent}>
+                    Director{renderSortArrow('director')}
+                  </span>
                 </StyledTableHeaderCell>
-                <StyledTableHeaderCell align="center">
-                  Release Year
+                <StyledTableHeaderCell
+                  onClick={() => sortData('year')}
+                  align="center"
+                >
+                  <span className={classes.headerContent}>
+                    Release Year{renderSortArrow('year')}
+                  </span>
                 </StyledTableHeaderCell>
-                <StyledTableHeaderCell align="center">
-                  Runtime
+                <StyledTableHeaderCell
+                  onClick={() => sortData('length')}
+                  align="center"
+                >
+                  <span className={classes.headerContent}>
+                    Runtime{renderSortArrow('length')}
+                  </span>
                 </StyledTableHeaderCell>
-                <StyledTableHeaderCell align="center">
-                  Language
+                <StyledTableHeaderCell
+                  onClick={() => sortData('language')}
+                  align="center"
+                >
+                  <span className={classes.headerContent}>
+                    Language{renderSortArrow('language')}
+                  </span>
                 </StyledTableHeaderCell>
-                <StyledTableHeaderCell align="center">
-                  Color
+                <StyledTableHeaderCell
+                  onClick={() => sortData('color')}
+                  align="center"
+                >
+                  <span className={classes.headerContent}>
+                    Color{renderSortArrow('color')}
+                  </span>
                 </StyledTableHeaderCell>
-                <StyledTableHeaderCell align="center">
-                  Studio
+                <StyledTableHeaderCell
+                  onClick={() => sortData('studio')}
+                  align="center"
+                >
+                  <span className={classes.headerContent}>
+                    Studio{renderSortArrow('studio')}
+                  </span>
                 </StyledTableHeaderCell>
                 <StyledTableHeaderCell align="center">
                   Notes
                 </StyledTableHeaderCell>
-                <StyledTableHeaderCell align="center">
-                  Genre
+                <StyledTableHeaderCell
+                  onClick={() => sortData('genre')}
+                  align="center"
+                >
+                  <span className={classes.headerContent}>
+                    Genre{renderSortArrow('genre')}
+                  </span>
                 </StyledTableHeaderCell>
                 <StyledTableHeaderCell align="center">
                   Actors
@@ -207,6 +252,43 @@ export function AllMovies() {
     </div>
   );
 
+  function renderSortArrow(field: string) {
+    let returnValue = null;
+    if (field === sortedColumn.field) {
+      sortedColumn.asc
+        ? (returnValue = <ArrowDownward />)
+        : (returnValue = <ArrowUpward />);
+    }
+    return returnValue;
+  }
+
+  function sortData(field: string) {
+    if (data) {
+      const tempData = [...data];
+      if (field === sortedColumn.field) {
+        if (sortedColumn.asc) {
+          if (field === 'year' || field === 'length')
+            tempData.sort((a: any, b: any) => a[field] - b[field]);
+          else
+            tempData.sort((a: any, b: any) => (a[field] > b[field] ? -1 : 1));
+        } else {
+          if (field === 'year' || field === 'length')
+            tempData.sort((a: any, b: any) => b[field] - a[field]);
+          else
+            tempData.sort((a: any, b: any) => (a[field] > b[field] ? 1 : -1));
+        }
+        setSortedColumn({ field, asc: !sortedColumn.asc });
+        setData(tempData);
+      } else {
+        if (field === 'year' || field === 'length')
+          tempData.sort((a: any, b: any) => b[field] - a[field]);
+        else tempData.sort((a: any, b: any) => (a[field] > b[field] ? 1 : -1));
+        setSortedColumn({ field, asc: true });
+        setData(tempData);
+      }
+    }
+  }
+
   function handleRowClick(id: string) {
     history.push({
       pathname: '/detail',
@@ -269,5 +351,9 @@ const useStyles = makeStyles(() => ({
   },
   container: {
     overflow: 'hidden',
+  },
+  headerContent: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
