@@ -1,0 +1,40 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    expose:
+      - ${REACT_APP_SERVER_HOST}
+    environment:
+      LOGGING: ${LOGGING}
+      VERBOSE: ${VERBOSE}
+      DB_HOST: ${DB_HOST}
+      API_KEY: ${API_KEY}
+    links:
+      - mongodb_data_container
+    ports:
+      - ${REACT_APP_SERVER_PORT}:${REACT_APP_SERVER_PORT}
+    command: npm run start:backend
+  frontend:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    expose:
+      - 3000
+    environment:
+      REACT_APP_SERVER_HOST: ${REACT_APP_SERVER_HOST}
+      REACT_APP_SERVER_PORT: ${REACT_APP_SERVER_PORT}
+    ports:
+      - 3000:3000
+    links:
+      - backend
+    command: npm run start
+  mongodb_data_container:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+volumes:
+  mongodb_data_container:
