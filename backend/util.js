@@ -16,6 +16,9 @@ export function removeEmptyFields(req) {
       } else req.query[key] !== '' && (doc[key] = req.query[key]);
     }
   });
+  delete doc.label;
+  delete doc.releaseNotes;
+  delete doc.format;
   doc.releases = releases;
   return doc;
 }

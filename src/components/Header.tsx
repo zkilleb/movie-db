@@ -44,6 +44,14 @@ export function Header({
       >
         Add Movie
       </Link>
+      <Link
+        to="/stats"
+        className={`${classes.link} ${
+          location.pathname === '/stats' && classes.current
+        }`}
+      >
+        Stats
+      </Link>
       <div className={classes.search}>
         <Search />
       </div>

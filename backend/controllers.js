@@ -228,3 +228,14 @@ export async function deleteRelease(req, res) {
       message: 'Error editing record in database',
     });
 }
+
+export async function getAllReleases(req, res) {
+  let resultArr = [];
+  const results = await movies.find({});
+  await results.forEach((result) => {
+    result.releases.forEach((release) => {
+      resultArr.push({ title: result.title, release });
+    });
+  });
+  res.status(200).send(resultArr);
+}

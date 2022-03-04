@@ -78,11 +78,9 @@ export function AddRelease({
                 InputLabelProps={{ className: classes.releaseField }}
                 select
                 label="Format"
-                id="format"
                 value={format}
-                onChange={handleReleaseChange}
+                onChange={handleSelectChange}
                 helperText="Please select your format"
-                disabled //TODO: Re-enable after material-ui issue is fixed
               >
                 {formats.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -129,13 +127,14 @@ export function AddRelease({
       case 'label':
         setLabel(event.target.value);
         break;
-      case 'format':
-        setFormat(event.target.value);
-        break;
       case 'notes':
         setReleaseNotes(event.target.value);
         break;
     }
+  }
+
+  function handleSelectChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setFormat(event.target.value);
   }
 }
 

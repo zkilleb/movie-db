@@ -10,10 +10,6 @@
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "11.2.7",
     "@testing-library/user-event": "12.8.3",
-    "@types/jest": "26.0.24",
-    "@types/node": "12.20.19",
-    "@types/react": "17.0.16",
-    "@types/react-dom": "17.0.9",
     "axios": "0.21.4",
     "dotenv": "10.0.0",
     "eberts-api": "1.0.1",
@@ -24,17 +20,22 @@
     "react-dom": "17.0.2",
     "react-router-dom": "5.3.0",
     "react-scripts": "4.0.3",
+    "recharts": "2.1.9",
     "typescript": "4.3.5",
     "web-vitals": "1.1.2"
   },
   "devDependencies": {
     "@testing-library/cypress": "8.0.2",
     "@types/react-router-dom": "5.1.8",
+    "@types/jest": "26.0.24",
+    "@types/node": "12.20.19",
+    "@types/react": "17.0.16",
+    "@types/react-dom": "17.0.9",
     "cypress": "9.2.1",
+    "husky": "7.0.0",
     "lint-staged": "12.3.4",
     "nodemon": "2.0.12",
-    "prettier": "2.3.2",
-    "husky": "7.0.0"
+    "prettier": "2.3.2"
   },
   "lint-staged": {
     "*": [

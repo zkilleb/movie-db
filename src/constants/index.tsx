@@ -1,2 +1,2 @@
-export { colors } from './colors';
+export { colors, chartColors } from './colors';
 export { formats } from './formats';

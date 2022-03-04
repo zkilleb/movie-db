@@ -9,6 +9,7 @@ import {
   Search,
   Detail,
   AllMovies,
+  Stats,
 } from './routes';
 import { Header } from './components';
 import { Search as SearchClass } from './classes';
@@ -38,6 +39,7 @@ function App() {
           <Route path="/search" component={Search} />
           <Route path="/detail" component={Detail} />
           <Route path="/all-movies" component={AllMovies} />
+          <Route path="/stats" component={Stats} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

@@ -16,6 +16,7 @@ import {
   addRelease,
   deleteRelease,
   getAllTitles,
+  getAllReleases,
 } from './controllers.js';
 
 dotenv.config();
@@ -83,6 +84,8 @@ app.get('/review/:title/:year', getReview);
 app.put('/add/release', addRelease);
 
 app.put('/delete/release', deleteRelease);
+
+app.get('/releases', getAllReleases);
 
 app.listen(port, () => {
   console.log(`App listening at ${host}:${port}`);
