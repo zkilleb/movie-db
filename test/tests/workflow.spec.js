@@ -72,7 +72,7 @@ describe('Test Application Workflow', () => {
   });
 
   it('Verify Duplicate Cannot Be Added', () => {
-    cy.get(`${objects.header} > :nth-child(3)`).click();
+    cy.get(`${objects.header} > :nth-child(4)`).click();
     cy.url().should('include', '/add');
     cy.get(objects.titleField).type('The Godfather');
     cy.get(objects.runtimeField).type('175');
