@@ -45,4 +45,5 @@ export const objects = {
   releaseLabelField: '[data-cy=ReleaseLabelField]',
   releaseNotesField: '[data-cy=ReleaseNotesField]',
   releaseResultRow: '[data-cy=ReleaseResultRow]',
+  statPage: '[data-cy=StatPage]',
 };

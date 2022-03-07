@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { PieChart, Pie, Tooltip, Cell } from 'recharts';
 import { chartColors } from '../../constants';
 import { ReleaseStat } from '../../classes';
-import { getAllReleases } from '../../handlers/getAllReleases';
+import { getAllReleases } from '../../handlers';
 
 export function ByFormat() {
   const classes = useStyles();

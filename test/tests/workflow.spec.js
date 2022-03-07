@@ -124,6 +124,15 @@ describe('Test Application Workflow', () => {
     cy.get(objects.allMoviesResultRow).should('contain', 'Al Pacino');
   });
 
+  it('Search Stat Page', () => {
+    cy.visit('/stats');
+    cy.get(objects.statPage).should('contain', 'Statistics');
+    cy.get(objects.statPage).should('contain', 'Releases By Label');
+    cy.get(objects.statPage).should('contain', 'Releases By Format');
+    cy.get(objects.statPage).should('contain', 'Movies By Genre');
+    cy.get(objects.statPage).should('contain', 'Movies By Color');
+  });
+
   it('Search Added Movie By Director', () => {
     cy.get(objects.searchType).click();
     cy.findByRole('option', {

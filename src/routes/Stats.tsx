@@ -1,17 +1,19 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import { colors } from '../constants';
-import { ByFormat, ByLabel } from '../components/Stats';
+import { ByColor, ByFormat, ByGenre, ByLabel } from '../components/Stats';
 
 export function Stats() {
   const classes = useStyles();
 
   return (
-    <div>
+    <div data-cy="StatPage">
       <div className={classes.header}>Statistics</div>
       <Paper elevation={1} className={classes.paper}>
         <ByLabel />
         <ByFormat />
+        <ByGenre />
+        <ByColor />
       </Paper>
     </div>
   );
