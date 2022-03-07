@@ -13,6 +13,9 @@ export function removeEmptyFields(req) {
         req.query[key].length !== 0
       ) {
         doc[key] = req.query[key];
+      } else if (key === 'color') {
+        if (req.query[key] === 'true') doc[key] = true;
+        else doc[key] = false;
       } else req.query[key] !== '' && (doc[key] = req.query[key]);
     }
   });
