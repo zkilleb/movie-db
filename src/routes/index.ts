@@ -5,4 +5,5 @@ export { Home } from './Home';
 export { Search } from './Search';
 export { Detail } from './Detail';
 export { AllMovies } from './AllMovies';
+export { AllReleases } from './AllReleases';
 export { Stats } from './Stats';

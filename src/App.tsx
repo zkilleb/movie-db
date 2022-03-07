@@ -9,6 +9,7 @@ import {
   Search,
   Detail,
   AllMovies,
+  AllReleases,
   Stats,
 } from './routes';
 import { Header } from './components';
@@ -39,6 +40,7 @@ function App() {
           <Route path="/search" component={Search} />
           <Route path="/detail" component={Detail} />
           <Route path="/all-movies" component={AllMovies} />
+          <Route path="/all-releases" component={AllReleases} />
           <Route path="/stats" component={Stats} />
           <Route component={NotFound} />
         </Switch>

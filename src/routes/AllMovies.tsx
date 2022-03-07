@@ -86,7 +86,7 @@ export function AllMovies() {
         </DialogActions>
       </Dialog>
 
-      <div className={classes.header}>All Releases</div>
+      <div className={classes.header}>All Movies</div>
       {data && (
         <TableContainer className={classes.table} component={Paper}>
           <Table aria-label="simple table">
