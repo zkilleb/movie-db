@@ -234,7 +234,7 @@ export async function getAllReleases(req, res) {
   const results = await movies.find({});
   await results.forEach((result) => {
     result.releases.forEach((release) => {
-      resultArr.push({ title: result.title, release });
+      resultArr.push({ title: result.title, id: result._id, release });
     });
   });
   res.status(200).send(resultArr.sort((a, b) => (a.title > b.title ? 1 : -1)));

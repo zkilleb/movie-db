@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 import { ReleaseStat } from '../classes';
 import { getAllReleases } from '../handlers';
 import { StyledTableCell, StyledTableHeaderCell } from '../components';
@@ -16,6 +17,7 @@ import { colors } from '../constants';
 
 export function AllReleases() {
   const classes = useStyles();
+  const history = useHistory();
   const [data, setData] = React.useState<ReleaseStat[]>();
   const [sortedColumn, setSortedColumn] = React.useState({
     field: 'title',
@@ -75,6 +77,7 @@ export function AllReleases() {
                     <TableRow
                       key={`${release.title}${index}`}
                       data-cy="AllReleasesResultRow"
+                      onClick={() => handleRowClick(release.id)}
                     >
                       <StyledTableCell align="center">
                         {release.title}
@@ -146,6 +149,15 @@ export function AllReleases() {
         setData(tempData);
       }
     }
+  }
+
+  function handleRowClick(id: string) {
+    history.push({
+      pathname: '/detail',
+      state: {
+        id,
+      },
+    });
   }
 }
 
