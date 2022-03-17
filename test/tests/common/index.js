@@ -1,20 +1,20 @@
-import { objects } from '../pageObjects';
+import { objects } from '../../pageObjects';
 
-describe('Test Application Workflow', () => {
-  before(() => {
-    cy.visit('/');
-  });
-
+export function verifyHomeLoads() {
   it('Verifies the Home Page Loads', () => {
     cy.get(objects.header).should('exist');
   });
+}
 
+export function verifyRandomTitle() {
   it('Verify Random Title is Loaded', () => {
     cy.get(objects.random).click({ force: true });
     cy.url().should('include', '/detail');
     cy.get(objects.detailContainer).should('exist');
   });
+}
 
+export function verifyMovieIsAdded() {
   it('Add Movie', () => {
     cy.get(`${objects.header} > :nth-child(4)`).click();
     cy.url().should('include', '/add');
@@ -70,7 +70,9 @@ describe('Test Application Workflow', () => {
     cy.get(objects.submitButton).click();
     cy.wait(3000);
   });
+}
 
+export function verifyDuplicateCanNotBeAdded() {
   it('Verify Duplicate Cannot Be Added', () => {
     cy.get(`${objects.header} > :nth-child(4)`).click();
     cy.url().should('include', '/add');
@@ -92,7 +94,9 @@ describe('Test Application Workflow', () => {
     cy.get(objects.detailAlert).should('contain', 'Record already exists');
     cy.wait(3000);
   });
+}
 
+export function verifyAllMoviesPage() {
   it('Check All Movies Page', () => {
     cy.get(`${objects.header} > :nth-child(2)`).click();
     cy.url().should('include', '/all-movies');
@@ -123,7 +127,9 @@ describe('Test Application Workflow', () => {
     cy.get(objects.allMoviesResultRow).should('contain', 'Gangster');
     cy.get(objects.allMoviesResultRow).should('contain', 'Al Pacino');
   });
+}
 
+export function verifyStatPage() {
   it('Search Stat Page', () => {
     cy.visit('/stats');
     cy.get(objects.statPage).should('contain', 'Statistics');
@@ -132,68 +138,9 @@ describe('Test Application Workflow', () => {
     cy.get(objects.statPage).should('contain', 'Movies By Genre');
     cy.get(objects.statPage).should('contain', 'Movies By Color');
   });
+}
 
-  it('Search Added Movie By Director', () => {
-    cy.get(objects.searchType).click();
-    cy.findByRole('option', {
-      name: /director/i,
-    }).click();
-    cy.get(objects.searchTextField).type('Francis Ford Coppola');
-    cy.get(objects.searchButton).click();
-    cy.url().should('include', '/search');
-    cy.get(objects.posterImage)
-      .should('have.attr', 'alt')
-      .then((alt) => {
-        expect(alt).to.equal('The Godfather poster');
-      });
-    cy.get(objects.searchResultPage).should(
-      'contain',
-      'Results for Francis Ford Coppola: 1',
-    );
-    cy.get(objects.searchResult).eq(0).should('contain', 'The Godfather');
-    cy.get(objects.searchResult).eq(0).should('contain', '1972');
-    cy.get(objects.searchResult)
-      .eq(0)
-      .should('contain', 'Directed By: Francis Ford Coppola');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Language: English');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Runtime: 175 mins.');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Actors: Al Pacino');
-  });
-
-  it('Search Added Movie By Title', () => {
-    cy.get(objects.searchType).click();
-    cy.findByRole('option', {
-      name: /title/i,
-    }).click();
-    cy.get(objects.searchTextField).type('Th');
-    cy.get(objects.searchButton).click();
-    cy.get(objects.detailAlert).should(
-      'contain',
-      'Search must be at least 3 charactes long',
-    );
-    cy.get(`${objects.searchTextField} >>`).clear();
-    cy.get(objects.searchTextField).type('The Godfather');
-    cy.get(objects.searchButton).click();
-    cy.url().should('include', '/search');
-    cy.get(objects.posterImage)
-      .should('have.attr', 'alt')
-      .then((alt) => {
-        expect(alt).to.equal('The Godfather poster');
-      });
-    cy.get(objects.searchResultPage).should(
-      'contain',
-      'Results for The Godfather: 1',
-    );
-    cy.get(objects.searchResult).eq(0).should('contain', 'The Godfather');
-    cy.get(objects.searchResult).eq(0).should('contain', '1972');
-    cy.get(objects.searchResult)
-      .eq(0)
-      .should('contain', 'Directed By: Francis Ford Coppola');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Language: English');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Runtime: 175 mins.');
-    cy.get(objects.searchResult).eq(0).should('contain', 'Actors: Al Pacino');
-  });
-
+export function verifyMovieDetail() {
   it('View Movie Detail', () => {
     cy.get(objects.searchResult).eq(0).dblclick();
     cy.url().should('include', '/detail');
@@ -225,7 +172,9 @@ describe('Test Application Workflow', () => {
     cy.get(objects.recommendedFilm).eq(3).should('exist');
     cy.get(objects.recommendedFilm).eq(4).should('exist');
   });
+}
 
+export function verifyEditMovie() {
   it('Edit Movie', () => {
     cy.get(objects.editIcon).click();
     cy.url().should('include', '/edit');
@@ -287,7 +236,9 @@ describe('Test Application Workflow', () => {
     cy.get(objects.recommendedFilm).eq(3).should('exist');
     cy.get(objects.recommendedFilm).eq(4).should('exist');
   });
+}
 
+export function verifyAddRelease() {
   it('Add Release to Movie', () => {
     cy.get(objects.deleteRelease).click();
     cy.get(objects.confirmDelete).click();
@@ -311,7 +262,9 @@ describe('Test Application Workflow', () => {
       'The Godfather Trilogy Boxset',
     );
   });
+}
 
+export function verifyAddSecondRelease() {
   it('Add Second Release to Movie', () => {
     cy.get(objects.addReleaseButton).click();
     cy.get(objects.releaseLabel).type('Paramount');
@@ -330,7 +283,9 @@ describe('Test Application Workflow', () => {
       'The Godfather Re-Release',
     );
   });
+}
 
+export function verifyDeleteRelease() {
   it('Delete Release', () => {
     cy.get(objects.deleteRelease).eq(0).click();
     cy.get(objects.confirmDelete).click();
@@ -345,33 +300,12 @@ describe('Test Application Workflow', () => {
       'The Godfather Re-Release',
     );
   });
+}
 
-  it('Delete Movie', () => {
-    cy.wait(3000);
-    cy.get(objects.searchTextField).type('The Godfather');
-    cy.get(objects.searchButton).click();
-    cy.get(objects.searchResult).eq(0).dblclick();
-    cy.get(objects.deleteIcon).click();
-    cy.get(objects.confirmDelete).click();
-    cy.wait(3000);
-    cy.get(objects.recentSearches).should(
-      'contain',
-      'director: Francis Ford Coppola',
-    );
-    cy.get(objects.recentSearches).should('contain', 'title: The Godfather');
-    cy.get(objects.searchTextField).type('The Godfather');
-    cy.get(objects.searchButton).click();
-    cy.get(objects.searchResultPage).should(
-      'contain',
-      'Results for The Godfather: 0',
-    );
-    cy.get(objects.addMovieButton).should('be.visible');
-    cy.get(objects.viewAllButton).should('be.visible');
-  });
-
+export function verifyRouteNotFound() {
   it('Route is Not Found', () => {
     cy.visit('/not-a-real-route');
     cy.get(objects.notFound).should('contain', 'Page Not Found');
     cy.get(objects.notFound).should('contain', 'Return Home');
   });
-});
+}

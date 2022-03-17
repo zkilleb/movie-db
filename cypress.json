@@ -1,6 +1,6 @@
 {
   "pluginsFile": false,
-  "integrationFolder": "test/tests",
+  "integrationFolder": "test/tests/specs",
   "baseUrl": "http://localhost:3000",
   "watchForFileChanges": false
 }

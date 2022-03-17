@@ -23,13 +23,15 @@ const useStyles = makeStyles(() => ({
   paper: {
     backgroundColor: colors.tableBackground,
     width: '90%',
-    height: 500,
+    height: '50%',
     margin: 'auto',
     marginTop: 25,
     borderRadius: '10px 10px 10px 10px',
     color: 'white',
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'center',
+    flexWrap: 'wrap',
   },
   header: {
     color: 'white',
