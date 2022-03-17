@@ -88,166 +88,171 @@ export function AllMovies() {
 
       <div className={classes.header}>All Movies</div>
       {data && (
-        <TableContainer className={classes.table} component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead data-cy="AllMoviesHeaderRow">
-              <TableRow className={classes.headerRow}>
-                <StyledTableHeaderCell
-                  onClick={() => sortData('title')}
-                  align="center"
-                >
-                  <span className={classes.headerContent}>
-                    Title{renderSortArrow('title')}
-                  </span>
-                </StyledTableHeaderCell>
-                <StyledTableHeaderCell
-                  onClick={() => sortData('director')}
-                  align="center"
-                >
-                  <span className={classes.headerContent}>
-                    Director{renderSortArrow('director')}
-                  </span>
-                </StyledTableHeaderCell>
-                <StyledTableHeaderCell
-                  onClick={() => sortData('year')}
-                  align="center"
-                >
-                  <span className={classes.headerContent}>
-                    Release Year{renderSortArrow('year')}
-                  </span>
-                </StyledTableHeaderCell>
-                <StyledTableHeaderCell
-                  onClick={() => sortData('length')}
-                  align="center"
-                >
-                  <span className={classes.headerContent}>
-                    Runtime{renderSortArrow('length')}
-                  </span>
-                </StyledTableHeaderCell>
-                <StyledTableHeaderCell
-                  onClick={() => sortData('language')}
-                  align="center"
-                >
-                  <span className={classes.headerContent}>
-                    Language{renderSortArrow('language')}
-                  </span>
-                </StyledTableHeaderCell>
-                <StyledTableHeaderCell
-                  onClick={() => sortData('color')}
-                  align="center"
-                >
-                  <span className={classes.headerContent}>
-                    Color{renderSortArrow('color')}
-                  </span>
-                </StyledTableHeaderCell>
-                <StyledTableHeaderCell
-                  onClick={() => sortData('studio')}
-                  align="center"
-                >
-                  <span className={classes.headerContent}>
-                    Studio{renderSortArrow('studio')}
-                  </span>
-                </StyledTableHeaderCell>
-                <StyledTableHeaderCell align="center">
-                  Notes
-                </StyledTableHeaderCell>
-                <StyledTableHeaderCell
-                  onClick={() => sortData('genre')}
-                  align="center"
-                >
-                  <span className={classes.headerContent}>
-                    Genre{renderSortArrow('genre')}
-                  </span>
-                </StyledTableHeaderCell>
-                <StyledTableHeaderCell align="center">
-                  Actors
-                </StyledTableHeaderCell>
-                <TableCell />
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map((movie) => {
-                return (
-                  <TableRow key={movie.title} data-cy="AllMoviesResultRow">
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.title}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.director}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.year}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.length && `${movie.length} mins.`}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.language}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.color ? 'Yes' : 'No'}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.studio}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.notes}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.genre}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      onClick={() => handleRowClick(movie._id)}
-                    >
-                      {movie.actors &&
-                        movie.actors.slice(0, 3).map((actor, index) => {
-                          return `${actor}${
-                            movie.actors &&
-                            index < movie.actors.slice(0, 3).length - 1
-                              ? ', '
-                              : ''
-                          }`;
-                        })}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      onClick={() => handleDeleteModal(movie._id, movie.title)}
-                    >
-                      <Delete />
-                    </StyledTableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <>
+          <TableContainer className={classes.table} component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead data-cy="AllMoviesHeaderRow">
+                <TableRow className={classes.headerRow}>
+                  <StyledTableHeaderCell
+                    onClick={() => sortData('title')}
+                    align="center"
+                  >
+                    <span className={classes.headerContent}>
+                      Title{renderSortArrow('title')}
+                    </span>
+                  </StyledTableHeaderCell>
+                  <StyledTableHeaderCell
+                    onClick={() => sortData('director')}
+                    align="center"
+                  >
+                    <span className={classes.headerContent}>
+                      Director{renderSortArrow('director')}
+                    </span>
+                  </StyledTableHeaderCell>
+                  <StyledTableHeaderCell
+                    onClick={() => sortData('year')}
+                    align="center"
+                  >
+                    <span className={classes.headerContent}>
+                      Release Year{renderSortArrow('year')}
+                    </span>
+                  </StyledTableHeaderCell>
+                  <StyledTableHeaderCell
+                    onClick={() => sortData('length')}
+                    align="center"
+                  >
+                    <span className={classes.headerContent}>
+                      Runtime{renderSortArrow('length')}
+                    </span>
+                  </StyledTableHeaderCell>
+                  <StyledTableHeaderCell
+                    onClick={() => sortData('language')}
+                    align="center"
+                  >
+                    <span className={classes.headerContent}>
+                      Language{renderSortArrow('language')}
+                    </span>
+                  </StyledTableHeaderCell>
+                  <StyledTableHeaderCell
+                    onClick={() => sortData('color')}
+                    align="center"
+                  >
+                    <span className={classes.headerContent}>
+                      Color{renderSortArrow('color')}
+                    </span>
+                  </StyledTableHeaderCell>
+                  <StyledTableHeaderCell
+                    onClick={() => sortData('studio')}
+                    align="center"
+                  >
+                    <span className={classes.headerContent}>
+                      Studio{renderSortArrow('studio')}
+                    </span>
+                  </StyledTableHeaderCell>
+                  <StyledTableHeaderCell align="center">
+                    Notes
+                  </StyledTableHeaderCell>
+                  <StyledTableHeaderCell
+                    onClick={() => sortData('genre')}
+                    align="center"
+                  >
+                    <span className={classes.headerContent}>
+                      Genre{renderSortArrow('genre')}
+                    </span>
+                  </StyledTableHeaderCell>
+                  <StyledTableHeaderCell align="center">
+                    Actors
+                  </StyledTableHeaderCell>
+                  <TableCell />
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((movie) => {
+                  return (
+                    <TableRow key={movie.title} data-cy="AllMoviesResultRow">
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.title}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.director}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.year}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.length && `${movie.length} mins.`}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.language}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.color ? 'Yes' : 'No'}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.studio}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.notes}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.genre}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(movie._id)}
+                      >
+                        {movie.actors &&
+                          movie.actors.slice(0, 3).map((actor, index) => {
+                            return `${actor}${
+                              movie.actors &&
+                              index < movie.actors.slice(0, 3).length - 1
+                                ? ', '
+                                : ''
+                            }`;
+                          })}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        onClick={() =>
+                          handleDeleteModal(movie._id, movie.title)
+                        }
+                      >
+                        <Delete />
+                      </StyledTableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <span className={classes.footer}>Total Movies: {data.length}</span>
+        </>
       )}
     </div>
   );
@@ -355,5 +360,8 @@ const useStyles = makeStyles(() => ({
   headerContent: {
     display: 'flex',
     justifyContent: 'center',
+  },
+  footer: {
+    color: 'white',
   },
 }));

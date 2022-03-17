@@ -237,5 +237,5 @@ export async function getAllReleases(req, res) {
       resultArr.push({ title: result.title, release });
     });
   });
-  res.status(200).send(resultArr);
+  res.status(200).send(resultArr.sort((a, b) => (a.title > b.title ? 1 : -1)));
 }
