@@ -250,7 +250,6 @@ export function AllReleases() {
           deleteMovieId,
           deleteReleaseId,
         );
-        console.log(response);
         if (response.status === 200) {
           history.push({
             pathname: '/all-releases',
