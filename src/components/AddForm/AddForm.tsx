@@ -8,6 +8,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { Release, Result, Validation } from '../../classes';
 import { addMovie, editMovie } from '../../handlers';
 import { colors } from '../../constants';
@@ -227,7 +228,7 @@ export function AddForm(data: IAddForm) {
 
   function handleAddRelease({ label, format, notes }: Release) {
     if (format || notes || label) {
-      setReleases([...releases, { format, notes, label }]);
+      setReleases([...releases, { format, notes, label, uuid: uuidv4() }]);
     }
   }
 

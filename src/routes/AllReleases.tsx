@@ -6,13 +6,23 @@ import {
   TableContainer,
   TableBody,
   Table,
+  TableCell,
+  Dialog,
+  DialogContent,
+  Button,
+  DialogActions,
 } from '@material-ui/core';
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import { ReleaseStat } from '../classes';
-import { getAllReleases } from '../handlers';
-import { StyledTableCell, StyledTableHeaderCell } from '../components';
+import { ReleaseStat, Validation } from '../classes';
+import { getAllReleases, deleteReleaseFromAll } from '../handlers';
+import {
+  StyledTableCell,
+  StyledTableHeaderCell,
+  Notification,
+} from '../components';
+import { Delete } from '@material-ui/icons';
 import { colors } from '../constants';
 
 export function AllReleases() {
@@ -23,6 +33,12 @@ export function AllReleases() {
     field: 'title',
     asc: true,
   });
+  const [deleteMovieId, setDeleteMovieId] = React.useState<string>();
+  const [deleteReleaseId, setDeleteReleaseId] = React.useState<string>();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [deleteTitle, setDeleteTitle] = React.useState<string>();
+  const [validation, setValidation] = React.useState<Validation | undefined>();
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     fetchData();
@@ -30,6 +46,48 @@ export function AllReleases() {
 
   return (
     <div className={classes.container}>
+      {validation && open && (
+        <Notification
+          message={validation.message}
+          severity={validation.severity}
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
+
+      <Dialog
+        open={dialogOpen}
+        PaperProps={{
+          style: {
+            backgroundColor: colors.tableBackground,
+            color: 'white',
+            width: '50%',
+            height: '15%',
+          },
+        }}
+      >
+        <DialogContent>
+          Are you sure you want to delete release from{' '}
+          {deleteTitle && deleteTitle}?
+        </DialogContent>
+
+        <DialogActions>
+          <Button
+            className={classes.dialogButtons}
+            onClick={() => handleDeleteModal()}
+          >
+            No
+          </Button>
+          <Button
+            className={classes.dialogButtons}
+            onClick={handleDelete}
+            data-cy="ConfirmDelete"
+          >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <div className={classes.header}>All Releases</div>
       {data && (
         <>
@@ -69,6 +127,7 @@ export function AllReleases() {
                       Notes{renderSortArrow('notes')}
                     </span>
                   </StyledTableHeaderCell>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -77,19 +136,41 @@ export function AllReleases() {
                     <TableRow
                       key={`${release.title}${index}`}
                       data-cy="AllReleasesResultRow"
-                      onClick={() => handleRowClick(release.id)}
                     >
-                      <StyledTableCell align="center">
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(release.id)}
+                      >
                         {release.title}
                       </StyledTableCell>
-                      <StyledTableCell align="center">
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(release.id)}
+                      >
                         {release.release.label}
                       </StyledTableCell>
-                      <StyledTableCell align="center">
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(release.id)}
+                      >
                         {release.release.format}
                       </StyledTableCell>
-                      <StyledTableCell align="center">
+                      <StyledTableCell
+                        align="center"
+                        onClick={() => handleRowClick(release.id)}
+                      >
                         {release.release.notes}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        onClick={() =>
+                          handleDeleteModal(
+                            release.id,
+                            release.release.uuid,
+                            release.title,
+                          )
+                        }
+                      >
+                        <Delete />
                       </StyledTableCell>
                     </TableRow>
                   );
@@ -116,6 +197,10 @@ export function AllReleases() {
         : (returnValue = <ArrowUpward />);
     }
     return returnValue;
+  }
+
+  function handleClose() {
+    setOpen(false);
   }
 
   function sortData(field: string) {
@@ -151,6 +236,35 @@ export function AllReleases() {
     }
   }
 
+  function handleDeleteModal(id?: string, uuid?: string, title?: string) {
+    setDialogOpen(!dialogOpen);
+    setDeleteMovieId(id);
+    setDeleteReleaseId(uuid);
+    setDeleteTitle(title);
+  }
+
+  async function handleDelete() {
+    try {
+      if (deleteReleaseId && deleteMovieId) {
+        const response = await deleteReleaseFromAll(
+          deleteMovieId,
+          deleteReleaseId,
+        );
+        console.log(response);
+        if (response.status === 200) {
+          history.push({
+            pathname: '/all-releases',
+          });
+          setDialogOpen(false);
+          fetchData();
+        }
+      }
+    } catch (e: any) {
+      setValidation({ message: e.response.data.message, severity: 'error' });
+    }
+    setOpen(true);
+  }
+
   function handleRowClick(id: string) {
     history.push({
       pathname: '/detail',
@@ -183,6 +297,9 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
   },
   footer: {
+    color: 'white',
+  },
+  dialogButtons: {
     color: 'white',
   },
 }));

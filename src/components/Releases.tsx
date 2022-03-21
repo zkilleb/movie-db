@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core';
 import { Add, Delete } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { Result, Validation } from '../classes';
 import { addRelease, deleteRelease } from '../handlers';
 import { colors, formats } from '../constants';
@@ -225,6 +226,7 @@ export function Releases({ data }: { data: Result }) {
         ...data,
         format,
         label,
+        uuid: uuidv4(),
         releaseNotes: notes,
       });
       if (result.status === 200) {

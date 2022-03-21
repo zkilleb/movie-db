@@ -201,6 +201,7 @@ export async function addRelease(req, res) {
     label: req.query.label,
     notes: req.query.releaseNotes,
     format: req.query.format,
+    uuid: req.query.uuid,
   });
   const response = await movies.replaceOne(
     { _id: ObjectId(req.query._id) },
@@ -238,4 +239,24 @@ export async function getAllReleases(req, res) {
     });
   });
   res.status(200).send(resultArr.sort((a, b) => (a.title > b.title ? 1 : -1)));
+}
+
+export async function deleteReleaseFromAll(req, res) {
+  const doc = await movies.findOne({ _id: ObjectId(req.params.movieId) });
+  let tempReleases = [...doc.releases];
+  const index = tempReleases.findIndex(
+    (element) => element.uuid === req.params.releaseId,
+  );
+  tempReleases.splice(index, 1);
+  doc.releases = tempReleases;
+  const response = await movies.replaceOne(
+    { _id: ObjectId(req.params.movieId) },
+    doc,
+  );
+  if (response.acknowledged)
+    res.status(200).json({ message: 'Release succesfully deleted' });
+  else
+    res.status(400).json({
+      message: 'Error editing record in database',
+    });
 }

@@ -22,6 +22,7 @@ export function removeEmptyFields(req) {
   delete doc.label;
   delete doc.releaseNotes;
   delete doc.format;
+  delete doc.uuid;
   doc.releases = releases;
   return doc;
 }

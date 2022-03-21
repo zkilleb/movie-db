@@ -12,6 +12,7 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { Delete, AddCircle } from '@material-ui/icons';
+import { v4 as uuidv4 } from 'uuid';
 import { Release } from '../../classes';
 import { colors, formats } from '../../constants';
 import { StyledTableCell, StyledTableHeaderCell } from '..';
@@ -100,7 +101,12 @@ export function AddRelease({
               <Button
                 className={classes.addButton}
                 onClick={() =>
-                  addRelease({ label, format, notes: releaseNotes })
+                  addRelease({
+                    label,
+                    format,
+                    notes: releaseNotes,
+                    uuid: uuidv4(),
+                  })
                 }
                 variant="contained"
                 disabled={!label && !releaseNotes}
@@ -116,7 +122,7 @@ export function AddRelease({
   );
 
   function addRelease({ label, format, notes }: Release) {
-    handleAddRelease({ label, format, notes });
+    handleAddRelease({ label, format, notes, uuid: uuidv4() });
     setLabel('');
     setFormat('blu-ray');
     setReleaseNotes('');

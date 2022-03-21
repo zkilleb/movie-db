@@ -17,6 +17,7 @@ import {
   deleteRelease,
   getAllTitles,
   getAllReleases,
+  deleteReleaseFromAll,
 } from './controllers.js';
 
 dotenv.config();
@@ -84,6 +85,8 @@ app.get('/review/:title/:year', getReview);
 app.put('/add/release', addRelease);
 
 app.put('/delete/release', deleteRelease);
+
+app.put('/delete/release/:movieId/:releaseId', deleteReleaseFromAll);
 
 app.get('/releases', getAllReleases);
 
