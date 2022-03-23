@@ -20,3 +20,11 @@ export async function filterTMDBResult(
   }
   return;
 }
+
+export function getFormattedDate() {
+  const currentDate = new Date();
+  const formattedDate = `${
+    currentDate.getMonth() + 1
+  }/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+  return formattedDate;
+}

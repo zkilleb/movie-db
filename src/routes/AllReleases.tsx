@@ -11,10 +11,13 @@ import {
   DialogContent,
   Button,
   DialogActions,
+  Tooltip,
 } from '@material-ui/core';
-import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
+import { ArrowDownward, ArrowUpward, PictureAsPdf } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ReleaseStat, Validation } from '../classes';
 import { getAllReleases, deleteReleaseFromAll } from '../handlers';
 import {
@@ -22,8 +25,11 @@ import {
   StyledTableHeaderCell,
   Notification,
 } from '../components';
+import { getFormattedDate } from '../util';
 import { Delete } from '@material-ui/icons';
 import { colors } from '../constants';
+
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 export function AllReleases() {
   const classes = useStyles();
@@ -88,7 +94,12 @@ export function AllReleases() {
         </DialogActions>
       </Dialog>
 
-      <div className={classes.header}>All Releases</div>
+      <div className={classes.header}>
+        <div className={classes.headerText}>All Releases</div>
+        <Tooltip title={'Export as PDF'}>
+          <PictureAsPdf className={classes.pdfIcon} onClick={generatePdf} />
+        </Tooltip>
+      </div>
       {data && (
         <>
           <TableContainer className={classes.table} component={Paper}>
@@ -272,12 +283,96 @@ export function AllReleases() {
       },
     });
   }
+
+  function aggregateData(): any {
+    const headerData = [
+      { text: '#', bold: true, center: true, alignment: 'center' },
+      { text: 'Title', bold: true, center: true, alignment: 'center' },
+      { text: 'Label', bold: true, alignment: 'center' },
+      { text: 'Format', bold: true, alignment: 'center' },
+      { text: 'Notes', bold: true, alignment: 'center' },
+    ];
+    if (data) {
+      const tempData = data.map((release, index) => {
+        return [
+          { text: index, alignment: 'center' },
+          { text: release.title, alignment: 'center' },
+          { text: release.release.label, alignment: 'center' },
+          { text: release.release.format, alignment: 'center' },
+          { text: release.release.notes, alignment: 'center' },
+        ];
+      });
+      return [headerData, ...tempData];
+    }
+
+    return [headerData];
+  }
+
+  async function generatePdf() {
+    const docDefinition = {
+      info: {
+        title: 'Releases.pdf',
+      },
+      styles: {
+        header: {
+          fontSize: 30,
+          bold: true,
+          marginBottom: 10,
+        },
+        subHeader: {
+          fontSize: 15,
+          bold: true,
+          marginBottom: 10,
+        },
+        footer: {
+          bold: true,
+          fontSize: 15,
+          marginTop: 10,
+        },
+      },
+      content: [
+        { text: 'Releases', style: 'header' },
+        { text: `Generated On: ${getFormattedDate()}`, style: 'subHeader' },
+        {
+          text: `Sorted by ${sortedColumn.field}, ${
+            sortedColumn.asc ? 'ascending' : 'descending'
+          }`,
+          style: 'subHeader',
+        },
+        {
+          layout: {
+            fillColor: (i: number) => {
+              return i % 2 === 0 ? '#CCCCCC' : null;
+            },
+          },
+          table: {
+            widths: ['auto', '*', '*', '*', '*'],
+            body: aggregateData(),
+          },
+        },
+        {
+          text: `Total Number of Releases: ${data ? data.length : 0}`,
+          style: 'footer',
+        },
+      ],
+    };
+    pdfMake.createPdf(docDefinition).download('Releases.pdf');
+    pdfMake.createPdf(docDefinition).open();
+  }
 }
 
 const useStyles = makeStyles(() => ({
   header: {
     color: 'white',
     fontSize: 30,
+    display: 'flex',
+  },
+  headerText: {
+    fontSize: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginLeft: 40,
   },
   table: {
     backgroundColor: colors.tableBackground,
@@ -299,6 +394,11 @@ const useStyles = makeStyles(() => ({
     color: 'white',
   },
   dialogButtons: {
+    color: 'white',
+  },
+  pdfIcon: {
+    paddingRight: 10,
+    marginLeft: 'auto',
     color: 'white',
   },
 }));
