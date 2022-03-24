@@ -286,8 +286,8 @@ export function AllReleases() {
 
   function aggregateData(): any {
     const headerData = [
-      { text: '#', bold: true, center: true, alignment: 'center' },
-      { text: 'Title', bold: true, center: true, alignment: 'center' },
+      { text: '#', bold: true, alignment: 'center' },
+      { text: 'Title', bold: true, alignment: 'center' },
       { text: 'Label', bold: true, alignment: 'center' },
       { text: 'Format', bold: true, alignment: 'center' },
       { text: 'Notes', bold: true, alignment: 'center' },
@@ -310,9 +310,6 @@ export function AllReleases() {
 
   async function generatePdf() {
     const docDefinition = {
-      info: {
-        title: 'Releases.pdf',
-      },
       styles: {
         header: {
           fontSize: 30,

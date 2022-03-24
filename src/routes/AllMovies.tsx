@@ -11,11 +11,15 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Tooltip,
 } from '@material-ui/core';
-import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
+import { ArrowDownward, ArrowUpward, PictureAsPdf } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Result, Validation } from '../classes';
+import { getFormattedDate } from '../util';
 import { getAllMovies, deleteMovie } from '../handlers';
 import {
   Notification,
@@ -24,6 +28,8 @@ import {
 } from '../components';
 import { colors } from '../constants';
 import { Delete } from '@material-ui/icons';
+
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 export function AllMovies() {
   const classes = useStyles();
@@ -86,7 +92,12 @@ export function AllMovies() {
         </DialogActions>
       </Dialog>
 
-      <div className={classes.header}>All Movies</div>
+      <div className={classes.header}>
+        <div className={classes.headerText}>All Movies</div>
+        <Tooltip title={'Export as PDF'}>
+          <PictureAsPdf className={classes.pdfIcon} onClick={generatePdf} />
+        </Tooltip>
+      </div>
       {data && (
         <>
           <TableContainer className={classes.table} component={Paper}>
@@ -335,12 +346,114 @@ export function AllMovies() {
     const result = await getAllMovies();
     setData(result);
   }
+
+  function aggregateData(): any {
+    const headerData = [
+      { text: '#', bold: true, alignment: 'center' },
+      { text: 'Title', bold: true, alignment: 'center' },
+      { text: 'Director', bold: true, alignment: 'center' },
+      { text: 'Release Year', bold: true, alignment: 'center' },
+      { text: 'Runtime', bold: true, alignment: 'center' },
+      { text: 'Language', bold: true, alignment: 'center' },
+      { text: 'Color', bold: true, alignment: 'center' },
+      { text: 'Studio', bold: true, alignment: 'center' },
+      { text: 'Notes', bold: true, alignment: 'center' },
+      { text: 'Genre', bold: true, alignment: 'center' },
+      { text: 'Actors', bold: true, alignment: 'center' },
+    ];
+    if (data) {
+      const tempData = data.map((movie, index) => {
+        return [
+          { text: index, alignment: 'center' },
+          { text: movie.title, alignment: 'center' },
+          { text: movie.director, alignment: 'center' },
+          { text: movie.year, alignment: 'center' },
+          { text: movie.length, alignment: 'center' },
+          { text: movie.language, alignment: 'center' },
+          { text: movie.color, alignment: 'center' },
+          { text: movie.studio, alignment: 'center' },
+          { text: movie.notes, alignment: 'center' },
+          { text: movie.genre, alignment: 'center' },
+          {
+            text: movie && movie.actors ? movie.actors.join('\n') : '',
+            alignment: 'center',
+          },
+        ];
+      });
+      return [headerData, ...tempData];
+    }
+
+    return [headerData];
+  }
+
+  async function generatePdf() {
+    const docDefinition = {
+      styles: {
+        header: {
+          fontSize: 30,
+          bold: true,
+          marginBottom: 10,
+        },
+        subHeader: {
+          fontSize: 15,
+          bold: true,
+          marginBottom: 10,
+        },
+        footer: {
+          bold: true,
+          fontSize: 15,
+          marginTop: 10,
+        },
+      },
+      pageOrientation: 'landscape' as any,
+      content: [
+        { text: 'Movies', style: 'header' },
+        { text: `Generated On: ${getFormattedDate()}`, style: 'subHeader' },
+        {
+          text: `Sorted by ${sortedColumn.field}, ${
+            sortedColumn.asc ? 'ascending' : 'descending'
+          }`,
+          style: 'subHeader',
+        },
+        {
+          layout: {
+            fillColor: (i: number) => {
+              return i % 2 === 0 ? '#CCCCCC' : null;
+            },
+          },
+          table: {
+            widths: [
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+              'auto',
+            ],
+            body: aggregateData(),
+          },
+        },
+        {
+          text: `Total Number of Movies: ${data ? data.length : 0}`,
+          style: 'footer',
+        },
+      ],
+    };
+    pdfMake.createPdf(docDefinition).download('Movies.pdf');
+    pdfMake.createPdf(docDefinition).open();
+  }
 }
 
 const useStyles = makeStyles(() => ({
   header: {
     color: 'white',
     fontSize: 30,
+    display: 'flex',
   },
   table: {
     backgroundColor: colors.tableBackground,
@@ -363,5 +476,17 @@ const useStyles = makeStyles(() => ({
   },
   footer: {
     color: 'white',
+  },
+  pdfIcon: {
+    paddingRight: 10,
+    marginLeft: 'auto',
+    color: 'white',
+  },
+  headerText: {
+    fontSize: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginLeft: 40,
   },
 }));
