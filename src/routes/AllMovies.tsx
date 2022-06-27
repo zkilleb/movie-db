@@ -12,6 +12,7 @@ import {
   DialogActions,
   Button,
   Tooltip,
+  TextField,
 } from '@material-ui/core';
 import { ArrowDownward, ArrowUpward, PictureAsPdf } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -35,6 +36,7 @@ export function AllMovies() {
   const classes = useStyles();
   const history = useHistory();
   const [data, setData] = React.useState<Result[]>();
+  const [displayedData, setDisplayedData] = React.useState<Result[]>();
   const [validation, setValidation] = React.useState<Validation | undefined>();
   const [open, setOpen] = React.useState(false);
   const [deleteId, setDeleteId] = React.useState<string>();
@@ -44,6 +46,7 @@ export function AllMovies() {
     field: 'title',
     asc: true,
   });
+  const [filter, setFilter] = React.useState<string>('');
 
   React.useEffect(() => {
     fetchData();
@@ -94,11 +97,18 @@ export function AllMovies() {
 
       <div className={classes.header}>
         <div className={classes.headerText}>All Movies</div>
+        <TextField
+          label="Filter Movies"
+          value={filter}
+          InputProps={{ className: classes.field }}
+          InputLabelProps={{ className: classes.field }}
+          onChange={handleFilterChange}
+        />
         <Tooltip title={'Export as PDF'}>
           <PictureAsPdf className={classes.pdfIcon} onClick={generatePdf} />
         </Tooltip>
       </div>
-      {data && (
+      {displayedData && (
         <>
           <TableContainer className={classes.table} component={Paper}>
             <Table aria-label="simple table">
@@ -178,7 +188,7 @@ export function AllMovies() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((movie) => {
+                {displayedData.map((movie) => {
                   return (
                     <TableRow key={movie.title} data-cy="AllMoviesResultRow">
                       <StyledTableCell
@@ -262,7 +272,9 @@ export function AllMovies() {
               </TableBody>
             </Table>
           </TableContainer>
-          <span className={classes.footer}>Total Movies: {data.length}</span>
+          <span className={classes.footer}>
+            Total Movies: {displayedData.length}
+          </span>
         </>
       )}
     </div>
@@ -279,8 +291,8 @@ export function AllMovies() {
   }
 
   function sortData(field: string) {
-    if (data) {
-      const tempData = [...data];
+    if (displayedData) {
+      const tempData = [...displayedData];
       if (field === sortedColumn.field) {
         if (sortedColumn.asc) {
           if (field === 'year' || field === 'length')
@@ -294,13 +306,13 @@ export function AllMovies() {
             tempData.sort((a: any, b: any) => (a[field] > b[field] ? 1 : -1));
         }
         setSortedColumn({ field, asc: !sortedColumn.asc });
-        setData(tempData);
+        setDisplayedData(tempData);
       } else {
         if (field === 'year' || field === 'length')
           tempData.sort((a: any, b: any) => b[field] - a[field]);
         else tempData.sort((a: any, b: any) => (a[field] > b[field] ? 1 : -1));
         setSortedColumn({ field, asc: true });
-        setData(tempData);
+        setDisplayedData(tempData);
       }
     }
   }
@@ -312,6 +324,40 @@ export function AllMovies() {
         id,
       },
     });
+  }
+
+  async function fetchFilteredData(value: string) {
+    let formattedColorValue: boolean;
+    if (
+      value.toLowerCase() === 'y' ||
+      value.toLowerCase() === 'ye' ||
+      value.toLowerCase() === 'yes'
+    )
+      formattedColorValue = true;
+    else if (value.toLowerCase() === 'n' || value.toLowerCase() === 'no')
+      formattedColorValue = false;
+    if (value && data) {
+      const tempResult = data.filter(
+        (e) =>
+          e.title.toLowerCase().includes(value.toLowerCase()) ||
+          e.director.toLowerCase().includes(value.toLowerCase()) ||
+          (formattedColorValue &&
+            e.color
+              .toString()
+              .toLowerCase()
+              .includes(formattedColorValue.toString())) ||
+          (e.actors &&
+            e.actors.join(',').toLowerCase().includes(value.toLowerCase())) ||
+          (e.genre && e.genre.toLowerCase().includes(value.toLowerCase())) ||
+          (e.language &&
+            e.language.toLowerCase().includes(value.toLowerCase())) ||
+          (e.notes && e.notes.toLowerCase().includes(value.toLowerCase())) ||
+          (e.studio && e.studio.toLowerCase().includes(value.toLowerCase())) ||
+          (e.year && e.year.toString().includes(value.toLowerCase())) ||
+          (e.length && e.length.toString().includes(value.toLowerCase())),
+      );
+      setDisplayedData(tempResult);
+    } else if (data) setDisplayedData(data);
   }
 
   function handleDeleteModal(id?: string, title?: string) {
@@ -345,6 +391,7 @@ export function AllMovies() {
   async function fetchData() {
     const result = await getAllMovies();
     setData(result);
+    setDisplayedData(result);
   }
 
   function aggregateData(): any {
@@ -361,8 +408,8 @@ export function AllMovies() {
       { text: 'Genre', bold: true, alignment: 'center' },
       { text: 'Actors', bold: true, alignment: 'center' },
     ];
-    if (data) {
-      const tempData = data.map((movie, index) => {
+    if (displayedData) {
+      const tempData = displayedData.map((movie, index) => {
         return [
           { text: index, alignment: 'center' },
           { text: movie.title, alignment: 'center' },
@@ -439,13 +486,21 @@ export function AllMovies() {
           },
         },
         {
-          text: `Total Number of Movies: ${data ? data.length : 0}`,
+          text: `Total Number of Movies: ${
+            displayedData ? displayedData.length : 0
+          }`,
           style: 'footer',
         },
       ],
     };
     pdfMake.createPdf(docDefinition).download('Movies.pdf');
     pdfMake.createPdf(docDefinition).open();
+  }
+
+  function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setFilter(event.target.value);
+    if (event.target.value) fetchFilteredData(event.target.value);
+    else if (data) setDisplayedData(data);
   }
 }
 
@@ -488,5 +543,8 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     width: '100%',
     marginLeft: 40,
+  },
+  field: {
+    color: 'white',
   },
 }));

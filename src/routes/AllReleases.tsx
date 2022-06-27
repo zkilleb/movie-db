@@ -12,6 +12,7 @@ import {
   Button,
   DialogActions,
   Tooltip,
+  TextField,
 } from '@material-ui/core';
 import { ArrowDownward, ArrowUpward, PictureAsPdf } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -35,6 +36,7 @@ export function AllReleases() {
   const classes = useStyles();
   const history = useHistory();
   const [data, setData] = React.useState<ReleaseStat[]>();
+  const [displayedData, setDisplayedData] = React.useState<ReleaseStat[]>();
   const [sortedColumn, setSortedColumn] = React.useState({
     field: 'title',
     asc: true,
@@ -45,6 +47,7 @@ export function AllReleases() {
   const [deleteTitle, setDeleteTitle] = React.useState<string>();
   const [validation, setValidation] = React.useState<Validation | undefined>();
   const [open, setOpen] = React.useState(false);
+  const [filter, setFilter] = React.useState<string>('');
 
   React.useEffect(() => {
     fetchData();
@@ -96,11 +99,18 @@ export function AllReleases() {
 
       <div className={classes.header}>
         <div className={classes.headerText}>All Releases</div>
+        <TextField
+          label="Filter Releases"
+          value={filter}
+          InputProps={{ className: classes.field }}
+          InputLabelProps={{ className: classes.field }}
+          onChange={handleFilterChange}
+        />
         <Tooltip title={'Export as PDF'}>
           <PictureAsPdf className={classes.pdfIcon} onClick={generatePdf} />
         </Tooltip>
       </div>
-      {data && (
+      {displayedData && (
         <>
           <TableContainer className={classes.table} component={Paper}>
             <Table aria-label="simple table">
@@ -142,7 +152,7 @@ export function AllReleases() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((release, index) => {
+                {displayedData.map((release, index) => {
                   return (
                     <TableRow
                       key={`${release.title}${index}`}
@@ -189,7 +199,9 @@ export function AllReleases() {
               </TableBody>
             </Table>
           </TableContainer>
-          <span className={classes.footer}>Total Releases: {data.length}</span>
+          <span className={classes.footer}>
+            Total Releases: {displayedData.length}
+          </span>
         </>
       )}
     </div>
@@ -198,6 +210,22 @@ export function AllReleases() {
   async function fetchData() {
     const result = await getAllReleases();
     setData(result);
+    setDisplayedData(result);
+  }
+
+  async function fetchFilteredData(value: string) {
+    if (value && data) {
+      const tempResult = data.filter(
+        (e) =>
+          e.title.toLowerCase().includes(value.toLowerCase()) ||
+          e.release.format.toLowerCase().includes(value.toLowerCase()) ||
+          (e.release.label &&
+            e.release.label.toLowerCase().includes(value.toLowerCase())) ||
+          (e.release.notes &&
+            e.release.notes.toLowerCase().includes(value.toLowerCase())),
+      );
+      setDisplayedData(tempResult);
+    } else if (data) setDisplayedData(data);
   }
 
   function renderSortArrow(field: string) {
@@ -215,8 +243,8 @@ export function AllReleases() {
   }
 
   function sortData(field: string) {
-    if (data) {
-      const tempData = [...data];
+    if (displayedData) {
+      const tempData = [...displayedData];
       if (field === sortedColumn.field) {
         if (sortedColumn.asc) {
           if (field !== 'title')
@@ -234,7 +262,7 @@ export function AllReleases() {
             tempData.sort((a: any, b: any) => (a[field] > b[field] ? 1 : -1));
         }
         setSortedColumn({ field, asc: !sortedColumn.asc });
-        setData(tempData);
+        setDisplayedData(tempData);
       } else {
         if (field !== 'title')
           tempData.sort((a: any, b: any) =>
@@ -242,7 +270,7 @@ export function AllReleases() {
           );
         else tempData.sort((a: any, b: any) => (a[field] > b[field] ? 1 : -1));
         setSortedColumn({ field, asc: true });
-        setData(tempData);
+        setDisplayedData(tempData);
       }
     }
   }
@@ -292,8 +320,8 @@ export function AllReleases() {
       { text: 'Format', bold: true, alignment: 'center' },
       { text: 'Notes', bold: true, alignment: 'center' },
     ];
-    if (data) {
-      const tempData = data.map((release, index) => {
+    if (displayedData) {
+      const tempData = displayedData.map((release, index) => {
         return [
           { text: index, alignment: 'center' },
           { text: release.title, alignment: 'center' },
@@ -304,7 +332,6 @@ export function AllReleases() {
       });
       return [headerData, ...tempData];
     }
-
     return [headerData];
   }
 
@@ -348,13 +375,21 @@ export function AllReleases() {
           },
         },
         {
-          text: `Total Number of Releases: ${data ? data.length : 0}`,
+          text: `Total Number of Releases: ${
+            displayedData ? displayedData.length : 0
+          }`,
           style: 'footer',
         },
       ],
     };
     pdfMake.createPdf(docDefinition).download('Releases.pdf');
     pdfMake.createPdf(docDefinition).open();
+  }
+
+  function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setFilter(event.target.value);
+    if (event.target.value) fetchFilteredData(event.target.value);
+    else if (data) setDisplayedData(data);
   }
 }
 
@@ -369,7 +404,7 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    marginLeft: 40,
+    marginLeft: 200,
   },
   table: {
     backgroundColor: colors.tableBackground,
@@ -396,6 +431,9 @@ const useStyles = makeStyles(() => ({
   pdfIcon: {
     paddingRight: 10,
     marginLeft: 'auto',
+    color: 'white',
+  },
+  field: {
     color: 'white',
   },
 }));
