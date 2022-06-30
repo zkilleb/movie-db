@@ -2,21 +2,14 @@ import Joi from 'joi';
 import dotenv from 'dotenv';
 import { fetchReview, fetchGreatMovie } from 'eberts-api';
 import axios from 'axios';
-import { MongoClient, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { removeEmptyFields, generateTMDBParams } from './util.js';
+import { BASE_URL, API_KEY, verbose } from './constants.js';
+import { connectToDB } from './db.js';
 
 dotenv.config();
 
-const BASE_URL = 'https://api.themoviedb.org/3';
-const API_KEY = process.env.API_KEY;
-
-const uri = process.env.DB_HOST;
-const verbose = process.env.VERBOSE === 'true';
-const client = new MongoClient(uri);
-
-client.connect();
-const database = client.db(process.env.DB_NAME || 'mydb');
-const movies = database.collection(process.env.COLLECTION || 'movies');
+const movies = connectToDB();
 
 export async function getTitles(req, res) {
   const titleSchema = Joi.string().min(3);
