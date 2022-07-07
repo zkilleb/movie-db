@@ -150,7 +150,7 @@ export function Search() {
     </div>
   );
 
-  function handleMenuClick(event: any) {
+  function handleMenuClick() {
     setMinMenuOpen(true);
   }
 

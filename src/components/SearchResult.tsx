@@ -22,10 +22,10 @@ export function SearchResult({ data, keywordResults }: IResult) {
 
   React.useEffect(() => {
     const tempResult = keywordResults.find(
-      (movie: any) =>
+      (movie: ITMDBResult) =>
         movie.title.toLowerCase() === title.toLowerCase() &&
-        movie.release_date.substring(0, 4) >= minYear &&
-        movie.release_date.substring(0, 4) <= maxYear,
+        parseInt(movie.release_date.substring(0, 4)) >= minYear &&
+        parseInt(movie.release_date.substring(0, 4)) <= maxYear,
     );
     setResult(tempResult);
   }, [keywordResults, minYear, maxYear, title]);
@@ -104,4 +104,6 @@ interface IResult {
 
 interface ITMDBResult {
   poster_path: string;
+  title: string;
+  release_date: string;
 }
