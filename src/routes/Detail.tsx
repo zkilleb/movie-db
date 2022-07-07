@@ -10,7 +10,7 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Result, Validation, Ebert, TMDBResult } from '../classes';
 import { Notification, Review, Releases } from '../components';
 import { colors } from '../constants';
@@ -22,9 +22,11 @@ import {
 } from '../handlers';
 import { filterTMDBResult } from '../util';
 
-export function Detail(props: IDetailProps) {
+export function Detail() {
+  const location = useLocation();
+  const { state } = location as IDetailProps;
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [recommendations, setRecommendations] = React.useState<IRecommend[]>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [validation, setValidation] = React.useState<Validation | undefined>();
@@ -39,9 +41,9 @@ export function Detail(props: IDetailProps) {
   });
 
   React.useEffect(() => {
-    if (props.location.state && props.location.state.id) {
+    if (state && state.id) {
       async function fetchData() {
-        const result = await getMovieById(props.location.state.id);
+        const result = await getMovieById(state.id);
         const tmdbResult: TMDBResult | undefined = await filterTMDBResult(
           result.year,
           result.title,
@@ -53,11 +55,7 @@ export function Detail(props: IDetailProps) {
           setRecommendations(recommendationResponse);
         }
         try {
-          if (
-            result.title &&
-            result.year &&
-            !props.location.state.reviewLoaded
-          ) {
+          if (result.title && result.year && !state.reviewLoaded) {
             const response = await getReview(result.title, result.year);
             if (response.status === 200) {
               setReview(response.data);
@@ -72,9 +70,9 @@ export function Detail(props: IDetailProps) {
       }
       fetchData();
     }
-  }, [props]);
+  }, [state]);
 
-  return props.location.state && props.location.state.id && !data ? (
+  return state && state.id && !data ? (
     <CircularProgress className={classes.loading} />
   ) : (
     <div>
@@ -236,7 +234,7 @@ export function Detail(props: IDetailProps) {
       if (data && data._id) {
         const response = await deleteMovie(data._id);
         if (response.status === 200) {
-          history.push({
+          navigate({
             pathname: '/',
           });
         }
@@ -252,32 +250,24 @@ export function Detail(props: IDetailProps) {
   }
 
   function handleEditClick() {
-    history.push({
-      pathname: '/edit',
-      state: { details: data },
-    });
+    navigate('/edit', { state: { details: data } });
   }
 
   function handleDirectorClick() {
     if (data) {
-      history.push({
-        pathname: '/search',
-        search: `?title=${data.director}&type=director`,
+      navigate('/search', {
+        state: { search: `?title=${data.director}&type=director` },
       });
     }
   }
 
   function handleActorClick(actor: string) {
-    history.push({
-      pathname: '/search',
-      search: `?title=${actor}&type=actor`,
-    });
+    navigate('/search', { state: { search: `?title=${actor}&type=actor` } });
   }
 
   async function handleClick(recommend: IRecommend) {
     if (recommend.inCollection && recommend.state) {
-      history.push({
-        pathname: '/detail',
+      navigate('/detail', {
         state: {
           id: recommend.state._id,
         },
@@ -373,10 +363,8 @@ interface IRecommend {
 }
 
 interface IDetailProps {
-  location: {
-    state: {
-      id: string;
-      reviewLoaded?: boolean;
-    };
+  state: {
+    id: string;
+    reviewLoaded?: boolean;
   };
 }

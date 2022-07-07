@@ -7,7 +7,7 @@ import {
   Checkbox,
   TextField,
 } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { Release, Result, Validation } from '../../classes';
 import { addMovie, editMovie } from '../../handlers';
@@ -19,7 +19,7 @@ import { AddActor } from './AddActor';
 export function AddForm(data: IAddForm) {
   const editResults = data.data;
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState<string>(
     editResults && editResults.title ? editResults.title : '',
@@ -190,7 +190,7 @@ export function AddForm(data: IAddForm) {
   );
 
   function handleCancel() {
-    history.goBack();
+    navigate(-1);
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -280,8 +280,7 @@ export function AddForm(data: IAddForm) {
               message: 'Record Succesfully Created',
               severity: 'success',
             });
-            history.push({
-              pathname: '/detail',
+            navigate('/detail', {
               state: {
                 id: results.data.insertedId,
               },
@@ -303,8 +302,7 @@ export function AddForm(data: IAddForm) {
             id: editResults._id,
           });
           if (results.status === 200) {
-            history.push({
-              pathname: '/detail',
+            navigate('/detail', {
               state: {
                 id: editResults._id,
               },

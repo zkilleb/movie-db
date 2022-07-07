@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import {
   NotFound,
   AddMovie,
@@ -29,22 +29,18 @@ function App() {
 
   return (
     <div className={'App'}>
-      <BrowserRouter>
-        <Header callback={callback} />
-        <Switch>
-          <Route path="/" exact>
-            <Home recentSearches={recentSearches} />
-          </Route>
-          <Route path="/add" component={AddMovie} exact />
-          <Route path="/edit" component={EditMovie} exact />
-          <Route path="/search" component={Search} />
-          <Route path="/detail" component={Detail} />
-          <Route path="/all-movies" component={AllMovies} />
-          <Route path="/all-releases" component={AllReleases} />
-          <Route path="/stats" component={Stats} />
-          <Route component={NotFound} />
-        </Switch>
-      </BrowserRouter>
+      <Header callback={callback} />
+      <Routes>
+        <Route path="/" element={<Home recentSearches={recentSearches} />} />
+        <Route path="/add" element={<AddMovie />} />
+        <Route path="/edit" element={<EditMovie />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/detail" element={<Detail />} />
+        <Route path="/all-movies" element={<AllMovies />} />
+        <Route path="/all-releases" element={<AllReleases />} />
+        <Route path="/stats" element={<Stats />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 }

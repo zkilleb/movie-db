@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import { ArrowDownward, ArrowUpward, PictureAsPdf } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ReleaseStat, Validation } from '../classes';
@@ -34,7 +34,7 @@ import { colors } from '../constants';
 
 export function AllReleases() {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [data, setData] = React.useState<ReleaseStat[]>();
   const [displayedData, setDisplayedData] = React.useState<ReleaseStat[]>();
   const [sortedColumn, setSortedColumn] = React.useState({
@@ -290,9 +290,7 @@ export function AllReleases() {
           deleteReleaseId,
         );
         if (response.status === 200) {
-          history.push({
-            pathname: '/all-releases',
-          });
+          navigate('/all-releases');
           setDialogOpen(false);
           fetchData();
         }
@@ -304,8 +302,7 @@ export function AllReleases() {
   }
 
   function handleRowClick(id: string) {
-    history.push({
-      pathname: '/detail',
+    navigate('/detail', {
       state: {
         id,
       },

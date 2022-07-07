@@ -1,13 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Result } from '../classes';
 import { colors } from '../constants';
 
 export function SearchResult({ data, keywordResults }: IResult) {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const title = data.title ? data.title : '';
   const actors = data.actors ? data.actors : [];
   // Check for between plus or minus 1 year to account for differences in international release dates
@@ -61,10 +61,7 @@ export function SearchResult({ data, keywordResults }: IResult) {
   );
 
   function handleClick() {
-    history.push({
-      pathname: '/detail',
-      state: { id: data._id },
-    });
+    navigate('/detail', { state: { id: data._id } });
   }
 }
 

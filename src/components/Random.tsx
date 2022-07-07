@@ -1,11 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getRandom } from '../handlers';
 
 export function Random() {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <div className={classes.random} data-cy="Random" onClick={handleClick}>
@@ -15,8 +15,7 @@ export function Random() {
 
   async function handleClick() {
     const result = await getRandom();
-    history.push({
-      pathname: '/detail',
+    navigate('/detail', {
       state: {
         id: result._id,
       },

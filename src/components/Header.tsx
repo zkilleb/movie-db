@@ -11,12 +11,13 @@ export function Header({
 }) {
   const classes = useStyles();
   const location = useLocation();
+  const { state } = location as ISearchHistory;
 
   React.useEffect(() => {
     if (location.pathname === '/search') {
-      callback(location.pathname, location.search);
+      callback(location.pathname, state.search);
     }
-  }, [location, callback]);
+  }, [location, state, callback]);
 
   return (
     <div className={classes.header} data-cy="Header">
@@ -94,3 +95,9 @@ const useStyles = makeStyles(() => ({
     textUnderlineOffset: '.5em',
   },
 }));
+
+interface ISearchHistory {
+  state: {
+    search: string;
+  };
+}

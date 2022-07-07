@@ -11,14 +11,14 @@ import {
   DialogTitle,
   DialogActions,
 } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Validation } from '../classes';
 import { Notification } from '.';
 import { colors } from '../constants';
 
 export function Search() {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [title, setTitle] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [minMenuOpen, setMinMenuOpen] = React.useState(false);
@@ -160,9 +160,8 @@ export function Search() {
 
   function handleSearchClick() {
     if (title.length > 2) {
-      history.push({
-        pathname: '/search',
-        search: `?title=${title}&type=${search}`,
+      navigate('/search', {
+        state: { search: `?title=${title}&type=${search}` },
       });
       setTitle('');
       setMinMenuOpen(false);

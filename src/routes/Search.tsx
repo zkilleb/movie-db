@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   searchMovie,
   getTMDBKeyword,
@@ -13,11 +13,14 @@ import { SearchResult } from '../components';
 
 export function Search() {
   const classes = useStyles();
+  const location = useLocation();
+  const { state } = location as ISearchTerm;
+
   const [urlParams, setUrlParams] = React.useState<string>();
   const [searchResults, setSearchResults] = React.useState<Result[]>();
   const [keywordResults, setKeywordResults] = React.useState<[]>();
 
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(state.search);
   const title = params.get('title');
   const type = params.get('type');
 
@@ -99,3 +102,9 @@ const useStyles = makeStyles(() => ({
     marginTop: 20,
   },
 }));
+
+interface ISearchTerm {
+  state: {
+    search: string;
+  };
+}

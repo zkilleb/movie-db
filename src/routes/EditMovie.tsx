@@ -1,10 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { useLocation } from 'react-router-dom';
 import { AddForm } from '../components';
 import { Result } from '../classes';
 
-export function EditMovie(props: IEditProps) {
+export function EditMovie() {
+  const location = useLocation();
+  const { state } = location as IEditProps;
   const classes = useStyles();
-  const data: Result = props.location.state.details;
+  const data: Result = state.details;
 
   return (
     <div>
@@ -15,10 +18,8 @@ export function EditMovie(props: IEditProps) {
 }
 
 interface IEditProps {
-  location: {
-    state: {
-      details: Result;
-    };
+  state: {
+    details: Result;
   };
 }
 

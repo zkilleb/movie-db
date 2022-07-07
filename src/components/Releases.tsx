@@ -17,7 +17,7 @@ import {
   Paper,
 } from '@material-ui/core';
 import { Add, Delete } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { Result, Validation } from '../classes';
 import { addRelease, deleteRelease } from '../handlers';
@@ -26,7 +26,7 @@ import { Notification, StyledTableCell, StyledTableHeaderCell } from '.';
 
 export function Releases({ data }: { data: Result }) {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [label, setLabel] = React.useState<string>();
@@ -200,8 +200,7 @@ export function Releases({ data }: { data: Result }) {
         setDeleteDialogOpen(false);
         setLabel('');
         setNotes('');
-        history.push({
-          pathname: '/detail',
+        navigate('/detail', {
           state: {
             id: data._id,
             reviewLoaded: true,
@@ -233,8 +232,7 @@ export function Releases({ data }: { data: Result }) {
         setDialogOpen(false);
         setLabel('');
         setNotes('');
-        history.push({
-          pathname: '/detail',
+        navigate('/detail', {
           state: {
             id: data._id,
             reviewLoaded: true,

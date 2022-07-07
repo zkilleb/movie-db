@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import { ArrowDownward, ArrowUpward, PictureAsPdf } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Result, Validation } from '../classes';
@@ -34,7 +34,7 @@ import { Delete } from '@material-ui/icons';
 
 export function AllMovies() {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [data, setData] = React.useState<Result[]>();
   const [displayedData, setDisplayedData] = React.useState<Result[]>();
   const [validation, setValidation] = React.useState<Validation | undefined>();
@@ -318,8 +318,7 @@ export function AllMovies() {
   }
 
   function handleRowClick(id: string) {
-    history.push({
-      pathname: '/detail',
+    navigate('/detail', {
       state: {
         id,
       },
@@ -371,9 +370,7 @@ export function AllMovies() {
       if (deleteId) {
         const response = await deleteMovie(deleteId);
         if (response.status === 200) {
-          history.push({
-            pathname: '/all-movies',
-          });
+          navigate('/all-movies');
           setDialogOpen(false);
           fetchData();
         }
