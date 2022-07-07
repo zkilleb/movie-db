@@ -102,6 +102,7 @@ export function AllReleases() {
         <TextField
           label="Filter Releases"
           value={filter}
+          className={classes.field}
           InputProps={{ className: classes.field }}
           InputLabelProps={{ className: classes.field }}
           onChange={handleFilterChange}
@@ -432,5 +433,14 @@ const useStyles = makeStyles(() => ({
   },
   field: {
     color: 'white',
+    '& label.Mui-focused': {
+      color: 'white',
+    },
+    '& .MuiInput-underline:before': {
+      borderBottomColor: 'white',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'white',
+    },
   },
 }));
