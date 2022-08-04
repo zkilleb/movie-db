@@ -8,17 +8,21 @@ import {
   addMovie,
   editMovie,
   deleteMovie,
+  getActor,
+  getAllTitles,
+} from './controllers/movieControllers.js';
+import {
   getTMDBKeyword,
   getTMDBKeywordByPerson,
   getRecommendations,
-  getReview,
-  getActor,
+} from './controllers/tmdbControllers.js';
+import { getReview } from './controllers/reviewControllers.js';
+import {
   addRelease,
   deleteRelease,
-  getAllTitles,
   getAllReleases,
   deleteReleaseFromAll,
-} from './controllers.js';
+} from './controllers/releaseControllers.js';
 import { loggingMiddleware, configurationMiddleware } from './middleware.js';
 import { host, port } from './constants.js';
 
