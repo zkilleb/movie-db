@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { fetchReview, fetchGreatMovie } from 'eberts-api';
 import axios from 'axios';
 import { ObjectId } from 'mongodb';
-import { removeEmptyFields, generateTMDBParams } from './util.js';
+import { generateTMDBParams } from './util.js';
 import { BASE_URL, API_KEY, verbose } from './constants.js';
 import { connectToDB } from './db.js';
 
@@ -84,7 +84,7 @@ export async function getAllTitles(req, res) {
 }
 
 export async function addMovie(req, res) {
-  const doc = removeEmptyFields(req);
+  const doc = req.query;
   const movie = await movies.findOne({
     director: new RegExp(doc.director, 'i'),
     title: new RegExp(doc.title, 'i'),
@@ -106,7 +106,7 @@ export async function addMovie(req, res) {
 }
 
 export async function editMovie(req, res) {
-  const doc = removeEmptyFields(req);
+  const doc = req.query;
   const response = await movies.replaceOne(
     { _id: ObjectId(req.query.id) },
     doc,
@@ -188,7 +188,8 @@ export async function getReview(req, res) {
 }
 
 export async function addRelease(req, res) {
-  const doc = removeEmptyFields(req);
+  console.log('req', req.query);
+  const doc = req.query;
   if (!doc.releases) doc.releases = [];
   doc.releases.push({
     label: req.query.label,
@@ -208,7 +209,7 @@ export async function addRelease(req, res) {
 }
 
 export async function deleteRelease(req, res) {
-  const doc = removeEmptyFields(req);
+  const doc = req.query;
   let tempReleases = [...doc.releases];
   tempReleases.splice(req.query.index, 1);
   doc.releases = tempReleases;

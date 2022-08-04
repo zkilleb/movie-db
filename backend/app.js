@@ -19,7 +19,11 @@ import {
   getAllReleases,
   deleteReleaseFromAll,
 } from './controllers.js';
-import { loggingMiddleware, configurationMiddleware } from './middleware.js';
+import {
+  loggingMiddleware,
+  configurationMiddleware,
+  removeEmptyFieldsMiddleware,
+} from './middleware.js';
 import { host, port } from './constants.js';
 
 dotenv.config();
@@ -41,9 +45,9 @@ app.get('/title/id/:id', getTitleById);
 
 app.get('/random-title', getRandomTitle);
 
-app.post('/add/title', addMovie);
+app.post('/add/title', removeEmptyFieldsMiddleware, addMovie);
 
-app.put('/edit/title', editMovie);
+app.put('/edit/title', removeEmptyFieldsMiddleware, editMovie);
 
 app.delete('/title/:id', deleteMovie);
 
@@ -55,9 +59,9 @@ app.get('/recommendations/:id', getRecommendations);
 
 app.get('/review/:title/:year', getReview);
 
-app.put('/add/release', addRelease);
+app.put('/add/release', removeEmptyFieldsMiddleware, addRelease);
 
-app.put('/delete/release', deleteRelease);
+app.put('/delete/release', removeEmptyFieldsMiddleware, deleteRelease);
 
 app.put('/delete/release/:movieId/:releaseId', deleteReleaseFromAll);
 

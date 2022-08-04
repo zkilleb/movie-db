@@ -2,6 +2,7 @@ export function removeEmptyFields(req) {
   let doc = {};
   let releases = [];
   Object.keys(req.query).forEach((key) => {
+    console.log('key', key);
     if (key !== '_id') {
       if (key === 'releases' && req.query[key].length !== 0) {
         req.query[key].forEach((release) => {

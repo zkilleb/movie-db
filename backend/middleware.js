@@ -1,10 +1,19 @@
-import { getCurrentLoggingDate } from './util.js';
+import { getCurrentLoggingDate, removeEmptyFields } from './util.js';
 
 export function loggingMiddleware(req, res, next) {
   if (process.env.LOGGING === 'true') {
     const formattedDate = getCurrentLoggingDate();
     console.log(`${formattedDate}: ${req.method} ${req.url} ${res.statusCode}`);
   }
+  next();
+}
+
+export function removeEmptyFieldsMiddleware(req, res, next) {
+  console.log('middleware', req.query);
+  const tempRequest = req;
+  console.log('temp', tempRequest.query);
+  req.query = removeEmptyFields(tempRequest);
+  console.log('middleware out', req.query);
   next();
 }
 
