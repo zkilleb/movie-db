@@ -59,7 +59,7 @@ app.get('/person-search/:keyword/:type', getTMDBKeywordByPerson);
 
 app.get('/recommendations/:id', getRecommendations);
 
-app.get('/review/:title/:year', getReview);
+app.get('/review/:title/:year/:id', getReview);
 
 app.put('/add/release', addRelease);
 

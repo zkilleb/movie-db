@@ -203,7 +203,6 @@ export function Releases({ data }: { data: Result }) {
         navigate('/detail', {
           state: {
             id: data._id,
-            reviewLoaded: true,
           },
         });
       }
@@ -235,7 +234,6 @@ export function Releases({ data }: { data: Result }) {
         navigate('/detail', {
           state: {
             id: data._id,
-            reviewLoaded: true,
           },
         });
       }
