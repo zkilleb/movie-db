@@ -1,4 +1,5 @@
 import express from 'express';
+import helmet from 'helmet';
 import dotenv from 'dotenv';
 import {
   getTitles,
@@ -32,6 +33,7 @@ const app = express();
 
 app.use(loggingMiddleware);
 app.use(configurationMiddleware);
+app.use(helmet());
 
 app.get('/titles', getAllTitles);
 
