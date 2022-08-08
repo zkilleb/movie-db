@@ -14,7 +14,13 @@ import {
   Tooltip,
   TextField,
 } from '@material-ui/core';
-import { ArrowDownward, ArrowUpward, PictureAsPdf } from '@material-ui/icons';
+import {
+  ArrowDownward,
+  ArrowUpward,
+  ArrowForward,
+  PictureAsPdf,
+  FilterList,
+} from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';
 import * as pdfMake from 'pdfmake/build/pdfmake';
@@ -47,6 +53,12 @@ export function AllMovies() {
     asc: true,
   });
   const [filter, setFilter] = React.useState<string>('');
+  const [width, setWidth] = React.useState(window.innerWidth);
+  const [fullView, setFullView] = React.useState(false);
+
+  window.addEventListener('resize', () => {
+    setWidth(window.innerWidth);
+  });
 
   React.useEffect(() => {
     fetchData();
@@ -97,18 +109,38 @@ export function AllMovies() {
 
       <div className={classes.header}>
         <div className={classes.headerText}>All Movies</div>
-        <TextField
-          label="Filter Movies"
-          value={filter}
-          className={classes.field}
-          InputProps={{ className: classes.field }}
-          InputLabelProps={{ className: classes.field }}
-          onChange={handleFilterChange}
-        />
+      </div>
+      <div className={classes.subHeader}>
         <Tooltip title={'Export as PDF'}>
           <PictureAsPdf className={classes.pdfIcon} onClick={generatePdf} />
         </Tooltip>
+        {width > 576 || fullView ? (
+          <>
+            {width < 576 && fullView && (
+              <ArrowForward
+                className={classes.pdfIcon}
+                onClick={() => {
+                  setFullView(false);
+                }}
+              />
+            )}
+            <TextField
+              label="Filter Movies"
+              value={filter}
+              className={classes.field}
+              InputProps={{ className: classes.field }}
+              InputLabelProps={{ className: classes.field }}
+              onChange={handleFilterChange}
+            />
+          </>
+        ) : (
+          <FilterList
+            className={classes.pdfIcon}
+            onClick={() => setFullView(!fullView)}
+          />
+        )}
       </div>
+
       {displayedData && (
         <>
           <TableContainer className={classes.table} component={Paper}>
@@ -531,8 +563,8 @@ const useStyles = makeStyles(() => ({
     color: 'white',
   },
   pdfIcon: {
-    paddingRight: 10,
-    marginLeft: 'auto',
+    paddingRight: 20,
+    marginTop: 20,
     color: 'white',
   },
   headerText: {
@@ -540,9 +572,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    marginLeft: 200,
   },
   field: {
+    justifyContent: 'flex-end',
+    paddingRight: 20,
     color: 'white',
     '& label.Mui-focused': {
       color: 'white',
@@ -553,5 +586,10 @@ const useStyles = makeStyles(() => ({
     '& .MuiInput-underline:after': {
       borderBottomColor: 'white',
     },
+  },
+  subHeader: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginLeft: 'auto',
   },
 }));
