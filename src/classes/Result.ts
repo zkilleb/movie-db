@@ -12,6 +12,6 @@ export class Result {
   year: number = 0;
   _id: string = '0000';
   releases: Release[] = [];
-  reviewLoaded: boolean = false;
+  review?: any;
   genre?: string;
 }

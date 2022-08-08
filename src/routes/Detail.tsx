@@ -55,12 +55,17 @@ export function Detail() {
           setRecommendations(recommendationResponse);
         }
         try {
-          if (result.title && result.year && !state.reviewLoaded) {
-            const response = await getReview(result.title, result.year);
+          if (result.title && result.year && !result.review) {
+            const response = await getReview(
+              result.title,
+              result.year,
+              state.id,
+            );
             if (response.status === 200) {
               setReview(response.data);
             }
-          }
+          } else if (result.review && result.review !== 'Review not found')
+            setReview(result.review);
         } catch (e: any) {
           setValidation({ message: e.response.data, severity: 'info' });
           setOpen(true);
