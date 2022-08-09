@@ -32,6 +32,19 @@ import {
   StyledTableHeaderCell,
   Notification,
 } from '../components';
+import {
+  tableFieldStyle,
+  tableHeaderContentStyle,
+  tableHeaderStyle,
+  tableHeaderTextStyle,
+  tableStyle,
+  headerRowStyle,
+  subHeaderStyle,
+  pdfIconStyle,
+  tableContainerStyle,
+  dialogButtonStyle,
+  tableFooterStyle,
+} from '../styles';
 import { getFormattedDate } from '../util';
 import { Delete } from '@material-ui/icons';
 import { colors } from '../constants';
@@ -67,7 +80,7 @@ export function AllReleases() {
   }, []);
 
   return (
-    <div className={classes.container}>
+    <div className={classes.tableContainerStyle}>
       {validation && open && (
         <Notification
           message={validation.message}
@@ -95,13 +108,13 @@ export function AllReleases() {
 
         <DialogActions>
           <Button
-            className={classes.dialogButtons}
+            className={classes.dialogButtonStyle}
             onClick={() => handleDeleteModal()}
           >
             No
           </Button>
           <Button
-            className={classes.dialogButtons}
+            className={classes.dialogButtonStyle}
             onClick={handleDelete}
             data-cy="ConfirmDelete"
           >
@@ -110,18 +123,21 @@ export function AllReleases() {
         </DialogActions>
       </Dialog>
 
-      <div className={classes.header}>
-        <div className={classes.headerText}>All Releases</div>
+      <div className={classes.tableHeaderStyle}>
+        <div className={classes.tableHeaderTextStyle}>All Releases</div>
       </div>
-      <div className={classes.subHeader}>
+      <div className={classes.subHeaderStyle}>
         <Tooltip title={'Export as PDF'}>
-          <PictureAsPdf className={classes.pdfIcon} onClick={generatePdf} />
+          <PictureAsPdf
+            className={classes.pdfIconStyle}
+            onClick={generatePdf}
+          />
         </Tooltip>
         {width > 576 || fullView ? (
           <>
             {width < 576 && fullView && (
               <ArrowForward
-                className={classes.pdfIcon}
+                className={classes.pdfIconStyle}
                 onClick={() => {
                   setFullView(false);
                 }}
@@ -130,30 +146,30 @@ export function AllReleases() {
             <TextField
               label="Filter Releases"
               value={filter}
-              className={classes.field}
-              InputProps={{ className: classes.field }}
-              InputLabelProps={{ className: classes.field }}
+              className={classes.tableFieldStyle}
+              InputProps={{ className: classes.tableFieldStyle }}
+              InputLabelProps={{ className: classes.tableFieldStyle }}
               onChange={handleFilterChange}
             />
           </>
         ) : (
           <FilterList
-            className={classes.pdfIcon}
+            className={classes.pdfIconStyle}
             onClick={() => setFullView(!fullView)}
           />
         )}
       </div>
       {displayedData && (
         <>
-          <TableContainer className={classes.table} component={Paper}>
+          <TableContainer className={classes.tableStyle} component={Paper}>
             <Table aria-label="simple table">
               <TableHead data-cy="AllReleasesHeaderRow">
-                <TableRow className={classes.headerRow}>
+                <TableRow className={classes.headerRowStyle}>
                   <StyledTableHeaderCell
                     align="center"
                     onClick={() => sortData('title')}
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Title{renderSortArrow('title')}
                     </span>
                   </StyledTableHeaderCell>
@@ -161,7 +177,7 @@ export function AllReleases() {
                     align="center"
                     onClick={() => sortData('label')}
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Label{renderSortArrow('label')}
                     </span>
                   </StyledTableHeaderCell>
@@ -169,7 +185,7 @@ export function AllReleases() {
                     align="center"
                     onClick={() => sortData('format')}
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Format{renderSortArrow('format')}
                     </span>
                   </StyledTableHeaderCell>
@@ -177,7 +193,7 @@ export function AllReleases() {
                     align="center"
                     onClick={() => sortData('notes')}
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Notes{renderSortArrow('notes')}
                     </span>
                   </StyledTableHeaderCell>
@@ -232,9 +248,9 @@ export function AllReleases() {
               </TableBody>
             </Table>
           </TableContainer>
-          <span className={classes.footer}>
+          <div className={classes.tableFooterStyle}>
             Total Releases: {displayedData.length}
-          </span>
+          </div>
         </>
       )}
     </div>
@@ -367,6 +383,9 @@ export function AllReleases() {
 
   async function generatePdf() {
     const docDefinition = {
+      info: {
+        title: 'Releases.pdf',
+      },
       styles: {
         header: {
           fontSize: 30,
@@ -413,7 +432,9 @@ export function AllReleases() {
       ],
     };
     pdfMake.createPdf(docDefinition).download('Releases.pdf');
-    pdfMake.createPdf(docDefinition).open();
+    if (!navigator.userAgent.toLowerCase().includes('android')) {
+      pdfMake.createPdf(docDefinition).open();
+    }
   }
 
   function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -424,61 +445,15 @@ export function AllReleases() {
 }
 
 const useStyles = makeStyles(() => ({
-  header: {
-    color: 'white',
-    fontSize: 30,
-    display: 'flex',
-  },
-  headerText: {
-    fontSize: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  table: {
-    backgroundColor: colors.tableBackground,
-    width: '95%',
-    marginTop: 10,
-    margin: 'auto',
-  },
-  headerRow: {
-    backgroundColor: colors.tableHeaderRowBackground,
-  },
-  container: {
-    overflow: 'hidden',
-  },
-  headerContent: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  footer: {
-    color: 'white',
-  },
-  dialogButtons: {
-    color: 'white',
-  },
-  pdfIcon: {
-    paddingRight: 20,
-    marginTop: 20,
-    color: 'white',
-  },
-  field: {
-    justifyContent: 'flex-end',
-    paddingRight: 20,
-    color: 'white',
-    '& label.Mui-focused': {
-      color: 'white',
-    },
-    '& .MuiInput-underline:before': {
-      borderBottomColor: 'white',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'white',
-    },
-  },
-  subHeader: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    marginLeft: 'auto',
-  },
+  tableFieldStyle,
+  tableHeaderContentStyle,
+  tableHeaderStyle,
+  tableHeaderTextStyle,
+  tableStyle,
+  headerRowStyle,
+  subHeaderStyle,
+  pdfIconStyle,
+  tableContainerStyle,
+  dialogButtonStyle,
+  tableFooterStyle,
 }));

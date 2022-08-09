@@ -2,7 +2,12 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, useLocation } from 'react-router-dom';
 import { Search } from '.';
-import { colors } from '../constants';
+import {
+  headerLinkStyle,
+  headerCurrentLinkStyle,
+  headerStyle,
+  headerSearchStyle,
+} from '../styles';
 
 export function Header({
   callback,
@@ -20,48 +25,49 @@ export function Header({
   }, [location, state, callback]);
 
   return (
-    <div className={classes.header} data-cy="Header">
+    <div className={classes.headerStyle} data-cy="Header">
       <Link
         to="/"
-        className={`${classes.link} ${
-          location.pathname === '/' && classes.current
+        className={`${classes.headerLinkStyle} ${
+          location.pathname === '/' && classes.headerCurrentLinkStyle
         }`}
       >
         Home
       </Link>
       <Link
         to="/all-movies"
-        className={`${classes.link} ${
-          location.pathname === '/all-movies' && classes.current
+        className={`${classes.headerLinkStyle} ${
+          location.pathname === '/all-movies' && classes.headerCurrentLinkStyle
         }`}
       >
         All Movies
       </Link>
       <Link
         to="/all-releases"
-        className={`${classes.link} ${
-          location.pathname === '/all-releases' && classes.current
+        className={`${classes.headerLinkStyle} ${
+          location.pathname === '/all-releases' &&
+          classes.headerCurrentLinkStyle
         }`}
       >
         All Releases
       </Link>
       <Link
         to="/add"
-        className={`${classes.link} ${
-          location.pathname === '/add' && classes.current
+        className={`${classes.headerLinkStyle} ${
+          location.pathname === '/add' && classes.headerCurrentLinkStyle
         }`}
       >
         Add Movie
       </Link>
       <Link
         to="/stats"
-        className={`${classes.link} ${
-          location.pathname === '/stats' && classes.current
+        className={`${classes.headerLinkStyle} ${
+          location.pathname === '/stats' && classes.headerCurrentLinkStyle
         }`}
       >
         Stats
       </Link>
-      <div className={classes.search}>
+      <div className={classes.headerSearchStyle}>
         <Search />
       </div>
     </div>
@@ -69,31 +75,10 @@ export function Header({
 }
 
 const useStyles = makeStyles(() => ({
-  header: {
-    width: '100%',
-    height: 55,
-    backgroundColor: colors.tableHeaderRowBackground,
-    display: 'flex',
-    alignItems: 'center',
-  },
-  link: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    fontFamily: 'Graphik-Semibold-Web,sans-serif',
-    fontWeight: 'bold',
-    textDecoration: 'none',
-    color: 'white',
-  },
-  search: {
-    paddingRight: 10,
-    color: 'white',
-    marginLeft: 'auto',
-  },
-  current: {
-    textDecoration: 'underline',
-    textDecorationThickness: 2.5,
-    textUnderlineOffset: '.5em',
-  },
+  headerStyle,
+  headerLinkStyle,
+  headerSearchStyle,
+  headerCurrentLinkStyle,
 }));
 
 interface ISearchHistory {

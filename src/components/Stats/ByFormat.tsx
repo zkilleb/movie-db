@@ -4,6 +4,7 @@ import { PieChart, Pie, Tooltip, Cell } from 'recharts';
 import { chartColors } from '../../constants';
 import { ReleaseStat } from '../../classes';
 import { getAllReleases } from '../../handlers';
+import { statHeaderStyle } from '../../styles';
 
 export function ByFormat() {
   const classes = useStyles();
@@ -20,7 +21,7 @@ export function ByFormat() {
 
   return (
     <div>
-      <div className={classes.header}>Releases By Format</div>
+      <div className={classes.statHeaderStyle}>Releases By Format</div>
       {flatReleases && (
         <PieChart width={250} height={250}>
           <Tooltip />
@@ -67,7 +68,5 @@ interface AggregatedRelease {
 }
 
 const useStyles = makeStyles(() => ({
-  header: {
-    fontSize: 25,
-  },
+  statHeaderStyle,
 }));
