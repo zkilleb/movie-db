@@ -33,6 +33,19 @@ import {
   StyledTableCell,
   StyledTableHeaderCell,
 } from '../components';
+import {
+  tableFieldStyle,
+  tableHeaderContentStyle,
+  tableHeaderStyle,
+  tableHeaderTextStyle,
+  tableStyle,
+  headerRowStyle,
+  subHeaderStyle,
+  pdfIconStyle,
+  tableContainerStyle,
+  dialogButtonStyle,
+  tableFooterStyle,
+} from '../styles';
 import { colors } from '../constants';
 import { Delete } from '@material-ui/icons';
 
@@ -65,7 +78,7 @@ export function AllMovies() {
   }, []);
 
   return (
-    <div className={classes.container}>
+    <div className={classes.tableContainerStyle}>
       {validation && open && (
         <Notification
           message={validation.message}
@@ -92,13 +105,13 @@ export function AllMovies() {
 
         <DialogActions>
           <Button
-            className={classes.dialogButtons}
+            className={classes.dialogButtonStyle}
             onClick={() => handleDeleteModal()}
           >
             No
           </Button>
           <Button
-            className={classes.dialogButtons}
+            className={classes.dialogButtonStyle}
             onClick={handleDelete}
             data-cy="ConfirmDelete"
           >
@@ -107,18 +120,21 @@ export function AllMovies() {
         </DialogActions>
       </Dialog>
 
-      <div className={classes.header}>
-        <div className={classes.headerText}>All Movies</div>
+      <div className={classes.tableHeaderStyle}>
+        <div className={classes.tableHeaderTextStyle}>All Movies</div>
       </div>
-      <div className={classes.subHeader}>
+      <div className={classes.subHeaderStyle}>
         <Tooltip title={'Export as PDF'}>
-          <PictureAsPdf className={classes.pdfIcon} onClick={generatePdf} />
+          <PictureAsPdf
+            className={classes.pdfIconStyle}
+            onClick={generatePdf}
+          />
         </Tooltip>
         {width > 576 || fullView ? (
           <>
             {width < 576 && fullView && (
               <ArrowForward
-                className={classes.pdfIcon}
+                className={classes.pdfIconStyle}
                 onClick={() => {
                   setFullView(false);
                 }}
@@ -127,15 +143,15 @@ export function AllMovies() {
             <TextField
               label="Filter Movies"
               value={filter}
-              className={classes.field}
-              InputProps={{ className: classes.field }}
-              InputLabelProps={{ className: classes.field }}
+              className={classes.tableFieldStyle}
+              InputProps={{ className: classes.tableFieldStyle }}
+              InputLabelProps={{ className: classes.tableFieldStyle }}
               onChange={handleFilterChange}
             />
           </>
         ) : (
           <FilterList
-            className={classes.pdfIcon}
+            className={classes.pdfIconStyle}
             onClick={() => setFullView(!fullView)}
           />
         )}
@@ -143,15 +159,15 @@ export function AllMovies() {
 
       {displayedData && (
         <>
-          <TableContainer className={classes.table} component={Paper}>
+          <TableContainer className={classes.tableStyle} component={Paper}>
             <Table aria-label="simple table">
               <TableHead data-cy="AllMoviesHeaderRow">
-                <TableRow className={classes.headerRow}>
+                <TableRow className={classes.headerRowStyle}>
                   <StyledTableHeaderCell
                     onClick={() => sortData('title')}
                     align="center"
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Title{renderSortArrow('title')}
                     </span>
                   </StyledTableHeaderCell>
@@ -159,7 +175,7 @@ export function AllMovies() {
                     onClick={() => sortData('director')}
                     align="center"
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Director{renderSortArrow('director')}
                     </span>
                   </StyledTableHeaderCell>
@@ -167,7 +183,7 @@ export function AllMovies() {
                     onClick={() => sortData('year')}
                     align="center"
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Release Year{renderSortArrow('year')}
                     </span>
                   </StyledTableHeaderCell>
@@ -175,7 +191,7 @@ export function AllMovies() {
                     onClick={() => sortData('length')}
                     align="center"
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Runtime{renderSortArrow('length')}
                     </span>
                   </StyledTableHeaderCell>
@@ -183,7 +199,7 @@ export function AllMovies() {
                     onClick={() => sortData('language')}
                     align="center"
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Language{renderSortArrow('language')}
                     </span>
                   </StyledTableHeaderCell>
@@ -191,7 +207,7 @@ export function AllMovies() {
                     onClick={() => sortData('color')}
                     align="center"
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Color{renderSortArrow('color')}
                     </span>
                   </StyledTableHeaderCell>
@@ -199,7 +215,7 @@ export function AllMovies() {
                     onClick={() => sortData('studio')}
                     align="center"
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Studio{renderSortArrow('studio')}
                     </span>
                   </StyledTableHeaderCell>
@@ -210,7 +226,7 @@ export function AllMovies() {
                     onClick={() => sortData('genre')}
                     align="center"
                   >
-                    <span className={classes.headerContent}>
+                    <span className={classes.tableHeaderContentStyle}>
                       Genre{renderSortArrow('genre')}
                     </span>
                   </StyledTableHeaderCell>
@@ -305,9 +321,9 @@ export function AllMovies() {
               </TableBody>
             </Table>
           </TableContainer>
-          <span className={classes.footer}>
+          <div className={classes.tableFooterStyle}>
             Total Movies: {displayedData.length}
-          </span>
+          </div>
         </>
       )}
     </div>
@@ -465,6 +481,9 @@ export function AllMovies() {
 
   async function generatePdf() {
     const docDefinition = {
+      info: {
+        title: 'Movies.pdf',
+      },
       styles: {
         header: {
           fontSize: 30,
@@ -524,7 +543,9 @@ export function AllMovies() {
       ],
     };
     pdfMake.createPdf(docDefinition).download('Movies.pdf');
-    pdfMake.createPdf(docDefinition).open();
+    if (!navigator.userAgent.toLowerCase().includes('android')) {
+      pdfMake.createPdf(docDefinition).open();
+    }
   }
 
   function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -535,61 +556,15 @@ export function AllMovies() {
 }
 
 const useStyles = makeStyles(() => ({
-  header: {
-    color: 'white',
-    fontSize: 30,
-    display: 'flex',
-  },
-  table: {
-    backgroundColor: colors.tableBackground,
-    width: '95%',
-    marginTop: 10,
-    margin: 'auto',
-  },
-  headerRow: {
-    backgroundColor: colors.tableHeaderRowBackground,
-  },
-  dialogButtons: {
-    color: 'white',
-  },
-  container: {
-    overflow: 'hidden',
-  },
-  headerContent: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  footer: {
-    color: 'white',
-  },
-  pdfIcon: {
-    paddingRight: 20,
-    marginTop: 20,
-    color: 'white',
-  },
-  headerText: {
-    fontSize: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  field: {
-    justifyContent: 'flex-end',
-    paddingRight: 20,
-    color: 'white',
-    '& label.Mui-focused': {
-      color: 'white',
-    },
-    '& .MuiInput-underline:before': {
-      borderBottomColor: 'white',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'white',
-    },
-  },
-  subHeader: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    marginLeft: 'auto',
-  },
+  tableHeaderStyle,
+  tableStyle,
+  headerRowStyle,
+  dialogButtonStyle,
+  tableContainerStyle,
+  tableHeaderContentStyle,
+  tableFooterStyle,
+  pdfIconStyle,
+  tableHeaderTextStyle,
+  tableFieldStyle,
+  subHeaderStyle,
 }));

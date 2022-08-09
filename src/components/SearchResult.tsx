@@ -3,7 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import { Result } from '../classes';
-import { colors } from '../constants';
+import {
+  searchResultNoPosterStyle,
+  searchResultPosterStyle,
+  paperStyle,
+  maxSearchResultStyle,
+  minSearchResultStyle,
+} from '../styles';
 
 export function SearchResult({ data, keywordResults }: IResult) {
   const classes = useStyles();
@@ -34,12 +40,16 @@ export function SearchResult({ data, keywordResults }: IResult) {
     <Paper
       data-cy="SearchResult"
       elevation={1}
-      className={`${classes.paper} ${width > 576 ? classes.max : classes.min}`}
+      className={`${classes.paperStyle} ${
+        width > 576
+          ? classes.maxSearchResultStyle
+          : classes.minSearchResultStyle
+      }`}
       onClick={handleClick}
     >
       {result ? (
         <img
-          className={classes.poster}
+          className={classes.searchResultPosterStyle}
           src={`https://image.tmdb.org/t/p/original${result.poster_path}`}
           alt={`${data.title} poster`}
           width="106.7"
@@ -47,7 +57,7 @@ export function SearchResult({ data, keywordResults }: IResult) {
           data-cy="PosterImage"
         />
       ) : (
-        <div className={classes.noPoster}>No Poster Found</div>
+        <div className={classes.searchResultNoPosterStyle}>No Poster Found</div>
       )}
       <div>
         <div>{data.title} </div>
@@ -66,32 +76,11 @@ export function SearchResult({ data, keywordResults }: IResult) {
 }
 
 const useStyles = makeStyles(() => ({
-  paper: {
-    backgroundColor: colors.tableBackground,
-    margin: 'auto',
-    marginTop: 25,
-    fontSize: 15,
-    color: 'white',
-    display: 'flex',
-    textAlign: 'left',
-    borderRadius: '10px 10px 10px 10px',
-  },
-  max: {
-    width: '50%',
-  },
-  min: {
-    width: '75%',
-  },
-  poster: {
-    padding: 10,
-  },
-  noPoster: {
-    width: 106.7,
-    height: 160,
-    margin: 10,
-    textAlign: 'center',
-    border: 'solid',
-  },
+  paperStyle,
+  maxSearchResultStyle,
+  minSearchResultStyle,
+  searchResultPosterStyle,
+  searchResultNoPosterStyle,
 }));
 
 interface IResult {

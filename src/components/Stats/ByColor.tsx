@@ -4,6 +4,7 @@ import { PieChart, Pie, Tooltip, Cell } from 'recharts';
 import { chartColors } from '../../constants';
 import { Result } from '../../classes';
 import { getAllMovies } from '../../handlers';
+import { statHeaderStyle } from '../../styles';
 
 export function ByColor() {
   const classes = useStyles();
@@ -21,7 +22,7 @@ export function ByColor() {
 
   return (
     <div>
-      <div className={classes.header}>Movies By Color</div>
+      <div className={classes.statHeaderStyle}>Movies By Color</div>
       {compiledColors && (
         <PieChart width={250} height={250}>
           <Tooltip />
@@ -63,7 +64,5 @@ interface AggregatedColor {
 }
 
 const useStyles = makeStyles(() => ({
-  header: {
-    fontSize: 25,
-  },
+  statHeaderStyle,
 }));

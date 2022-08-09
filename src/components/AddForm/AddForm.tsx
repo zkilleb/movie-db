@@ -15,6 +15,7 @@ import { colors } from '../../constants';
 import { Notification } from '..';
 import { AddRelease } from './AddRelease';
 import { AddActor } from './AddActor';
+import { formFieldStyle } from '../../styles';
 
 export function AddForm(data: IAddForm) {
   const editResults = data.data;
@@ -70,8 +71,8 @@ export function AddForm(data: IAddForm) {
       <Paper elevation={1} className={classes.paper}>
         <form className={classes.root} noValidate autoComplete="off">
           <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
+            InputProps={{ className: classes.formFieldStyle }}
+            InputLabelProps={{ className: classes.formFieldStyle }}
             label="Title"
             id="title"
             value={title}
@@ -79,8 +80,8 @@ export function AddForm(data: IAddForm) {
             data-cy="TitleField"
           />
           <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
+            InputProps={{ className: classes.formFieldStyle }}
+            InputLabelProps={{ className: classes.formFieldStyle }}
             label="Runtime"
             id="length"
             value={length}
@@ -89,8 +90,8 @@ export function AddForm(data: IAddForm) {
             data-cy="RuntimeField"
           />
           <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
+            InputProps={{ className: classes.formFieldStyle }}
+            InputLabelProps={{ className: classes.formFieldStyle }}
             label="Release Year"
             id="year"
             value={year}
@@ -99,7 +100,7 @@ export function AddForm(data: IAddForm) {
             data-cy="ReleaseYearField"
           />
           <FormControlLabel
-            className={`${classes.field} ${classes.checkbox}`}
+            className={`${classes.formFieldStyle} ${classes.checkbox}`}
             control={
               <Checkbox
                 checked={color}
@@ -111,8 +112,8 @@ export function AddForm(data: IAddForm) {
             label="Color"
           />
           <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
+            InputProps={{ className: classes.formFieldStyle }}
+            InputLabelProps={{ className: classes.formFieldStyle }}
             label="Language(s)"
             id="language"
             value={language}
@@ -120,8 +121,8 @@ export function AddForm(data: IAddForm) {
             data-cy="LanguageField"
           />
           <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
+            InputProps={{ className: classes.formFieldStyle }}
+            InputLabelProps={{ className: classes.formFieldStyle }}
             label="Director"
             id="director"
             value={director}
@@ -129,8 +130,8 @@ export function AddForm(data: IAddForm) {
             data-cy="DirectorField"
           />
           <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
+            InputProps={{ className: classes.formFieldStyle }}
+            InputLabelProps={{ className: classes.formFieldStyle }}
             label="Studio"
             id="studio"
             value={studio}
@@ -138,8 +139,8 @@ export function AddForm(data: IAddForm) {
             data-cy="StudioField"
           />
           <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
+            InputProps={{ className: classes.formFieldStyle }}
+            InputLabelProps={{ className: classes.formFieldStyle }}
             label="Genre"
             id="genre"
             value={genre}
@@ -147,8 +148,8 @@ export function AddForm(data: IAddForm) {
             data-cy="GenreField"
           />
           <TextField
-            InputProps={{ className: classes.field }}
-            InputLabelProps={{ className: classes.field }}
+            InputProps={{ className: classes.formFieldStyle }}
+            InputLabelProps={{ className: classes.formFieldStyle }}
             label="Notes"
             id="notes"
             value={notes}
@@ -326,9 +327,7 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       margin: theme.spacing(1),
     },
-    '& label.Mui-focused': {
-      color: 'white',
-    },
+    '& label.Mui-focused': formFieldStyle,
     '& .MuiInput-underline:before': {
       borderBottomColor: 'white',
     },
@@ -339,9 +338,7 @@ const useStyles = makeStyles((theme) => ({
   checkbox: {
     marginTop: 20,
   },
-  field: {
-    color: 'white',
-  },
+  formFieldStyle,
   paper: {
     backgroundColor: colors.tableBackground,
     width: '90%',

@@ -22,6 +22,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Result, Validation } from '../classes';
 import { addRelease, deleteRelease } from '../handlers';
 import { colors, formats } from '../constants';
+import { dialogButtonStyle } from '../styles';
 import { Notification, StyledTableCell, StyledTableHeaderCell } from '.';
 
 export function Releases({ data }: { data: Result }) {
@@ -62,13 +63,13 @@ export function Releases({ data }: { data: Result }) {
 
         <DialogActions>
           <Button
-            className={classes.dialogButtons}
+            className={classes.dialogButtonStyle}
             onClick={() => handleDeleteModal()}
           >
             No
           </Button>
           <Button
-            className={classes.dialogButtons}
+            className={classes.dialogButtonStyle}
             onClick={() => handleDelete()}
             data-cy="ConfirmDelete"
           >
@@ -300,9 +301,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
-  dialogButtons: {
-    color: 'white',
-  },
+  dialogButtonStyle,
   headerRow: {
     backgroundColor: colors.tableHeaderRowBackground,
   },

@@ -14,6 +14,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Result, Validation, Ebert, TMDBResult } from '../classes';
 import { Notification, Review, Releases } from '../components';
 import { colors } from '../constants';
+import { dialogButtonStyle } from '../styles';
 import {
   getRecommendations,
   deleteMovie,
@@ -104,11 +105,14 @@ export function Detail() {
         </DialogContent>
 
         <DialogActions>
-          <Button className={classes.dialogButtons} onClick={handleDeleteModal}>
+          <Button
+            className={classes.dialogButtonStyle}
+            onClick={handleDeleteModal}
+          >
             No
           </Button>
           <Button
-            className={classes.dialogButtons}
+            className={classes.dialogButtonStyle}
             onClick={handleDelete}
             data-cy="ConfirmDelete"
           >
@@ -331,9 +335,7 @@ const useStyles = makeStyles(() => ({
     marginLeft: 5,
     marginRight: 5,
   },
-  dialogButtons: {
-    color: 'white',
-  },
+  dialogButtonStyle,
   field: {
     '&:hover': {
       textDecoration: 'underline',
@@ -370,6 +372,5 @@ interface IRecommend {
 interface IDetailProps {
   state: {
     id: string;
-    reviewLoaded?: boolean;
   };
 }
