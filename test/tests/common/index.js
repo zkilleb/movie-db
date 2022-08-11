@@ -62,11 +62,15 @@ export function verifyMovieIsAdded() {
     cy.get(objects.releaseLabelField).type('Paramount');
     cy.get(objects.releaseNotesField).type('Individual release');
     cy.get(objects.addReleaseButton).click();
-    cy.get(objects.releaseResultRow).eq(0).should('contain', 'Paramount');
-    cy.get(objects.releaseResultRow).eq(0).should('contain', 'blu-ray');
-    cy.get(objects.releaseResultRow)
+    cy.get(`${objects.releaseResultRow} >>>>`)
       .eq(0)
-      .should('contain', 'Individual release');
+      .should('have.value', 'Paramount');
+    cy.get(`${objects.releaseResultRow} >>>>`)
+      .eq(1)
+      .should('have.value', 'blu-ray');
+    cy.get(`${objects.releaseResultRow} >>>>`)
+      .eq(2)
+      .should('have.value', 'Individual release');
     cy.get(objects.submitButton).click();
     cy.wait(3000);
   });
