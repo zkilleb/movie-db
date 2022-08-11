@@ -16,15 +16,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { Release } from '../../classes';
 import { colors, formats } from '../../constants';
 import { StyledTableCell, StyledTableHeaderCell } from '..';
+import { AddedReleaseCell } from './AddedReleaseCell';
 
 export function AddRelease({
   releases,
   handleAddRelease,
   deleteRelease,
+  handleAddedReleaseChange,
 }: {
   releases: Release[];
   handleAddRelease: ({ label, format, notes }: Release) => void;
   deleteRelease: (index: number) => void;
+  handleAddedReleaseChange: (value: any, index: number) => void;
 }) {
   const classes = useStyles();
   const [label, setLabel] = React.useState<string>();
@@ -46,9 +49,42 @@ export function AddRelease({
             {releases.map((release, index) => {
               return (
                 <TableRow key={index} data-cy="ReleaseResultRow">
-                  <StyledTableCell>{release.label}</StyledTableCell>
-                  <StyledTableCell>{release.format}</StyledTableCell>
-                  <StyledTableCell>{release.notes}</StyledTableCell>
+                  <AddedReleaseCell
+                    id="label"
+                    value={release.label}
+                    handleAddedReleaseChange={(value) =>
+                      handleInterimAddedReleaseChange(
+                        value,
+                        release,
+                        index,
+                        'label',
+                      )
+                    }
+                  />
+                  <AddedReleaseCell
+                    id="format"
+                    value={release.format}
+                    handleAddedReleaseChange={(value) =>
+                      handleInterimAddedReleaseChange(
+                        value,
+                        release,
+                        index,
+                        'format',
+                      )
+                    }
+                  />
+                  <AddedReleaseCell
+                    id="notes"
+                    value={release.notes}
+                    handleAddedReleaseChange={(value) =>
+                      handleInterimAddedReleaseChange(
+                        value,
+                        release,
+                        index,
+                        'notes',
+                      )
+                    }
+                  />
                   <StyledTableCell>
                     <Delete
                       onClick={() => deleteRelease(index)}
@@ -120,6 +156,46 @@ export function AddRelease({
       </TableContainer>
     </div>
   );
+
+  function handleInterimAddedReleaseChange(
+    value: string,
+    release: Release,
+    index: number,
+    id: string,
+  ) {
+    switch (id) {
+      case 'label':
+        handleAddedReleaseChange(
+          {
+            label: value,
+            format: release.format,
+            notes: release.notes,
+          },
+          index,
+        );
+        break;
+      case 'format':
+        handleAddedReleaseChange(
+          {
+            label: release.label,
+            format: value,
+            notes: release.notes,
+          },
+          index,
+        );
+        break;
+      case 'notes':
+        handleAddedReleaseChange(
+          {
+            label: release.label,
+            format: release.format,
+            notes: value,
+          },
+          index,
+        );
+        break;
+    }
+  }
 
   function addRelease({ label, format, notes }: Release) {
     handleAddRelease({ label, format, notes, uuid: uuidv4() });

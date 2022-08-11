@@ -166,6 +166,7 @@ export function AddForm(data: IAddForm) {
             releases={releases}
             handleAddRelease={handleAddRelease}
             deleteRelease={deleteRelease}
+            handleAddedReleaseChange={handleAddedReleaseChange}
           />
         </form>
         {window.location.pathname === '/edit' && (
@@ -256,6 +257,12 @@ export function AddForm(data: IAddForm) {
   function deleteRelease(index: number) {
     let tempReleases = [...releases];
     tempReleases.splice(index, 1);
+    setReleases(tempReleases);
+  }
+
+  function handleAddedReleaseChange(value: any, index: number) {
+    const tempReleases = [...releases];
+    tempReleases[index] = value;
     setReleases(tempReleases);
   }
 
