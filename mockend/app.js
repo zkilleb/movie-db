@@ -91,7 +91,7 @@ app.get('/recommendations/:id', (req, res) => {
   res.send(RECOMMENDATIONS);
 });
 
-app.get('/review/:title/:year', (req, res) => {
+app.get('/review/:title/:year/:id', (req, res) => {
   res.status(200).send(mockReview());
 });
 
@@ -116,6 +116,10 @@ app.put('/delete/release/:movieId/:releaseId', (req, res) => {
 
 app.get('/releases', (req, res) => {
   res.status(200).send(mockAllReleases());
+});
+
+app.put('/add/rating', (req, res) => {
+  res.status(200).json({ message: 'Rating succesfully added' });
 });
 
 app.listen(8080, () => {

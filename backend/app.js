@@ -11,6 +11,7 @@ import {
   deleteMovie,
   getActor,
   getAllTitles,
+  addRating,
 } from './controllers/movieControllers.js';
 import {
   getTMDBKeyword,
@@ -68,6 +69,8 @@ app.put('/delete/release', deleteRelease);
 app.put('/delete/release/:movieId/:releaseId', deleteReleaseFromAll);
 
 app.get('/releases', getAllReleases);
+
+app.put('/add/rating', addRating);
 
 app.listen(port, () => {
   console.log(`App listening at ${host}:${port}`);

@@ -123,3 +123,16 @@ export async function deleteMovie(req, res) {
     });
   }
 }
+
+export async function addRating(req, res) {
+  try {
+    movies.updateOne(
+      { _id: ObjectId(req.query.id) },
+      { $set: { rating: req.query.rating } },
+      false,
+    );
+    res.status(200).json({ message: 'Rating succesfully added' });
+  } catch (e) {
+    res.status(400).json({ message: 'Error adding rating' });
+  }
+}

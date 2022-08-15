@@ -14,4 +14,5 @@ export class Result {
   releases: Release[] = [];
   review?: any;
   genre?: string;
+  rating?: number;
 }

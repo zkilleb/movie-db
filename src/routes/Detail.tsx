@@ -192,6 +192,7 @@ export function Detail() {
             <div
               className={width > 576 ? classes.extraInfo : classes.minExtraInfo}
             >
+              <Review stars={data.rating} id={data._id} />
               {review && (
                 <Review
                   writer={review.reviewWriter}
