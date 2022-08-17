@@ -71,6 +71,7 @@ export function AddForm(data: IAddForm) {
       <Paper elevation={1} className={classes.paper}>
         <form className={classes.root} noValidate autoComplete="off">
           <TextField
+            className={validation && !title ? classes.errorRoot : undefined}
             InputProps={{ className: classes.formFieldStyle }}
             InputLabelProps={{ className: classes.formFieldStyle }}
             label="Title"
@@ -90,6 +91,7 @@ export function AddForm(data: IAddForm) {
             data-cy="RuntimeField"
           />
           <TextField
+            className={validation && !year ? classes.errorRoot : undefined}
             InputProps={{ className: classes.formFieldStyle }}
             InputLabelProps={{ className: classes.formFieldStyle }}
             label="Release Year"
@@ -121,6 +123,7 @@ export function AddForm(data: IAddForm) {
             data-cy="LanguageField"
           />
           <TextField
+            className={validation && !director ? classes.errorRoot : undefined}
             InputProps={{ className: classes.formFieldStyle }}
             InputLabelProps={{ className: classes.formFieldStyle }}
             label="Director"
@@ -340,6 +343,15 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiInput-underline:after': {
       borderBottomColor: 'white',
+    },
+  },
+  errorRoot: {
+    '& label.Mui-focused': formFieldStyle,
+    '& .MuiInput-underline:before': {
+      borderBottomColor: 'rgb(215, 83, 67)',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'rgb(215, 83, 67)',
     },
   },
   checkbox: {
