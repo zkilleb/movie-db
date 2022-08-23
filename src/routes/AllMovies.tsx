@@ -10,6 +10,8 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
+  DialogContentText,
+  DialogTitle,
   Button,
   Tooltip,
   TextField,
@@ -20,14 +22,15 @@ import {
   ArrowForward,
   PictureAsPdf,
   FilterList,
+  Publish,
 } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Result, Validation } from '../classes';
+import { BulkResponse, Result, Validation } from '../classes';
 import { getFormattedDate } from '../util';
-import { getAllMovies, deleteMovie } from '../handlers';
+import { getAllMovies, deleteMovie, addBulkMovie } from '../handlers';
 import {
   Notification,
   StyledTableCell,
@@ -45,6 +48,9 @@ import {
   tableContainerStyle,
   dialogButtonStyle,
   tableFooterStyle,
+  leftSubHeaderStyle,
+  parentHeaderStyle,
+  uploadButtonStyle,
 } from '../styles';
 import { colors } from '../constants';
 import { Delete } from '@material-ui/icons';
@@ -68,6 +74,8 @@ export function AllMovies() {
   const [filter, setFilter] = React.useState<string>('');
   const [width, setWidth] = React.useState(window.innerWidth);
   const [fullView, setFullView] = React.useState(false);
+  const [csvOpen, setCSVOpen] = React.useState(false);
+  const [bulkAddResponse, setBulkAddResponse] = React.useState<BulkResponse>();
 
   window.addEventListener('resize', () => {
     setWidth(window.innerWidth);
@@ -87,6 +95,61 @@ export function AllMovies() {
           handleClose={handleClose}
         />
       )}
+
+      <Dialog
+        open={csvOpen}
+        PaperProps={{
+          style: {
+            backgroundColor: colors.tableBackground,
+            color: 'white',
+            width: '50%',
+            height: '20%',
+          },
+        }}
+      >
+        <DialogTitle>Add Movies By CSV File</DialogTitle>
+        <DialogContent>
+          <DialogContentText className={classes.tableFooterStyle}>
+            Bulk upload movies via CSV file. Ensure CSV file contains a header
+            row and data follows the order of title, length, year, color,
+            language, director, studio, notes, genre. Leave empty fields blank.
+            Actors and releases will have to be added manually.
+          </DialogContentText>
+          <Button
+            className={classes.uploadButtonStyle}
+            variant="contained"
+            component="label"
+          >
+            Upload File
+            <input
+              accept=".csv"
+              type="file"
+              hidden
+              onChange={handleFileUpload}
+            />
+          </Button>
+          <DialogContentText className={classes.tableFooterStyle}>
+            <div>{bulkAddResponse && bulkAddResponse.message}</div>
+            {bulkAddResponse &&
+              bulkAddResponse.errors.map((error) => (
+                <div>
+                  {error.item}: {error.reason}
+                </div>
+              ))}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            className={classes.dialogButtonStyle}
+            onClick={() => {
+              setCSVOpen(false);
+              setBulkAddResponse(undefined);
+            }}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog
         open={dialogOpen}
@@ -123,38 +186,48 @@ export function AllMovies() {
       <div className={classes.tableHeaderStyle}>
         <div className={classes.tableHeaderTextStyle}>All Movies</div>
       </div>
-      <div className={classes.subHeaderStyle}>
-        <Tooltip title={'Export as PDF'}>
-          <PictureAsPdf
-            className={classes.pdfIconStyle}
-            onClick={generatePdf}
-          />
-        </Tooltip>
-        {width > 576 || fullView ? (
-          <>
-            {width < 576 && fullView && (
-              <ArrowForward
-                className={classes.pdfIconStyle}
-                onClick={() => {
-                  setFullView(false);
-                }}
-              />
-            )}
-            <TextField
-              label="Filter Movies"
-              value={filter}
-              className={classes.tableFieldStyle}
-              InputProps={{ className: classes.tableFieldStyle }}
-              InputLabelProps={{ className: classes.tableFieldStyle }}
-              onChange={handleFilterChange}
+      <div className={classes.parentHeaderStyle}>
+        <div className={classes.leftSubHeaderStyle}>
+          <Tooltip title={'Add Movies By CSV'}>
+            <Publish
+              className={classes.pdfIconStyle}
+              onClick={() => setCSVOpen(true)}
             />
-          </>
-        ) : (
-          <FilterList
-            className={classes.pdfIconStyle}
-            onClick={() => setFullView(!fullView)}
-          />
-        )}
+          </Tooltip>
+        </div>
+        <div className={classes.subHeaderStyle}>
+          <Tooltip title={'Export as PDF'}>
+            <PictureAsPdf
+              className={classes.pdfIconStyle}
+              onClick={generatePdf}
+            />
+          </Tooltip>
+          {width > 576 || fullView ? (
+            <>
+              {width < 576 && fullView && (
+                <ArrowForward
+                  className={classes.pdfIconStyle}
+                  onClick={() => {
+                    setFullView(false);
+                  }}
+                />
+              )}
+              <TextField
+                label="Filter Movies"
+                value={filter}
+                className={classes.tableFieldStyle}
+                InputProps={{ className: classes.tableFieldStyle }}
+                InputLabelProps={{ className: classes.tableFieldStyle }}
+                onChange={handleFilterChange}
+              />
+            </>
+          ) : (
+            <FilterList
+              className={classes.pdfIconStyle}
+              onClick={() => setFullView(!fullView)}
+            />
+          )}
+        </div>
       </div>
 
       {displayedData && (
@@ -553,9 +626,29 @@ export function AllMovies() {
     if (event.target.value) fetchFilteredData(event.target.value);
     else if (data) setDisplayedData(data);
   }
+
+  function handleFileUpload(event: any) {
+    if (
+      event.target.files[0].name.slice(
+        event.target.files[0].name.length - 4,
+      ) === '.csv'
+    ) {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const text = event?.target?.result;
+        if (typeof text === 'string') {
+          const uploadResult = await addBulkMovie(text);
+          setBulkAddResponse(uploadResult);
+          fetchData();
+        }
+      };
+      reader.readAsText(event.target.files[0]);
+    }
+  }
 }
 
 const useStyles = makeStyles(() => ({
+  leftSubHeaderStyle,
   tableHeaderStyle,
   tableStyle,
   headerRowStyle,
@@ -567,4 +660,6 @@ const useStyles = makeStyles(() => ({
   tableHeaderTextStyle,
   tableFieldStyle,
   subHeaderStyle,
+  parentHeaderStyle,
+  uploadButtonStyle,
 }));

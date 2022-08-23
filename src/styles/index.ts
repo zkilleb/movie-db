@@ -9,6 +9,9 @@ export {
   pdfIconStyle,
   tableContainerStyle,
   tableFooterStyle,
+  leftSubHeaderStyle,
+  parentHeaderStyle,
+  uploadButtonStyle,
 } from './tableStyles';
 
 export { dialogButtonStyle, formFieldStyle } from './commonStyles';

@@ -5,3 +5,5 @@ export { TMDBResult } from './TMDBResult';
 export { Search } from './Search';
 export { Release } from './Release';
 export { ReleaseStat } from './ReleaseStat';
+export { BulkErrors } from './BulkErrors';
+export { BulkResponse } from './BulkResponse';

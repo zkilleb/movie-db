@@ -6,6 +6,16 @@ export const subHeaderStyle = {
   marginLeft: 'auto',
 };
 
+export const leftSubHeaderStyle = {
+  display: 'flex',
+  justifyContent: 'flex-start',
+  paddingLeft: 20,
+};
+
+export const parentHeaderStyle = {
+  display: 'flex',
+};
+
 export const tableFieldStyle = {
   justifyContent: 'flex-end',
   paddingRight: 20,
@@ -62,4 +72,10 @@ export const tableContainerStyle = {
 
 export const tableFooterStyle = {
   color: 'white',
+};
+
+export const uploadButtonStyle = {
+  display: 'flex',
+  width: '50%',
+  margin: 'auto',
 };

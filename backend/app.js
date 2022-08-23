@@ -12,6 +12,7 @@ import {
   getActor,
   getAllTitles,
   addRating,
+  addBulkMovie,
 } from './controllers/movieControllers.js';
 import {
   getTMDBKeyword,
@@ -32,6 +33,7 @@ dotenv.config();
 
 const app = express();
 
+app.use(express.json());
 app.use(loggingMiddleware);
 app.use(configurationMiddleware);
 app.use(helmet());
@@ -71,6 +73,8 @@ app.put('/delete/release/:movieId/:releaseId', deleteReleaseFromAll);
 app.get('/releases', getAllReleases);
 
 app.put('/add/rating', addRating);
+
+app.post('/add/title/bulk', addBulkMovie);
 
 app.listen(port, () => {
   console.log(`App listening at ${host}:${port}`);

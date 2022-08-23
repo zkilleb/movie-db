@@ -136,3 +136,99 @@ export async function addRating(req, res) {
     res.status(400).json({ message: 'Error adding rating' });
   }
 }
+
+export async function addBulkMovie(req, res) {
+  let errors = [];
+  const columns = [
+    'title',
+    'length',
+    'year',
+    'color',
+    'language',
+    'director',
+    'studio',
+    'notes',
+    'genre',
+  ];
+  req.body.data.split('\n').forEach(async (movie, index) => {
+    if (index !== 0 && movie !== '') {
+      let doc = {};
+      let fields = movie.split(', ');
+      let errorFlag = false;
+      for (let i = 0; i < fields.length; i++) {
+        if (columns[i] === 'title' && fields[i] === '') {
+          errors.push({ item: `Index ${index}`, reason: 'Title not provided' });
+          errorFlag = true;
+          break;
+        } else if (columns[i] === 'director' && fields[i] === '') {
+          errors.push({
+            item: `Index ${index}`,
+            reason: 'Director not provided',
+          });
+          errorFlag = true;
+          break;
+        }
+        if (columns[i] === 'year' && fields[i] === '') {
+          errors.push({ item: `Index ${index}`, reason: 'Year not provided' });
+          break;
+        } else if (
+          columns[i] === 'color' &&
+          fields[i] !== 'true' &&
+          fields[i] !== 'false'
+        ) {
+          errors.push({
+            item: `Index ${index}`,
+            reason: 'Value for color must be true or false',
+          });
+          errorFlag = true;
+          break;
+        } else if (columns[i] === 'length' && !fields[i].match(/^[0-9]*$/)) {
+          errors.push({
+            item: `Index ${index}`,
+            reason: 'Length must be a numeric value',
+          });
+          errorFlag = true;
+          break;
+        } else if (
+          columns[i] === 'year' &&
+          (!fields[i].match(/^[0-9]*$/) || fields[i].length !== 4)
+        ) {
+          errors.push({
+            item: `Index ${index}`,
+            reason: 'Year must be a numeric value and contain 4 characters',
+          });
+          errorFlag = true;
+          break;
+        }
+        doc[columns[i]] = fields[i].replace(/\r/g, '');
+      }
+      if (!errorFlag) {
+        const movie = await movies.findOne({
+          director: new RegExp(doc.director, 'i'),
+          title: new RegExp(doc.title, 'i'),
+          year: new RegExp(doc.year, 'i'),
+        });
+        if (!movie) {
+          const response = await movies.insertOne(doc);
+          if (!response.acknowledged)
+            errors.push({
+              item: `Index ${index}`,
+              reason: 'Problem writing record to database',
+            });
+        } else {
+          errors.push({
+            item: `Index ${index}`,
+            reason: 'Record already exists',
+          });
+        }
+      }
+    }
+  });
+  res.status(200).json({
+    message:
+      errors.length === 0
+        ? 'All titles added succesfully'
+        : `Problem adding ${errors.length} record(s)`,
+    errors,
+  });
+}
