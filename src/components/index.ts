@@ -8,3 +8,4 @@ export { Random } from './Random';
 export { RecentSearches } from './RecentSearches';
 export { Releases } from './Releases';
 export { StyledTableCell, StyledTableHeaderCell } from './StyledTableCell';
+export { AddCSVModal } from './AddCSVModal';
